@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Transformadores por Subestación</title>
+    <title>Dashboard de Transformadores - 82 Equipos</title>
     <style>
         * {
             margin: 0;
@@ -34,6 +34,11 @@
             margin-bottom: 10px;
         }
 
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -47,11 +52,22 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-card h3 {
             font-size: 2rem;
             color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
         }
 
         .filters {
@@ -59,15 +75,22 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 1rem;
+            transition: border-color 0.3s;
             margin-bottom: 15px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         .filter-buttons {
@@ -82,6 +105,12 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            background: #e0e0e0;
         }
 
         .filter-btn.active {
@@ -91,7 +120,7 @@
 
         .subestaciones-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 25px;
         }
 
@@ -100,6 +129,12 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .subestacion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
 
         .subestacion-header {
@@ -114,39 +149,57 @@
 
         .subestacion-header h3 {
             font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .badge {
             background: rgba(255,255,255,0.2);
             padding: 3px 8px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            margin-left: 8px;
+            font-size: 0.75rem;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(180deg);
         }
 
         .transformadores-list {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: max-height 0.4s ease-out;
         }
 
         .transformadores-list.expanded {
-            max-height: 2000px;
-            transition: max-height 0.5s ease-in;
+            max-height: 3000px;
+            transition: max-height 0.6s ease-in;
         }
 
         .transformador-item {
             padding: 12px 20px;
             border-bottom: 1px solid #f0f0f0;
             cursor: pointer;
+            transition: background 0.2s;
         }
 
         .transformador-item:hover {
             background: #f8f9fa;
         }
 
+        .transformador-info {
+            flex: 1;
+        }
+
         .transformador-nombre {
             font-weight: 600;
+            color: #333;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -154,22 +207,30 @@
         }
 
         .transformador-detalles {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #888;
             margin-top: 4px;
         }
 
         .estado-badge {
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 600;
         }
 
         .estado-Operativo { background: #d4edda; color: #155724; }
-        .estado-Daño-Interno, .estado-incendiado, .estado-Averiado { background: #f8d7da; color: #721c24; }
+        .estado-Daño-Interno, .estado-incendiado, .estado-Averiado, .estado-Dado-de-baja { background: #f8d7da; color: #721c24; }
         .estado-No-Operativo { background: #fff3cd; color: #856404; }
         .estado-Reserva { background: #d1ecf1; color: #0c5460; }
+
+        .voltage-badge {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            color: #495057;
+        }
 
         .modal {
             display: none;
@@ -226,17 +287,31 @@
             color: #333;
         }
 
-        .loading, .empty-state {
+        .empty-state {
             text-align: center;
             padding: 50px;
             color: white;
             background: rgba(0,0,0,0.3);
             border-radius: 15px;
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 1.2rem;
         }
 
         @media (max-width: 768px) {
             .subestaciones-grid {
                 grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .detail-label {
+                width: 100px;
             }
         }
     </style>
@@ -245,7 +320,7 @@
     <div class="container">
         <div class="header">
             <h1>🏭 Dashboard de Transformadores</h1>
-            <p>Visualización de transformadores por subestación</p>
+            <p>Visualización de 82 transformadores organizados por subestación</p>
         </div>
 
         <div class="stats-container" id="statsContainer">
@@ -269,20 +344,21 @@
 
         <div class="filters">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Buscar subestación, transformador o fabricante...">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar subestación, transformador, fabricante o número de serie...">
             </div>
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">📊 Todos</button>
+                <button class="filter-btn active" data-filter="all">📊 Todos (82)</button>
                 <button class="filter-btn" data-filter="Operativo">✅ Operativos</button>
                 <button class="filter-btn" data-filter="No Operativo">⚠️ No Operativos</button>
                 <button class="filter-btn" data-filter="Daño Interno">🔥 Daño Interno</button>
                 <button class="filter-btn" data-filter="Averiado">🔧 Averiados</button>
                 <button class="filter-btn" data-filter="Reserva">📦 En Reserva</button>
+                <button class="filter-btn" data-filter="incendiado">🔥 Incendiados</button>
             </div>
         </div>
 
         <div id="subestacionesGrid" class="subestaciones-grid">
-            <div class="loading">📂 Cargando datos...</div>
+            <div class="loading">📂 Cargando 82 transformadores...</div>
         </div>
     </div>
 
@@ -297,9 +373,11 @@
     </div>
 
     <script>
-        // Datos de ejemplo (reemplaza esto con tu JSON completo de 82 transformadores)
-        // Para probar que funciona, incluimos algunos datos de ejemplo
+        // ============================================================
+        // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES
+        // ============================================================
         const transformadoresData = [
+            // TRANSFORMADOR 001
             {
                 "_id": "transformer_001",
                 "nombre_equipo": "Transformador de Potencia T2",
@@ -316,6 +394,7 @@
                 "estado_actual": "Daño Interno",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 002
             {
                 "_id": "transformer_002",
                 "nombre_equipo": "Transformador de Potencia T2",
@@ -332,6 +411,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 003
             {
                 "_id": "transformer_003",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -348,6 +428,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 004
             {
                 "_id": "transformer_004",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -364,6 +445,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 005
             {
                 "_id": "transformer_005",
                 "nombre_equipo": "Transformador de Potencia T2",
@@ -380,6 +462,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 006
             {
                 "_id": "transformer_006",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -396,6 +479,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 007
             {
                 "_id": "transformer_007",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -412,6 +496,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 008
             {
                 "_id": "transformer_008",
                 "nombre_equipo": "Transformador de Potencia T2",
@@ -428,6 +513,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 009
             {
                 "_id": "transformer_009",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -444,6 +530,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 010
             {
                 "_id": "transformer_010",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -460,6 +547,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 011
             {
                 "_id": "transformer_011",
                 "nombre_equipo": "Transformador de Potencia T1",
@@ -476,6 +564,7 @@
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
             },
+            // TRANSFORMADOR 012
             {
                 "_id": "transformer_012",
                 "nombre_equipo": "Transformador de Potencia T2",
@@ -491,9 +580,1200 @@
                 "voltaje_secundario_kv": [6.3, 22.8],
                 "estado_actual": "Operativo",
                 "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 013
+            {
+                "_id": "transformer_013",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Diez Vieja",
+                "capacidad": "8./10.",
+                "relacion": "43.8/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Mitsubishi",
+                "numero_serie": "558406",
+                "ano_fabricacion": 1972,
+                "voltaje_primario_kv": 43.8,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 014
+            {
+                "_id": "transformer_014",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Belisario Quevedo",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "201189",
+                "ano_fabricacion": 2013,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 015
+            {
+                "_id": "transformer_015",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "La Floresta",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "200788",
+                "ano_fabricacion": 2010,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 016
+            {
+                "_id": "transformer_016",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Gualo",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "201413",
+                "ano_fabricacion": 2015,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 017
+            {
+                "_id": "transformer_017",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Gualo",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK180674-1",
+                "ano_fabricacion": 2018,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 018
+            {
+                "_id": "transformer_018",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "El Bosque",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "",
+                "ano_fabricacion": 2019,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 019
+            {
+                "_id": "transformer_019",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Rio Coca",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Meidensha",
+                "numero_serie": "1K8307T1",
+                "ano_fabricacion": 1980,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 020
+            {
+                "_id": "transformer_020",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Rio Coca",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Meidensha",
+                "numero_serie": "1K8307T2",
+                "ano_fabricacion": 1980,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 021
+            {
+                "_id": "transformer_021",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Andalucia",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "185236-1388",
+                "ano_fabricacion": 1998,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 022
+            {
+                "_id": "transformer_022",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Cristiania",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Trafo",
+                "numero_serie": "2003",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 023
+            {
+                "_id": "transformer_023",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Cristiania",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 024
+            {
+                "_id": "transformer_024",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Cotocollao",
+                "capacidad": "20/27/33",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "200626",
+                "ano_fabricacion": 2008,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 025
+            {
+                "_id": "transformer_025",
+                "nombre_equipo": "Transformador de Potencia T3",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Cotocollao",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Pauwels",
+                "numero_serie": "9740751",
+                "ano_fabricacion": 1997,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 026
+            {
+                "_id": "transformer_026",
+                "nombre_equipo": "Transformador de Potencia T4",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Cotocollao",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Yorkshire",
+                "numero_serie": "9740751",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 027
+            {
+                "_id": "transformer_027",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Cotocollao",
+                "capacidad": "60/80/100",
+                "relacion": "138/46/23",
+                "tipo_conexion": "YNyn0d1",
+                "fabricante": "Meidensha",
+                "numero_serie": "8N8017T1",
+                "ano_fabricacion": 1987,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": [46, 23],
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 028
+            {
+                "_id": "transformer_028",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Epiclachima",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "295842",
+                "ano_fabricacion": 2009,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 029
+            {
+                "_id": "transformer_029",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Epiclachima",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "201190",
+                "ano_fabricacion": 2013,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 030
+            {
+                "_id": "transformer_030",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "San Antonio",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "201187",
+                "ano_fabricacion": 2013,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 031
+            {
+                "_id": "transformer_031",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Conocoto",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 032
+            {
+                "_id": "transformer_032",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Conocoto",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 033
+            {
+                "_id": "transformer_033",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Carolina",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Meiden",
+                "numero_serie": "1K8309T1",
+                "ano_fabricacion": 1984,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 034
+            {
+                "_id": "transformer_034",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Carolina",
+                "capacidad": "15/20",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK180673-1",
+                "ano_fabricacion": 2018,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 035
+            {
+                "_id": "transformer_035",
+                "nombre_equipo": "Transformador de Potencia T3",
+                "tipo_equipo": "Transformador",
+                "subestacion": "San Pablo",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "CG Transf",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 036
+            {
+                "_id": "transformer_036",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Alangasi",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "200628",
+                "ano_fabricacion": 2008,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 037
+            {
+                "_id": "transformer_037",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "San Rafael",
+                "capacidad": "20/26.7/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Meiden",
+                "numero_serie": "",
+                "ano_fabricacion": 1988,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 038
+            {
+                "_id": "transformer_038",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Iñaquito",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Pauwels",
+                "numero_serie": "94.2.4068",
+                "ano_fabricacion": 1995,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 039
+            {
+                "_id": "transformer_039",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Iñaquito",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "200787",
+                "ano_fabricacion": 2010,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 040
+            {
+                "_id": "transformer_040",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Nueva Cumbaya",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 041
+            {
+                "_id": "transformer_041",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Plataforma Financiera",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK170227-1",
+                "ano_fabricacion": 2017,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 042
+            {
+                "_id": "transformer_042",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Tababela",
+                "capacidad": "",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK221217-1",
+                "ano_fabricacion": 2023,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 043
+            {
+                "_id": "transformer_043",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Diez Nueva",
+                "capacidad": "15/20",
+                "relacion": "46/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Yorkshire",
+                "numero_serie": "22178",
+                "ano_fabricacion": 1978,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 044
+            {
+                "_id": "transformer_044",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Nuevo Aeropuerto",
+                "capacidad": "15/20",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Yorkshire",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 045
+            {
+                "_id": "transformer_045",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Tumbaco",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 046
+            {
+                "_id": "transformer_046",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Tumbaco",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "185329",
+                "ano_fabricacion": 2000,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 047
+            {
+                "_id": "transformer_047",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Vicentina",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YNyn0d1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK130960-1",
+                "ano_fabricacion": 2013,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 46,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 048
+            {
+                "_id": "transformer_048",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Vicentina",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YNyn0d1",
+                "fabricante": "Shenda",
+                "numero_serie": "18410",
+                "ano_fabricacion": 2002,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 46,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 049
+            {
+                "_id": "transformer_049",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Selva Alegre",
+                "capacidad": "60/80/100",
+                "relacion": "46/2.3",
+                "tipo_conexion": "YNyn0d1",
+                "fabricante": "BBC",
+                "numero_serie": "GM 100797",
+                "ano_fabricacion": 1986,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": [46, 6.3],
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 050
+            {
+                "_id": "transformer_050",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Selva Alegre",
+                "capacidad": "60/80/100",
+                "relacion": "46/2.3",
+                "tipo_conexion": "YNyn0d1",
+                "fabricante": "Siemens",
+                "numero_serie": "185641",
+                "ano_fabricacion": 2006,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": [46, 6.3],
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 051
+            {
+                "_id": "transformer_051",
+                "nombre_equipo": "Transformador de Potencia TR",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Papallacta",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "MOVIL_Siemens",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 052
+            {
+                "_id": "transformer_052",
+                "nombre_equipo": "Transformador de Potencia",
+                "tipo_equipo": "Transformador",
+                "subestacion": "La Calera",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YnD1",
+                "fabricante": "Ecuatran",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 6.3,
+                "voltaje_secundario_kv": 22.8,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 053
+            {
+                "_id": "transformer_053",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "El Inga Bajo",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Chint",
+                "numero_serie": "",
+                "ano_fabricacion": 2017,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 054
+            {
+                "_id": "transformer_054",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Mirador Alto",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Chint",
+                "numero_serie": "",
+                "ano_fabricacion": 2017,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 055
+            {
+                "_id": "transformer_055",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Los Bancos",
+                "capacidad": "8./10.",
+                "relacion": "43.8/13.2",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Mitsubishi",
+                "numero_serie": "558410",
+                "ano_fabricacion": 1972,
+                "voltaje_primario_kv": 43.8,
+                "voltaje_secundario_kv": 13.2,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 056
+            {
+                "_id": "transformer_056",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Los Bancos",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "200867",
+                "ano_fabricacion": 2010,
+                "voltaje_primario_kv": 69,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 057
+            {
+                "_id": "transformer_057",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Parque Bicentenario",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Chint",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 22.8,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 058
+            {
+                "_id": "transformer_058",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Perez Guerrero",
+                "capacidad": "20",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Pauwels",
+                "numero_serie": "94.2.406",
+                "ano_fabricacion": 1995,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 059
+            {
+                "_id": "transformer_059",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Perez Guerrero",
+                "capacidad": "20/25",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK180673-2",
+                "ano_fabricacion": 2018,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 060
+            {
+                "_id": "transformer_060",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Sangolqui",
+                "capacidad": "15/20",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Yorkshire",
+                "numero_serie": "71/22064",
+                "ano_fabricacion": 1977,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 061
+            {
+                "_id": "transformer_061",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Sangolqui",
+                "capacidad": "120/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "200784",
+                "ano_fabricacion": 2010,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 062
+            {
+                "_id": "transformer_062",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Pomasqui",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "185643",
+                "ano_fabricacion": 2006,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 063
+            {
+                "_id": "transformer_063",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Pomasqui",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Pauwels",
+                "numero_serie": "94.4.3338",
+                "ano_fabricacion": 1895,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 064
+            {
+                "_id": "transformer_064",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "El Quinche",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "201186",
+                "ano_fabricacion": 2013,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 065
+            {
+                "_id": "transformer_065",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Eugenio Espejo",
+                "capacidad": "",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Shenda",
+                "numero_serie": "CK221217-3",
+                "ano_fabricacion": 2023,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 066
+            {
+                "_id": "transformer_066",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Eugenio Espejo",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Pauwells",
+                "numero_serie": "95.4.7519",
+                "ano_fabricacion": 1996,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 067
+            {
+                "_id": "transformer_067",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Batán Alto",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Chint",
+                "numero_serie": "1ZDB300000P-1998",
+                "ano_fabricacion": 2017,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 068
+            {
+                "_id": "transformer_068",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "El Obraje",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Chint",
+                "numero_serie": "1ZDB300000P-1884",
+                "ano_fabricacion": 2017,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 069
+            {
+                "_id": "transformer_069",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Gualberto Hernandez",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YnD1",
+                "fabricante": "Yorkshire",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 13.8,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 070
+            {
+                "_id": "transformer_070",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Pasochoa",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YnD1",
+                "fabricante": "Transformers y Rectifiers (INDIA) LDT.",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 4.16,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 071
+            {
+                "_id": "transformer_071",
+                "nombre_equipo": "Transformador de Potencia TR-G35",
+                "tipo_equipo": "Transformador",
+                "subestacion": "CH Loreto",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YNd11",
+                "fabricante": "Z Standard",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 4.16,
+                "voltaje_secundario_kv": 24,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 072
+            {
+                "_id": "transformer_072",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "CH Victoria",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "YnD1",
+                "fabricante": "Incoesa",
+                "numero_serie": "",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 6.6,
+                "voltaje_secundario_kv": 22.8,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 073
+            {
+                "_id": "transformer_073",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Bario Nuevo",
+                "capacidad": "15/20",
+                "relacion": "46/23/6.3",
+                "tipo_conexion": "YNyn0d1",
+                "fabricante": "Yorkshire",
+                "numero_serie": "81/22181",
+                "ano_fabricacion": 1978,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": [6.3, 22.8],
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 074
+            {
+                "_id": "transformer_074",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Miraflores",
+                "capacidad": "15/20",
+                "relacion": "43.8/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Mitsubishi",
+                "numero_serie": "558409",
+                "ano_fabricacion": 1972,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "No Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 075
+            {
+                "_id": "transformer_075",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Diez Vieja",
+                "capacidad": "5/6.25",
+                "relacion": "43.8-21.9/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "T98676",
+                "ano_fabricacion": 1960,
+                "voltaje_primario_kv": 43.8,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Averiado",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 076
+            {
+                "_id": "transformer_076",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Diez Vieja",
+                "capacidad": "5/6.25",
+                "relacion": "43.8-21.9/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "98675",
+                "ano_fabricacion": 1960,
+                "voltaje_primario_kv": 43.8,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Reserva",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 077
+            {
+                "_id": "transformer_077",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Andalucia",
+                "capacidad": "5/6.25",
+                "relacion": "43.8/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Asea",
+                "numero_serie": "5897-844",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Dado de baja",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 078
+            {
+                "_id": "transformer_078",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Epiclachima",
+                "capacidad": "20/27/33",
+                "relacion": "46/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "185411",
+                "ano_fabricacion": 2002,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "incendiado",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 079
+            {
+                "_id": "transformer_079",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Pomasqui",
+                "capacidad": "",
+                "relacion": "",
+                "tipo_conexion": "DYn1",
+                "fabricante": "ABB",
+                "numero_serie": "94.4.3338",
+                "ano_fabricacion": null,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 080
+            {
+                "_id": "transformer_080",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Pomasqui",
+                "capacidad": "20/27/33",
+                "relacion": "138/23",
+                "tipo_conexion": "DYn1",
+                "fabricante": "TRAFO",
+                "numero_serie": "XA1604A001",
+                "ano_fabricacion": 2004,
+                "voltaje_primario_kv": 138,
+                "voltaje_secundario_kv": 23,
+                "estado_actual": "Daño Interno",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 081
+            {
+                "_id": "transformer_081",
+                "nombre_equipo": "Transformador de Potencia T1",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Miraflores",
+                "capacidad": "15/20",
+                "relacion": "43.8/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Mitsubishi",
+                "numero_serie": "558409",
+                "ano_fabricacion": 1972,
+                "voltaje_primario_kv": 46,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "No Operativo",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
+            },
+            // TRANSFORMADOR 082
+            {
+                "_id": "transformer_082",
+                "nombre_equipo": "Transformador de Potencia T2",
+                "tipo_equipo": "Transformador",
+                "subestacion": "Diez Vieja",
+                "capacidad": "5/6.25",
+                "relacion": "43.8-21.9/6.3",
+                "tipo_conexion": "DYn1",
+                "fabricante": "Siemens",
+                "numero_serie": "T98676",
+                "ano_fabricacion": 1960,
+                "voltaje_primario_kv": 43.8,
+                "voltaje_secundario_kv": 6.3,
+                "estado_actual": "Averiado",
+                "observaciones": "Nivel de aceite en rango, vibraciones normales."
             }
         ];
 
+        // Estado actual
         let currentFilter = "all";
         let currentSearch = "";
 
@@ -564,6 +1844,7 @@
                 const transformadores = grupos[subestacion];
                 const operativosCount = transformadores.filter(t => t.estado_actual === "Operativo").length;
                 const dañadosCount = transformadores.length - operativosCount;
+                const safeId = subestacion.replace(/[^a-zA-Z0-9]/g, '_');
                 
                 return `
                     <div class="subestacion-card">
@@ -574,9 +1855,9 @@
                                 ${operativosCount > 0 ? `<span class="badge" style="background:#28a745;">✓ ${operativosCount}</span>` : ''}
                                 ${dañadosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠ ${dañadosCount}</span>` : ''}
                             </h3>
-                            <span class="toggle-icon" id="icon-${subestacion.replace(/[^a-zA-Z0-9]/g, '_')}">▼</span>
+                            <span class="toggle-icon" id="icon-${safeId}">▼</span>
                         </div>
-                        <div class="transformadores-list" id="list-${subestacion.replace(/[^a-zA-Z0-9]/g, '_')}">
+                        <div class="transformadores-list" id="list-${safeId}">
                             ${transformadores.map(t => `
                                 <div class="transformador-item" onclick="mostrarDetalles('${t._id}')">
                                     <div class="transformador-info">
@@ -590,6 +1871,7 @@
                                                 ` | ⚡ ${t.voltaje_primario_kv}/${Array.isArray(t.voltaje_secundario_kv) ? t.voltaje_secundario_kv.join('/') : t.voltaje_secundario_kv} kV` : ''}
                                             ${t.capacidad ? ` | 📊 ${t.capacidad} MVA` : ''}
                                             ${t.numero_serie ? ` | 🔢 ${t.numero_serie}` : ''}
+                                            ${t.ano_fabricacion ? ` | 📅 ${t.ano_fabricacion}` : ''}
                                         </div>
                                     </div>
                                 </div>
@@ -607,11 +1889,9 @@
             if (list.classList.contains('expanded')) {
                 list.classList.remove('expanded');
                 icon.classList.remove('expanded');
-                icon.style.transform = '';
             } else {
                 list.classList.add('expanded');
                 icon.classList.add('expanded');
-                icon.style.transform = 'rotate(180deg)';
             }
         }
 
@@ -630,12 +1910,14 @@
                 <div class="detail-row"><span class="detail-label">Estado Actual:</span><span class="detail-value"><span class="estado-badge ${getEstadoClass(transformador.estado_actual)}">${transformador.estado_actual || "Desconocido"}</span></span></div>
                 <div class="detail-row"><span class="detail-label">Voltajes:</span><span class="detail-value">${transformador.voltaje_primario_kv || "?"} / ${Array.isArray(transformador.voltaje_secundario_kv) ? transformador.voltaje_secundario_kv.join('/') : transformador.voltaje_secundario_kv || "?"} kV</span></div>
                 <div class="detail-row"><span class="detail-label">Capacidad:</span><span class="detail-value">${transformador.capacidad || "No especificada"} MVA</span></div>
+                <div class="detail-row"><span class="detail-label">Relación:</span><span class="detail-value">${transformador.relacion || "No especificada"}</span></div>
                 <div class="detail-row"><span class="detail-label">Conexión:</span><span class="detail-value">${transformador.tipo_conexion || "No especificada"}</span></div>
                 <div class="detail-row"><span class="detail-label">Observaciones:</span><span class="detail-value">${transformador.observaciones || "Sin observaciones"}</span></div>
             `;
             modal.style.display = "flex";
         }
 
+        // Event listeners
         document.getElementById("searchInput").addEventListener("input", (e) => {
             currentSearch = e.target.value;
             renderDashboard();
@@ -663,6 +1945,7 @@
         window.toggleSubestacion = toggleSubestacion;
         window.mostrarDetalles = mostrarDetalles;
         
+        // Inicializar
         renderDashboard();
     </script>
 </body>
