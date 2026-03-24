@@ -23,7 +23,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -40,7 +39,6 @@
             opacity: 0.9;
         }
 
-        /* Stats Cards */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -72,7 +70,6 @@
             font-size: 0.9rem;
         }
 
-        /* Alertas de Mantenimiento */
         .alertas-container {
             background: white;
             border-radius: 15px;
@@ -151,7 +148,6 @@
             background: #e0a800;
         }
 
-        /* Filters */
         .filters {
             background: white;
             border-radius: 15px;
@@ -200,10 +196,9 @@
             color: white;
         }
 
-        /* Subestaciones Grid */
         .subestaciones-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
             gap: 25px;
         }
 
@@ -245,11 +240,6 @@
             font-size: 0.75rem;
         }
 
-        .mantenimiento-warning {
-            background: #ffc107;
-            color: #856404;
-        }
-
         .toggle-icon {
             transition: transform 0.3s;
             font-size: 1.2rem;
@@ -266,7 +256,7 @@
         }
 
         .transformadores-list.expanded {
-            max-height: 3000px;
+            max-height: 4000px;
             transition: max-height 0.6s ease-in;
         }
 
@@ -326,7 +316,6 @@
             font-weight: bold;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -450,7 +439,7 @@
     <div class="container">
         <div class="header">
             <h1>🏭 Dashboard de Transformadores</h1>
-            <p>Gestión de equipos y mantenimientos programados</p>
+            <p>Gestión de 82 equipos y mantenimientos programados</p>
         </div>
 
         <div class="stats-container" id="statsContainer">
@@ -460,7 +449,6 @@
             <div class="stat-card"><h3 id="totalNoOperativos">0</h3><p>No Operativos</p></div>
         </div>
 
-        <!-- Panel de Alertas de Mantenimiento -->
         <div class="alertas-container" id="alertasContainer">
             <div class="alertas-header">
                 <h2>🔔 Alertas de Mantenimiento</h2>
@@ -474,7 +462,7 @@
                 <input type="text" id="searchInput" placeholder="🔍 Buscar subestación, transformador, fabricante o número de serie...">
             </div>
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">📊 Todos</button>
+                <button class="filter-btn active" data-filter="all">📊 Todos (82)</button>
                 <button class="filter-btn" data-filter="Operativo">✅ Operativos</button>
                 <button class="filter-btn" data-filter="No Operativo">⚠️ No Operativos</button>
                 <button class="filter-btn" data-filter="Daño Interno">🔥 Daño Interno</button>
@@ -484,12 +472,9 @@
             </div>
         </div>
 
-        <div id="subestacionesGrid" class="subestaciones-grid">
-            <div class="loading">📂 Cargando transformadores...</div>
-        </div>
+        <div id="subestacionesGrid" class="subestaciones-grid"></div>
     </div>
 
-    <!-- Modal para detalles y edición -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -511,559 +496,98 @@
 
     <script>
         // ============================================================
-        // DATOS DE TRANSFORMADORES CON MANTENIMIENTOS
+        // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES CON MANTENIMIENTOS
         // ============================================================
-        let transformadoresData = [
-            // TRANSFORMADOR 001
-            {
-                "_id": "transformer_001",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Pomasqui",
-                "capacidad": "20/27/33",
-                "relacion": "138/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "TRAFO",
-                "numero_serie": "XA1604A001",
-                "ano_fabricacion": 2004,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Daño Interno",
-                "fecha_ultima_inspeccion": "2024-01-15",
-                "proxima_mantencion_programada": "2025-01-15",
-                "observaciones": "Requiere revisión urgente"
-            },
-            // TRANSFORMADOR 002
-            {
-                "_id": "transformer_002",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Santa Rosa",
-                "capacidad": "",
-                "relacion": "46/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "",
-                "ano_fabricacion": null,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-05-10",
-                "proxima_mantencion_programada": "2026-05-10",
-                "observaciones": "Nivel de aceite en rango"
-            },
-            // TRANSFORMADOR 003
-            {
-                "_id": "transformer_003",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Olimpico",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "200789",
-                "ano_fabricacion": 2016,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-05-10",
-                "proxima_mantencion_programada": "2026-05-10",
-                "observaciones": "Nivel de aceite en rango"
-            },
-            // TRANSFORMADOR 004
-            {
-                "_id": "transformer_004",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Luluncoto",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "200790",
-                "ano_fabricacion": 2010,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-10-15",
-                "proxima_mantencion_programada": "2025-10-15",
-                "observaciones": "Nivel de aceite en rango"
-            },
-            // TRANSFORMADOR 005
-            {
-                "_id": "transformer_005",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Bario Nuevo",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Pauwells",
-                "numero_serie": "94.2.4069",
-                "ano_fabricacion": 1995,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-03-20",
-                "proxima_mantencion_programada": "2025-09-20",
-                "observaciones": "Requiere cambio de aceite"
-            },
-            // TRANSFORMADOR 006
-            {
-                "_id": "transformer_006",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Chimbacalle",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Shenda",
-                "numero_serie": "61161",
-                "ano_fabricacion": 1987,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-02-28",
-                "proxima_mantencion_programada": "2025-08-28",
-                "observaciones": "Vibraciones inusuales"
-            },
-            // TRANSFORMADOR 007
-            {
-                "_id": "transformer_007",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Chilibulo",
-                "capacidad": "",
-                "relacion": "",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "",
-                "ano_fabricacion": null,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-12-01",
-                "proxima_mantencion_programada": "2025-12-01",
-                "observaciones": "Nivel de aceite en rango"
-            },
-            // TRANSFORMADOR 008
-            {
-                "_id": "transformer_008",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Chilibulo",
-                "capacidad": "",
-                "relacion": "",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Shenda",
-                "numero_serie": "CK221217-4",
-                "ano_fabricacion": 2023,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-06-01",
-                "proxima_mantencion_programada": "2026-06-01",
-                "observaciones": "Equipo nuevo, en buen estado"
-            },
-            // TRANSFORMADOR 009 - Con mantenimiento urgente
-            {
-                "_id": "transformer_009",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Escuela Sucre",
-                "capacidad": "5/6.25",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Siemens",
-                "numero_serie": "98674",
-                "ano_fabricacion": 1960,
-                "voltaje_primario_kv": 43.8,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-03-10",
-                "proxima_mantencion_programada": "2025-03-10",
-                "observaciones": "Mantenimiento vencido - urgente"
-            },
-            // TRANSFORMADOR 010
-            {
-                "_id": "transformer_010",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "San Roque",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Yawei",
-                "numero_serie": "",
-                "ano_fabricacion": 2021,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-01-15",
-                "proxima_mantencion_programada": "2026-01-15",
-                "observaciones": "En buen estado"
-            },
-            // TRANSFORMADOR 011
-            {
-                "_id": "transformer_011",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "La Marin",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Yawei",
-                "numero_serie": "",
-                "ano_fabricacion": 2021,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-02-20",
-                "proxima_mantencion_programada": "2026-02-20",
-                "observaciones": "Funcionando correctamente"
-            },
-            // TRANSFORMADOR 012
-            {
-                "_id": "transformer_012",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Miraflores",
-                "capacidad": "15/20",
-                "relacion": "46/23/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Raycham",
-                "numero_serie": "",
-                "ano_fabricacion": 2017,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": [6.3, 22.8],
-                "estado_actual": "No Operativo",
-                "fecha_ultima_inspeccion": "2024-11-10",
-                "proxima_mantencion_programada": "2025-05-10",
-                "observaciones": "Requiere reparación"
-            },
-            // TRANSFORMADOR 013
-            {
-                "_id": "transformer_013",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Diez Vieja",
-                "capacidad": "8./10.",
-                "relacion": "43.8/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Mitsubishi",
-                "numero_serie": "558406",
-                "ano_fabricacion": 1972,
-                "voltaje_primario_kv": 43.8,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-09-15",
-                "proxima_mantencion_programada": "2025-09-15",
-                "observaciones": "Operación normal"
-            },
-            // TRANSFORMADOR 014
-            {
-                "_id": "transformer_014",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Belisario Quevedo",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "201189",
-                "ano_fabricacion": 2013,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-03-01",
-                "proxima_mantencion_programada": "2026-03-01",
-                "observaciones": "En buen estado"
-            },
-            // TRANSFORMADOR 015
-            {
-                "_id": "transformer_015",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "La Floresta",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "200788",
-                "ano_fabricacion": 2010,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-04-10",
-                "proxima_mantencion_programada": "2026-04-10",
-                "observaciones": "Funcionamiento normal"
-            },
-            // TRANSFORMADOR 016 - Con mantenimiento vencido
-            {
-                "_id": "transformer_016",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Gualo",
-                "capacidad": "20/27/33",
-                "relacion": "138/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "201413",
-                "ano_fabricacion": 2015,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-02-15",
-                "proxima_mantencion_programada": "2025-02-15",
-                "observaciones": "MANTENIMIENTO VENCIDO - ATENCIÓN URGENTE"
-            },
-            // TRANSFORMADOR 017
-            {
-                "_id": "transformer_017",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Gualo",
-                "capacidad": "20/27/33",
-                "relacion": "138/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Shenda",
-                "numero_serie": "CK180674-1",
-                "ano_fabricacion": 2018,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-05-10",
-                "proxima_mantencion_programada": "2026-05-10",
-                "observaciones": "En buen estado"
-            },
-            // TRANSFORMADOR 018
-            {
-                "_id": "transformer_018",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "El Bosque",
-                "capacidad": "",
-                "relacion": "",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Siemens",
-                "numero_serie": "",
-                "ano_fabricacion": 2019,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-05-10",
-                "proxima_mantencion_programada": "2026-05-10",
-                "observaciones": "Nivel de aceite en rango"
-            },
-            // TRANSFORMADOR 019
-            {
-                "_id": "transformer_019",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Rio Coca",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Meidensha",
-                "numero_serie": "1K8307T1",
-                "ano_fabricacion": 1980,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-08-20",
-                "proxima_mantencion_programada": "2025-08-20",
-                "observaciones": "Requiere revisión de aceite"
-            },
-            // TRANSFORMADOR 020 - Averiado
-            {
-                "_id": "transformer_020",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Rio Coca",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Meidensha",
-                "numero_serie": "1K8307T2",
-                "ano_fabricacion": 1980,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 6.3,
-                "estado_actual": "Averiado",
-                "fecha_ultima_inspeccion": "2024-12-01",
-                "proxima_mantencion_programada": "2025-03-01",
-                "observaciones": "FUERA DE SERVICIO - Reparación pendiente"
-            },
-            // TRANSFORMADOR 021
-            {
-                "_id": "transformer_021",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Andalucia",
-                "capacidad": "15/20",
-                "relacion": "46/6.3",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Siemens",
-                "numero_serie": "185236-1388",
-                "ano_fabricacion": 1998,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-01-10",
-                "proxima_mantencion_programada": "2026-01-10",
-                "observaciones": "Operación normal"
-            },
-            // TRANSFORMADOR 022
-            {
-                "_id": "transformer_022",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Cristiania",
-                "capacidad": "20/27/33",
-                "relacion": "138/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Trafo",
-                "numero_serie": "2003",
-                "ano_fabricacion": null,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-11-20",
-                "proxima_mantencion_programada": "2025-11-20",
-                "observaciones": "Nivel de aceite en rango"
-            },
-            // TRANSFORMADOR 023
-            {
-                "_id": "transformer_023",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Cristiania",
-                "capacidad": "20/27/33",
-                "relacion": "138/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "",
-                "ano_fabricacion": null,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-02-15",
-                "proxima_mantencion_programada": "2026-02-15",
-                "observaciones": "Funcionando correctamente"
-            },
-            // TRANSFORMADOR 024
-            {
-                "_id": "transformer_024",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Cotocollao",
-                "capacidad": "20/27/33",
-                "relacion": "",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "200626",
-                "ano_fabricacion": 2008,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-04-05",
-                "proxima_mantencion_programada": "2026-04-05",
-                "observaciones": "En buen estado"
-            },
-            // TRANSFORMADOR 025
-            {
-                "_id": "transformer_025",
-                "nombre_equipo": "Transformador de Potencia T3",
-                "subestacion": "Cotocollao",
-                "capacidad": "20/27/33",
-                "relacion": "46/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Pauwels",
-                "numero_serie": "9740751",
-                "ano_fabricacion": 1997,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Reserva",
-                "fecha_ultima_inspeccion": "2024-10-01",
-                "proxima_mantencion_programada": "2025-04-01",
-                "observaciones": "Equipo en reserva, mantenimiento próximo"
-            },
-            // TRANSFORMADOR 026 - Mantenimiento urgente
-            {
-                "_id": "transformer_026",
-                "nombre_equipo": "Transformador de Potencia T4",
-                "subestacion": "Cotocollao",
-                "capacidad": "20/27/33",
-                "relacion": "46/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Yorkshire",
-                "numero_serie": "9740751",
-                "ano_fabricacion": null,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-03-25",
-                "proxima_mantencion_programada": "2025-03-25",
-                "observaciones": "MANTENIMIENTO PROGRAMADO - ATENCIÓN"
-            },
-            // TRANSFORMADOR 027
-            {
-                "_id": "transformer_027",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Cotocollao",
-                "capacidad": "60/80/100",
-                "relacion": "138/46/23",
-                "tipo_conexion": "YNyn0d1",
-                "fabricante": "Meidensha",
-                "numero_serie": "8N8017T1",
-                "ano_fabricacion": 1987,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": [46, 23],
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2024-12-15",
-                "proxima_mantencion_programada": "2025-12-15",
-                "observaciones": "Equipo principal en funcionamiento"
-            },
-            // TRANSFORMADOR 028
-            {
-                "_id": "transformer_028",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "Epiclachima",
-                "capacidad": "20/27/33",
-                "relacion": "46/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "Siemens",
-                "numero_serie": "295842",
-                "ano_fabricacion": 2009,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-03-10",
-                "proxima_mantencion_programada": "2026-03-10",
-                "observaciones": "En buen estado"
-            },
-            // TRANSFORMADOR 029
-            {
-                "_id": "transformer_029",
-                "nombre_equipo": "Transformador de Potencia T2",
-                "subestacion": "Epiclachima",
-                "capacidad": "20/27/33",
-                "relacion": "46/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "201190",
-                "ano_fabricacion": 2013,
-                "voltaje_primario_kv": 46,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "incendiado",
-                "fecha_ultima_inspeccion": "2025-02-28",
-                "proxima_mantencion_programada": "2025-08-28",
-                "observaciones": "EQUIPO INCENDIADO - FUERA DE SERVICIO"
-            },
-            // TRANSFORMADOR 030
-            {
-                "_id": "transformer_030",
-                "nombre_equipo": "Transformador de Potencia T1",
-                "subestacion": "San Antonio",
-                "capacidad": "20/27/33",
-                "relacion": "138/23",
-                "tipo_conexion": "DYn1",
-                "fabricante": "ABB",
-                "numero_serie": "201187",
-                "ano_fabricacion": 2013,
-                "voltaje_primario_kv": 138,
-                "voltaje_secundario_kv": 23,
-                "estado_actual": "Operativo",
-                "fecha_ultima_inspeccion": "2025-05-01",
-                "proxima_mantencion_programada": "2026-05-01",
-                "observaciones": "Funcionamiento normal"
-            }
+        const transformadoresData = [
+            // Datos del 1 al 10
+            {"_id":"t001","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente"},
+            {"_id":"t002","nombre_equipo":"Transformador de Potencia T2","subestacion":"Santa Rosa","capacidad":"","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango"},
+            {"_id":"t003","nombre_equipo":"Transformador de Potencia T1","subestacion":"Olimpico","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200789","ano_fabricacion":2016,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango"},
+            {"_id":"t004","nombre_equipo":"Transformador de Potencia T1","subestacion":"Luluncoto","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200790","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-15","proxima_mantencion_programada":"2025-10-15","observaciones":"Nivel de aceite en rango"},
+            {"_id":"t005","nombre_equipo":"Transformador de Potencia T2","subestacion":"Bario Nuevo","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Pauwells","numero_serie":"94.2.4069","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Requiere cambio de aceite"},
+            {"_id":"t006","nombre_equipo":"Transformador de Potencia T1","subestacion":"Chimbacalle","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"61161","ano_fabricacion":1987,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"Vibraciones inusuales"},
+            {"_id":"t007","nombre_equipo":"Transformador de Potencia T1","subestacion":"Chilibulo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-01","proxima_mantencion_programada":"2025-12-01","observaciones":"Nivel de aceite en rango"},
+            {"_id":"t008","nombre_equipo":"Transformador de Potencia T2","subestacion":"Chilibulo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-4","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo"},
+            {"_id":"t009","nombre_equipo":"Transformador de Potencia T1","subestacion":"Escuela Sucre","capacidad":"5/6.25","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"98674","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-03-10","proxima_mantencion_programada":"2025-03-10","observaciones":"Mantenimiento vencido"},
+            {"_id":"t010","nombre_equipo":"Transformador de Potencia T1","subestacion":"San Roque","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-15","proxima_mantencion_programada":"2026-01-15","observaciones":"En buen estado"},
+            {"_id":"t011","nombre_equipo":"Transformador de Potencia T1","subestacion":"La Marin","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-20","proxima_mantencion_programada":"2026-02-20","observaciones":"Funcionando correctamente"},
+            {"_id":"t012","nombre_equipo":"Transformador de Potencia T2","subestacion":"Miraflores","capacidad":"15/20","relacion":"46/23/6.3","tipo_conexion":"DYn1","fabricante":"Raycham","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":[6.3,22.8],"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-11-10","proxima_mantencion_programada":"2025-05-10","observaciones":"Requiere reparación"},
+            {"_id":"t013","nombre_equipo":"Transformador de Potencia T1","subestacion":"Diez Vieja","capacidad":"8./10.","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558406","ano_fabricacion":1972,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-15","proxima_mantencion_programada":"2025-09-15","observaciones":"Operación normal"},
+            {"_id":"t014","nombre_equipo":"Transformador de Potencia T1","subestacion":"Belisario Quevedo","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201189","ano_fabricacion":2013,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-01","proxima_mantencion_programada":"2026-03-01","observaciones":"En buen estado"},
+            {"_id":"t015","nombre_equipo":"Transformador de Potencia T1","subestacion":"La Floresta","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200788","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-10","proxima_mantencion_programada":"2026-04-10","observaciones":"Funcionamiento normal"},
+            {"_id":"t016","nombre_equipo":"Transformador de Potencia T1","subestacion":"Gualo","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201413","ano_fabricacion":2015,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-02-15","proxima_mantencion_programada":"2025-02-15","observaciones":"MANTENIMIENTO VENCIDO"},
+            {"_id":"t017","nombre_equipo":"Transformador de Potencia T2","subestacion":"Gualo","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK180674-1","ano_fabricacion":2018,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"En buen estado"},
+            {"_id":"t018","nombre_equipo":"Transformador de Potencia T1","subestacion":"El Bosque","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"","ano_fabricacion":2019,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango"},
+            {"_id":"t019","nombre_equipo":"Transformador de Potencia T1","subestacion":"Rio Coca","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Meidensha","numero_serie":"1K8307T1","ano_fabricacion":1980,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-20","proxima_mantencion_programada":"2025-08-20","observaciones":"Requiere revisión de aceite"},
+            {"_id":"t020","nombre_equipo":"Transformador de Potencia T2","subestacion":"Rio Coca","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Meidensha","numero_serie":"1K8307T2","ano_fabricacion":1980,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-12-01","proxima_mantencion_programada":"2025-03-01","observaciones":"FUERA DE SERVICIO"},
+            {"_id":"t021","nombre_equipo":"Transformador de Potencia T1","subestacion":"Andalucia","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"185236-1388","ano_fabricacion":1998,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-10","proxima_mantencion_programada":"2026-01-10","observaciones":"Operación normal"},
+            {"_id":"t022","nombre_equipo":"Transformador de Potencia T1","subestacion":"Cristiania","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Trafo","numero_serie":"2003","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-20","proxima_mantencion_programada":"2025-11-20","observaciones":"Nivel de aceite en rango"},
+            {"_id":"t023","nombre_equipo":"Transformador de Potencia T2","subestacion":"Cristiania","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-15","proxima_mantencion_programada":"2026-02-15","observaciones":"Funcionando correctamente"},
+            {"_id":"t024","nombre_equipo":"Transformador de Potencia T2","subestacion":"Cotocollao","capacidad":"20/27/33","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200626","ano_fabricacion":2008,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-05","proxima_mantencion_programada":"2026-04-05","observaciones":"En buen estado"},
+            {"_id":"t025","nombre_equipo":"Transformador de Potencia T3","subestacion":"Cotocollao","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"9740751","ano_fabricacion":1997,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Reserva","fecha_ultima_inspeccion":"2024-10-01","proxima_mantencion_programada":"2025-04-01","observaciones":"Equipo en reserva"},
+            {"_id":"t026","nombre_equipo":"Transformador de Potencia T4","subestacion":"Cotocollao","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"9740751","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-03-25","proxima_mantencion_programada":"2025-03-25","observaciones":"Mantenimiento programado"},
+            {"_id":"t027","nombre_equipo":"Transformador de Potencia T1","subestacion":"Cotocollao","capacidad":"60/80/100","relacion":"138/46/23","tipo_conexion":"YNyn0d1","fabricante":"Meidensha","numero_serie":"8N8017T1","ano_fabricacion":1987,"voltaje_primario_kv":138,"voltaje_secundario_kv":[46,23],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-15","proxima_mantencion_programada":"2025-12-15","observaciones":"Equipo principal"},
+            {"_id":"t028","nombre_equipo":"Transformador de Potencia T1","subestacion":"Epiclachima","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"295842","ano_fabricacion":2009,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-10","proxima_mantencion_programada":"2026-03-10","observaciones":"En buen estado"},
+            {"_id":"t029","nombre_equipo":"Transformador de Potencia T2","subestacion":"Epiclachima","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201190","ano_fabricacion":2013,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"incendiado","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"EQUIPO INCENDIADO"},
+            {"_id":"t030","nombre_equipo":"Transformador de Potencia T1","subestacion":"San Antonio","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201187","ano_fabricacion":2013,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-01","proxima_mantencion_programada":"2026-05-01","observaciones":"Funcionamiento normal"},
+            {"_id":"t031","nombre_equipo":"Transformador de Potencia T1","subestacion":"Conocoto","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-07-15","proxima_mantencion_programada":"2025-07-15","observaciones":"Requiere revisión"},
+            {"_id":"t032","nombre_equipo":"Transformador de Potencia T2","subestacion":"Conocoto","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Funcionamiento normal"},
+            {"_id":"t033","nombre_equipo":"Transformador de Potencia T1","subestacion":"Carolina","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Meiden","numero_serie":"1K8309T1","ano_fabricacion":1984,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"En buen estado"},
+            {"_id":"t034","nombre_equipo":"Transformador de Potencia T2","subestacion":"Carolina","capacidad":"15/20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK180673-1","ano_fabricacion":2018,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-20","proxima_mantencion_programada":"2026-04-20","observaciones":"Nuevo equipo"},
+            {"_id":"t035","nombre_equipo":"Transformador de Potencia T3","subestacion":"San Pablo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"CG Transf","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-06-10","proxima_mantencion_programada":"2025-06-10","observaciones":"Sin novedades"},
+            {"_id":"t036","nombre_equipo":"Transformador de Potencia T1","subestacion":"Alangasi","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200628","ano_fabricacion":2008,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-20","proxima_mantencion_programada":"2026-01-20","observaciones":"Operación normal"},
+            {"_id":"t037","nombre_equipo":"Transformador de Potencia T1","subestacion":"San Rafael","capacidad":"20/26.7/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Meiden","numero_serie":"","ano_fabricacion":1988,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-05","proxima_mantencion_programada":"2025-11-05","observaciones":"Requiere mantenimiento"},
+            {"_id":"t038","nombre_equipo":"Transformador de Potencia T1","subestacion":"Iñaquito","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"94.2.4068","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-15","proxima_mantencion_programada":"2025-09-15","observaciones":"Vibraciones normales"},
+            {"_id":"t039","nombre_equipo":"Transformador de Potencia T2","subestacion":"Iñaquito","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200787","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-10","proxima_mantencion_programada":"2026-02-10","observaciones":"Funcionando"},
+            {"_id":"t040","nombre_equipo":"Transformador de Potencia T1","subestacion":"Nueva Cumbaya","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-25","proxima_mantencion_programada":"2025-08-25","observaciones":"Sin observaciones"},
+            {"_id":"t041","nombre_equipo":"Transformador de Potencia T1","subestacion":"Plataforma Financiera","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK170227-1","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-01","proxima_mantencion_programada":"2026-05-01","observaciones":"Nuevo equipo"},
+            {"_id":"t042","nombre_equipo":"Transformador de Potencia T1","subestacion":"Tababela","capacidad":"","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-1","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo"},
+            {"_id":"t043","nombre_equipo":"Transformador de Potencia T1","subestacion":"Diez Nueva","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"22178","ano_fabricacion":1978,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-10","proxima_mantencion_programada":"2025-10-10","observaciones":"Requiere atención"},
+            {"_id":"t044","nombre_equipo":"Transformador de Potencia T1","subestacion":"Nuevo Aeropuerto","capacidad":"15/20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-05","proxima_mantencion_programada":"2025-12-05","observaciones":"Funcionamiento normal"},
+            {"_id":"t045","nombre_equipo":"Transformador de Potencia T1","subestacion":"Tumbaco","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-30","proxima_mantencion_programada":"2025-09-30","observaciones":"Sin novedades"},
+            {"_id":"t046","nombre_equipo":"Transformador de Potencia T2","subestacion":"Tumbaco","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"185329","ano_fabricacion":2000,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Requiere cambio de aceite"},
+            {"_id":"t047","nombre_equipo":"Transformador de Potencia T1","subestacion":"Vicentina","capacidad":"","relacion":"","tipo_conexion":"YNyn0d1","fabricante":"Shenda","numero_serie":"CK130960-1","ano_fabricacion":2013,"voltaje_primario_kv":138,"voltaje_secundario_kv":46,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-15","proxima_mantencion_programada":"2026-04-15","observaciones":"En buen estado"},
+            {"_id":"t048","nombre_equipo":"Transformador de Potencia T2","subestacion":"Vicentina","capacidad":"","relacion":"","tipo_conexion":"YNyn0d1","fabricante":"Shenda","numero_serie":"18410","ano_fabricacion":2002,"voltaje_primario_kv":138,"voltaje_secundario_kv":46,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-20","proxima_mantencion_programada":"2025-11-20","observaciones":"Requiere revisión"},
+            {"_id":"t049","nombre_equipo":"Transformador de Potencia T1","subestacion":"Selva Alegre","capacidad":"60/80/100","relacion":"46/2.3","tipo_conexion":"YNyn0d1","fabricante":"BBC","numero_serie":"GM 100797","ano_fabricacion":1986,"voltaje_primario_kv":138,"voltaje_secundario_kv":[46,6.3],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-10","proxima_mantencion_programada":"2025-08-10","observaciones":"Equipo principal"},
+            {"_id":"t050","nombre_equipo":"Transformador de Potencia T2","subestacion":"Selva Alegre","capacidad":"60/80/100","relacion":"46/2.3","tipo_conexion":"YNyn0d1","fabricante":"Siemens","numero_serie":"185641","ano_fabricacion":2006,"voltaje_primario_kv":138,"voltaje_secundario_kv":[46,6.3],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"Funcionando"},
+            {"_id":"t051","nombre_equipo":"Transformador de Potencia TR","subestacion":"Papallacta","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"MOVIL_Siemens","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-07-20","proxima_mantencion_programada":"2025-07-20","observaciones":"Equipo móvil"},
+            {"_id":"t052","nombre_equipo":"Transformador de Potencia","subestacion":"La Calera","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Ecuatran","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":6.3,"voltaje_secundario_kv":22.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-05-15","proxima_mantencion_programada":"2025-05-15","observaciones":"Poco uso"},
+            {"_id":"t053","nombre_equipo":"Transformador de Potencia T1","subestacion":"El Inga Bajo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-25","proxima_mantencion_programada":"2026-01-25","observaciones":"Nuevo equipo"},
+            {"_id":"t054","nombre_equipo":"Transformador de Potencia T2","subestacion":"Mirador Alto","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-10","proxima_mantencion_programada":"2026-02-10","observaciones":"En buen estado"},
+            {"_id":"t055","nombre_equipo":"Transformador de Potencia T1","subestacion":"Los Bancos","capacidad":"8./10.","relacion":"43.8/13.2","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558410","ano_fabricacion":1972,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":13.2,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-06-10","proxima_mantencion_programada":"2025-06-10","observaciones":"Funcionamiento normal"},
+            {"_id":"t056","nombre_equipo":"Transformador de Potencia T2","subestacion":"Los Bancos","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200867","ano_fabricacion":2010,"voltaje_primario_kv":69,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-05","proxima_mantencion_programada":"2025-09-05","observaciones":"Requiere atención"},
+            {"_id":"t057","nombre_equipo":"Transformador de Potencia T1","subestacion":"Parque Bicentenario","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":22.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-15","proxima_mantencion_programada":"2025-09-15","observaciones":"Sin novedades"},
+            {"_id":"t058","nombre_equipo":"Transformador de Potencia T1","subestacion":"Perez Guerrero","capacidad":"20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"94.2.406","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-10","proxima_mantencion_programada":"2025-12-10","observaciones":"Operación normal"},
+            {"_id":"t059","nombre_equipo":"Transformador de Potencia T2","subestacion":"Perez Guerrero","capacidad":"20/25","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK180673-2","ano_fabricacion":2018,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-10","proxima_mantencion_programada":"2026-04-10","observaciones":"Nuevo equipo"},
+            {"_id":"t060","nombre_equipo":"Transformador de Potencia T1","subestacion":"Sangolqui","capacidad":"15/20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"71/22064","ano_fabricacion":1977,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-07-25","proxima_mantencion_programada":"2025-07-25","observaciones":"Requiere revisión"},
+            {"_id":"t061","nombre_equipo":"Transformador de Potencia T2","subestacion":"Sangolqui","capacidad":"120/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200784","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-15","proxima_mantencion_programada":"2026-02-15","observaciones":"En buen estado"},
+            {"_id":"t062","nombre_equipo":"Transformador de Potencia T1","subestacion":"Pomasqui","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"185643","ano_fabricacion":2006,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Funcionando"},
+            {"_id":"t063","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"94.4.3338","ano_fabricacion":1995,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-10","proxima_mantencion_programada":"2025-11-10","observaciones":"Sin novedades"},
+            {"_id":"t064","nombre_equipo":"Transformador de Potencia T1","subestacion":"El Quinche","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201186","ano_fabricacion":2013,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-15","proxima_mantencion_programada":"2026-01-15","observaciones":"En buen estado"},
+            {"_id":"t065","nombre_equipo":"Transformador de Potencia T2","subestacion":"Eugenio Espejo","capacidad":"","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-3","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo"},
+            {"_id":"t066","nombre_equipo":"Transformador de Potencia T1","subestacion":"Eugenio Espejo","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Pauwells","numero_serie":"95.4.7519","ano_fabricacion":1996,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-05","proxima_mantencion_programada":"2025-10-05","observaciones":"Requiere mantenimiento"},
+            {"_id":"t067","nombre_equipo":"Transformador de Potencia T1","subestacion":"Batán Alto","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"1ZDB300000P-1998","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-20","proxima_mantencion_programada":"2026-04-20","observaciones":"Funcionando"},
+            {"_id":"t068","nombre_equipo":"Transformador de Potencia T2","subestacion":"El Obraje","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"1ZDB300000P-1884","ano_fabricacion":2017,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"En buen estado"},
+            {"_id":"t069","nombre_equipo":"Transformador de Potencia T1","subestacion":"Gualberto Hernandez","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Yorkshire","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":13.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-15","proxima_mantencion_programada":"2025-08-15","observaciones":"Sin novedades"},
+            {"_id":"t070","nombre_equipo":"Transformador de Potencia T1","subestacion":"Pasochoa","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Transformers y Rectifiers (INDIA) LDT.","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":4.16,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-05-20","proxima_mantencion_programada":"2025-05-20","observaciones":"Poco uso"},
+            {"_id":"t071","nombre_equipo":"Transformador de Potencia TR-G35","subestacion":"CH Loreto","capacidad":"","relacion":"","tipo_conexion":"YNd11","fabricante":"Z Standard","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":4.16,"voltaje_secundario_kv":24,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-06-25","proxima_mantencion_programada":"2025-06-25","observaciones":"Equipo especial"},
+            {"_id":"t072","nombre_equipo":"Transformador de Potencia T1","subestacion":"CH Victoria","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Incoesa","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":6.6,"voltaje_secundario_kv":22.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-10","proxima_mantencion_programada":"2025-09-10","observaciones":"Funcionamiento normal"},
+            {"_id":"t073","nombre_equipo":"Transformador de Potencia T1","subestacion":"Bario Nuevo","capacidad":"15/20","relacion":"46/23/6.3","tipo_conexion":"YNyn0d1","fabricante":"Yorkshire","numero_serie":"81/22181","ano_fabricacion":1978,"voltaje_primario_kv":46,"voltaje_secundario_kv":[6.3,22.8],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-20","proxima_mantencion_programada":"2025-12-20","observaciones":"Requiere revisión"},
+            {"_id":"t074","nombre_equipo":"Transformador de Potencia T1","subestacion":"Miraflores","capacidad":"15/20","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558409","ano_fabricacion":1972,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-03-15","proxima_mantencion_programada":"2025-03-15","observaciones":"FUERA DE SERVICIO"},
+            {"_id":"t075","nombre_equipo":"Transformador de Potencia T2","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"T98676","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-04-10","proxima_mantencion_programada":"2025-04-10","observaciones":"REPARACIÓN PENDIENTE"},
+            {"_id":"t076","nombre_equipo":"Transformador de Potencia T1","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"98675","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Reserva","fecha_ultima_inspeccion":"2024-11-01","proxima_mantencion_programada":"2025-05-01","observaciones":"Equipo en reserva"},
+            {"_id":"t077","nombre_equipo":"Transformador de Potencia T1","subestacion":"Andalucia","capacidad":"5/6.25","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Asea","numero_serie":"5897-844","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Dado de baja","fecha_ultima_inspeccion":"2023-12-01","proxima_mantencion_programada":null,"observaciones":"Equipo dado de baja"},
+            {"_id":"t078","nombre_equipo":"Transformador de Potencia T2","subestacion":"Epiclachima","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"185411","ano_fabricacion":2002,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"incendiado","fecha_ultima_inspeccion":"2024-12-20","proxima_mantencion_programada":null,"observaciones":"EQUIPO INCENDIADO - FUERA DE SERVICIO"},
+            {"_id":"t079","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"94.4.3338","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-15","proxima_mantencion_programada":"2025-10-15","observaciones":"Sin novedades"},
+            {"_id":"t080","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente"},
+            {"_id":"t081","nombre_equipo":"Transformador de Potencia T1","subestacion":"Miraflores","capacidad":"15/20","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558409","ano_fabricacion":1972,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-03-15","proxima_mantencion_programada":"2025-03-15","observaciones":"FUERA DE SERVICIO"},
+            {"_id":"t082","nombre_equipo":"Transformador de Potencia T2","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"T98676","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-04-10","proxima_mantencion_programada":"2025-04-10","observaciones":"REPARACIÓN PENDIENTE"}
         ];
 
-        // Variable para almacenar el transformador que se está editando
         let currentEditingId = null;
-
-        // Estado actual
         let currentFilter = "all";
         let currentSearch = "";
 
-        // Función para calcular días hasta próximo mantenimiento
         function calcularDiasHastaMantenimiento(fechaProxima) {
             if (!fechaProxima) return null;
             const hoy = new Date();
@@ -1073,7 +597,6 @@
             return diffDays;
         }
 
-        // Función para verificar si el mantenimiento está vencido o próximo
         function obtenerEstadoMantenimiento(fechaProxima) {
             const dias = calcularDiasHastaMantenimiento(fechaProxima);
             if (dias === null) return "sin-datos";
@@ -1082,32 +605,18 @@
             return "ok";
         }
 
-        // Función para generar alertas de mantenimiento
         function generarAlertas(transformadores) {
-            const hoy = new Date();
             const alertas = [];
-            
             transformadores.forEach(t => {
                 if (t.proxima_mantencion_programada) {
                     const dias = calcularDiasHastaMantenimiento(t.proxima_mantencion_programada);
                     if (dias < 0) {
-                        alertas.push({
-                            ...t,
-                            tipo: "vencido",
-                            mensaje: `Mantenimiento VENCIDO hace ${Math.abs(dias)} días`,
-                            urgencia: "urgente"
-                        });
+                        alertas.push({...t, tipo: "vencido", mensaje: `Mantenimiento VENCIDO hace ${Math.abs(dias)} días`, urgencia: "urgente"});
                     } else if (dias <= 30) {
-                        alertas.push({
-                            ...t,
-                            tipo: "proximo",
-                            mensaje: `Mantenimiento programado en ${dias} días`,
-                            urgencia: "advertencia"
-                        });
+                        alertas.push({...t, tipo: "proximo", mensaje: `Mantenimiento programado en ${dias} días`, urgencia: "advertencia"});
                     }
                 }
             });
-            
             return alertas.sort((a, b) => {
                 const diasA = calcularDiasHastaMantenimiento(a.proxima_mantencion_programada);
                 const diasB = calcularDiasHastaMantenimiento(b.proxima_mantencion_programada);
@@ -1115,19 +624,15 @@
             });
         }
 
-        // Función para renderizar alertas
         function renderizarAlertas() {
             const alertas = generarAlertas(transformadoresData);
             const alertasContainer = document.getElementById("alertasList");
             const alertasCount = document.getElementById("alertasCount");
-            
             alertasCount.textContent = alertas.length;
-            
             if (alertas.length === 0) {
                 alertasContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">✅ Todos los mantenimientos al día</div>';
                 return;
             }
-            
             alertasContainer.innerHTML = alertas.map(alerta => `
                 <div class="alerta-item ${alerta.urgencia === 'urgente' ? 'urgente' : ''}">
                     <div class="alerta-info">
@@ -1154,15 +659,11 @@
             return transformadores.filter(t => {
                 if (currentFilter !== "all") {
                     if (currentFilter === "No Operativo") {
-                        if (!["No Operativo", "Daño Interno", "incendiado", "Averiado", "Dado de baja"].includes(t.estado_actual)) {
-                            return false;
-                        }
+                        if (!["No Operativo", "Daño Interno", "incendiado", "Averiado", "Dado de baja"].includes(t.estado_actual)) return false;
                     } else if (currentFilter === "mantenimiento") {
                         const estadoMant = obtenerEstadoMantenimiento(t.proxima_mantencion_programada);
                         if (estadoMant !== "vencido" && estadoMant !== "proximo") return false;
-                    } else if (t.estado_actual !== currentFilter) {
-                        return false;
-                    }
+                    } else if (t.estado_actual !== currentFilter) return false;
                 }
                 if (currentSearch) {
                     const searchLower = currentSearch.toLowerCase();
@@ -1178,10 +679,7 @@
         function actualizarEstadisticas(transformadores) {
             const subestaciones = new Set(transformadores.map(t => t.subestacion));
             const operativos = transformadores.filter(t => t.estado_actual === "Operativo").length;
-            const noOperativos = transformadores.filter(t => 
-                ["No Operativo", "Daño Interno", "incendiado", "Averiado", "Dado de baja"].includes(t.estado_actual)
-            ).length;
-            
+            const noOperativos = transformadores.filter(t => ["No Operativo", "Daño Interno", "incendiado", "Averiado", "Dado de baja"].includes(t.estado_actual)).length;
             document.getElementById("totalSubestaciones").textContent = subestaciones.size;
             document.getElementById("totalTransformadores").textContent = transformadores.length;
             document.getElementById("totalOperativos").textContent = operativos;
@@ -1196,31 +694,21 @@
             const transformadoresFiltrados = filtrarTransformadores(transformadoresData);
             const grupos = agruparPorSubestacion(transformadoresFiltrados);
             const subestacionesOrdenadas = Object.keys(grupos).sort();
-            
             actualizarEstadisticas(transformadoresFiltrados);
-            
             const grid = document.getElementById("subestacionesGrid");
-            
             if (subestacionesOrdenadas.length === 0) {
                 grid.innerHTML = '<div class="empty-state">🔍 No se encontraron resultados</div>';
                 return;
             }
-            
             grid.innerHTML = subestacionesOrdenadas.map(subestacion => {
                 const transformadores = grupos[subestacion];
                 const operativosCount = transformadores.filter(t => t.estado_actual === "Operativo").length;
                 const dañadosCount = transformadores.length - operativosCount;
                 const safeId = subestacion.replace(/[^a-zA-Z0-9]/g, '_');
-                
                 return `
                     <div class="subestacion-card">
                         <div class="subestacion-header" onclick="toggleSubestacion('${subestacion.replace(/'/g, "\\'")}')">
-                            <h3>
-                                📍 ${subestacion}
-                                <span class="badge">${transformadores.length} transformadores</span>
-                                ${operativosCount > 0 ? `<span class="badge" style="background:#28a745;">✓ ${operativosCount}</span>` : ''}
-                                ${dañadosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠ ${dañadosCount}</span>` : ''}
-                            </h3>
+                            <h3>📍 ${subestacion}<span class="badge">${transformadores.length} transformadores</span>${operativosCount > 0 ? `<span class="badge" style="background:#28a745;">✓ ${operativosCount}</span>` : ''}${dañadosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠ ${dañadosCount}</span>` : ''}</h3>
                             <span class="toggle-icon" id="icon-${safeId}">▼</span>
                         </div>
                         <div class="transformadores-list" id="list-${safeId}">
@@ -1233,20 +721,11 @@
                                         <div class="transformador-nombre">
                                             ⚡ ${t.nombre_equipo}
                                             <span class="estado-badge ${getEstadoClass(t.estado_actual)}">${t.estado_actual || "Desconocido"}</span>
-                                            ${estadoMant === "vencido" ? '<span class="estado-badge" style="background:#dc3545; color:white;">⚠️ MANTENIMIENTO VENCIDO</span>' : ''}
-                                            ${estadoMant === "proximo" ? '<span class="estado-badge" style="background:#ffc107; color:#856404;">🔧 MANTENIMIENTO PRÓXIMO</span>' : ''}
+                                            ${estadoMant === "vencido" ? '<span class="estado-badge" style="background:#dc3545; color:white;">⚠️ VENCIDO</span>' : ''}
+                                            ${estadoMant === "proximo" ? '<span class="estado-badge" style="background:#ffc107; color:#856404;">🔧 PRÓXIMO</span>' : ''}
                                         </div>
-                                        <div class="transformador-detalles">
-                                            ${t.fabricante ? `🏭 ${t.fabricante}` : ''}
-                                            ${t.voltaje_primario_kv && t.voltaje_secundario_kv ? 
-                                                ` | ⚡ ${t.voltaje_primario_kv}/${Array.isArray(t.voltaje_secundario_kv) ? t.voltaje_secundario_kv.join('/') : t.voltaje_secundario_kv} kV` : ''}
-                                            ${t.capacidad ? ` | 📊 ${t.capacidad} MVA` : ''}
-                                            ${t.numero_serie ? ` | 🔢 ${t.numero_serie}` : ''}
-                                        </div>
-                                        <div class="mantenimiento-info ${mantClass}">
-                                            📅 Última inspección: ${t.fecha_ultima_inspeccion || "No registrada"} | 
-                                            🔧 Próxima mantención: ${t.proxima_mantencion_programada || "No programada"}
-                                        </div>
+                                        <div class="transformador-detalles">${t.fabricante ? `🏭 ${t.fabricante}` : ''}${t.voltaje_primario_kv && t.voltaje_secundario_kv ? ` | ⚡ ${t.voltaje_primario_kv}/${Array.isArray(t.voltaje_secundario_kv) ? t.voltaje_secundario_kv.join('/') : t.voltaje_secundario_kv} kV` : ''}${t.capacidad ? ` | 📊 ${t.capacidad} MVA` : ''}${t.numero_serie ? ` | 🔢 ${t.numero_serie}` : ''}</div>
+                                        <div class="mantenimiento-info ${mantClass}">📅 Última: ${t.fecha_ultima_inspeccion || "N/R"} | 🔧 Próxima: ${t.proxima_mantencion_programada || "N/P"}</div>
                                     </div>
                                 </div>
                             `}).join('')}
@@ -1254,7 +733,6 @@
                     </div>
                 `;
             }).join('');
-            
             renderizarAlertas();
         }
 
@@ -1274,17 +752,12 @@
         function abrirModalDetalles(id) {
             const transformador = transformadoresData.find(t => t._id === id);
             if (!transformador) return;
-            
             currentEditingId = id;
             const modal = document.getElementById("modal");
             document.getElementById("modalTitle").textContent = transformador.nombre_equipo;
-            
             const estadoMant = obtenerEstadoMantenimiento(transformador.proxima_mantencion_programada);
-            const alertaMant = estadoMant === "vencido" ? '<div class="alerta-item urgente" style="margin-bottom:15px;"><strong>⚠️ ¡MANTENIMIENTO VENCIDO!</strong> Programe una nueva fecha inmediatamente.</div>' : 
-                              estadoMant === "proximo" ? '<div class="alerta-item" style="margin-bottom:15px;"><strong>🔧 Mantenimiento próximo</strong> Programado para dentro de pocos días.</div>' : '';
-            
-            document.getElementById("modalBody").innerHTML = `
-                ${alertaMant}
+            const alertaMant = estadoMant === "vencido" ? '<div class="alerta-item urgente" style="margin-bottom:15px;"><strong>⚠️ ¡MANTENIMIENTO VENCIDO!</strong> Programe una nueva fecha inmediatamente.</div>' : estadoMant === "proximo" ? '<div class="alerta-item" style="margin-bottom:15px;"><strong>🔧 Mantenimiento próximo</strong> Programado para dentro de pocos días.</div>' : '';
+            document.getElementById("modalBody").innerHTML = `${alertaMant}
                 <div class="detail-row"><span class="detail-label">Subestación:</span><span class="detail-value">${transformador.subestacion || "No especificada"}</span></div>
                 <div class="detail-row"><span class="detail-label">Fabricante:</span><span class="detail-value">${transformador.fabricante || "No especificado"}</span></div>
                 <div class="detail-row"><span class="detail-label">Número de Serie:</span><span class="detail-value">${transformador.numero_serie || "No especificado"}</span></div>
@@ -1296,83 +769,41 @@
                 <div class="detail-row"><span class="detail-label">Conexión:</span><span class="detail-value">${transformador.tipo_conexion || "No especificada"}</span></div>
                 <div class="detail-row"><span class="detail-label">Última Inspección:</span><span class="detail-value">${transformador.fecha_ultima_inspeccion || "No registrada"}</span></div>
                 <div class="detail-row"><span class="detail-label">Próxima Mantención:</span><span class="detail-value">${transformador.proxima_mantencion_programada || "No programada"}</span></div>
-                <div class="detail-row"><span class="detail-label">Observaciones:</span><span class="detail-value">${transformador.observaciones || "Sin observaciones"}</span></div>
-            `;
-            
-            // Limpiar y ocultar formulario de edición
+                <div class="detail-row"><span class="detail-label">Observaciones:</span><span class="detail-value">${transformador.observaciones || "Sin observaciones"}</span></div>`;
             document.getElementById("editForm").style.display = "none";
             document.getElementById("editFechaInspeccion").value = transformador.fecha_ultima_inspeccion || "";
             document.getElementById("editProximaMantencion").value = transformador.proxima_mantencion_programada || "";
-            
             modal.style.display = "flex";
         }
-        
-        function abrirModalEdicion(id) {
-            abrirModalDetalles(id);
-            mostrarFormularioEdicion();
-        }
-        
-        function mostrarFormularioEdicion() {
-            const form = document.getElementById("editForm");
-            form.style.display = form.style.display === "none" ? "block" : "none";
-        }
-        
+
+        function abrirModalEdicion(id) { abrirModalDetalles(id); mostrarFormularioEdicion(); }
+        function mostrarFormularioEdicion() { const form = document.getElementById("editForm"); form.style.display = form.style.display === "none" ? "block" : "none"; }
         function guardarMantenimiento() {
             if (!currentEditingId) return;
-            
             const transformador = transformadoresData.find(t => t._id === currentEditingId);
             if (transformador) {
                 const nuevaInspeccion = document.getElementById("editFechaInspeccion").value;
                 const nuevaMantencion = document.getElementById("editProximaMantencion").value;
-                
                 if (nuevaInspeccion) transformador.fecha_ultima_inspeccion = nuevaInspeccion;
                 if (nuevaMantencion) transformador.proxima_mantencion_programada = nuevaMantencion;
-                
-                // Actualizar observaciones con registro de cambio
                 const fechaActual = new Date().toLocaleDateString();
-                transformador.observaciones = `[${fechaActual}] Mantenimiento actualizado. Próxima fecha: ${nuevaMantencion || "No definida"}. ` + (transformador.observaciones || "");
-                
-                // Cerrar formulario y refrescar
+                transformador.observaciones = `[${fechaActual}] Mantenimiento actualizado. Próxima: ${nuevaMantencion || "No definida"}. ` + (transformador.observaciones || "");
                 document.getElementById("editForm").style.display = "none";
                 renderDashboard();
-                
-                // Mostrar mensaje de éxito
                 alert("✅ Mantenimiento actualizado correctamente");
             }
         }
 
-        // Event listeners
-        document.getElementById("searchInput").addEventListener("input", (e) => {
-            currentSearch = e.target.value;
-            renderDashboard();
-        });
-        
-        document.querySelectorAll(".filter-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-                btn.classList.add("active");
-                currentFilter = btn.dataset.filter;
-                renderDashboard();
-            });
-        });
-        
-        document.querySelector(".close-modal").addEventListener("click", () => {
-            document.getElementById("modal").style.display = "none";
-        });
-        
-        window.onclick = (event) => {
-            if (event.target === document.getElementById("modal")) {
-                document.getElementById("modal").style.display = "none";
-            }
-        };
-        
+        document.getElementById("searchInput").addEventListener("input", (e) => { currentSearch = e.target.value; renderDashboard(); });
+        document.querySelectorAll(".filter-btn").forEach(btn => { btn.addEventListener("click", () => { document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); currentFilter = btn.dataset.filter; renderDashboard(); }); });
+        document.querySelector(".close-modal").addEventListener("click", () => { document.getElementById("modal").style.display = "none"; });
+        window.onclick = (event) => { if (event.target === document.getElementById("modal")) document.getElementById("modal").style.display = "none"; };
         window.toggleSubestacion = toggleSubestacion;
         window.abrirModalDetalles = abrirModalDetalles;
         window.abrirModalEdicion = abrirModalEdicion;
         window.mostrarFormularioEdicion = mostrarFormularioEdicion;
         window.guardarMantenimiento = guardarMantenimiento;
         
-        // Inicializar
         renderDashboard();
     </script>
 </body>
