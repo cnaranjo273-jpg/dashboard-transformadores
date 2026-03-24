@@ -23,7 +23,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -40,7 +39,6 @@
             opacity: 0.9;
         }
 
-        /* Stats Cards */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -72,7 +70,6 @@
             font-size: 0.9rem;
         }
 
-        /* Tabs */
         .tabs-container {
             background: white;
             border-radius: 15px;
@@ -128,7 +125,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Filters (dentro de cada pestaña) */
         .filters {
             background: #f8f9fa;
             border-radius: 12px;
@@ -177,7 +173,6 @@
             border-color: #667eea;
         }
 
-        /* Subestaciones Grid */
         .subestaciones-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
@@ -298,7 +293,6 @@
             font-weight: bold;
         }
 
-        /* Alertas específicas */
         .alertas-list {
             display: flex;
             flex-direction: column;
@@ -380,7 +374,6 @@
             background: #5a67d8;
         }
 
-        /* Reportes */
         .reportes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -426,7 +419,6 @@
             border-bottom: 1px solid #f0f0f0;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -562,8 +554,6 @@
             <div class="stat-card"><h3 id="totalOperativos">0</h3><p>Operativos</p></div>
             <div class="stat-card"><h3 id="totalNoOperativos">0</h3><p>No Operativos</p></div>
         </div>
-
-        <!-- Tabs -->
         <div class="tabs-container">
             <div class="tabs">
                 <button class="tab-btn active" data-tab="dashboard">
@@ -577,8 +567,6 @@
                     📋 Reporte General
                 </button>
             </div>
-
-            <!-- Pestaña Dashboard -->
             <div id="tab-dashboard" class="tab-content active">
                 <div class="filters">
                     <div class="search-box">
@@ -596,8 +584,6 @@
                 </div>
                 <div id="subestacionesGrid" class="subestaciones-grid"></div>
             </div>
-
-            <!-- Pestaña Alertas de Mantenimiento -->
             <div id="tab-alertas" class="tab-content">
                 <div class="filters">
                     <div class="filter-buttons">
@@ -608,8 +594,6 @@
                 </div>
                 <div id="alertasList" class="alertas-list"></div>
             </div>
-
-            <!-- Pestaña Reporte General -->
             <div id="tab-reportes" class="tab-content">
                 <div class="reportes-grid">
                     <div class="reporte-card">
@@ -646,8 +630,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -668,7 +650,6 @@
     </div>
 
     <script>
-        // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES
         const transformadoresData = [
             {"_id":"t001","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente"},
             {"_id":"t002","nombre_equipo":"Transformador de Potencia T2","subestacion":"Santa Rosa","capacidad":"","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango"},
@@ -753,14 +734,10 @@
             {"_id":"t081","nombre_equipo":"Transformador de Potencia T1","subestacion":"Miraflores","capacidad":"15/20","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558409","ano_fabricacion":1972,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-03-15","proxima_mantencion_programada":"2025-03-15","observaciones":"FUERA DE SERVICIO"},
             {"_id":"t082","nombre_equipo":"Transformador de Potencia T2","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"T98676","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-04-10","proxima_mantencion_programada":"2025-04-10","observaciones":"REPARACIÓN PENDIENTE"}
         ];
-
-        // Variables globales
         let currentEditingId = null;
         let currentFilter = "all";
         let currentSearch = "";
         let currentAlertaFilter = "all";
-
-        // Funciones de utilidad
         function calcularDiasHastaMantenimiento(fechaProxima) {
             if (!fechaProxima) return null;
             const hoy = new Date();
@@ -925,21 +902,14 @@
         }
 
         function renderReportes() {
-            // Porcentaje de operativos
             const total = transformadoresData.length;
             const operativos = transformadoresData.filter(t => t.estado_actual === "Operativo").length;
             const porcentajeOperativos = Math.round((operativos / total) * 100);
             document.getElementById("reporteOperativos").textContent = `${porcentajeOperativos}%`;
-            
-            // Equipos que requieren atención (mantenimiento vencido o próximo)
             const alertas = getAlertas();
             document.getElementById("reporteMantenimiento").textContent = alertas.length;
-            
-            // Número de subestaciones
             const subestaciones = new Set(transformadoresData.map(t => t.subestacion));
             document.getElementById("reporteSubestaciones").textContent = subestaciones.size;
-            
-            // Top 5 subestaciones
             const subestacionesCount = {};
             transformadoresData.forEach(t => {
                 const sub = t.subestacion || "Sin subestación";
@@ -952,8 +922,6 @@
                     <span><strong>${count}</strong> transformadores</span>
                 </div>
             `).join('');
-            
-            // Distribución por estado
             const estados = {};
             transformadoresData.forEach(t => {
                 const estado = t.estado_actual || "Desconocido";
@@ -965,8 +933,6 @@
                     <span><strong>${count}</strong> equipos (${Math.round((count/total)*100)}%)</span>
                 </div>
             `).join('');
-            
-            // Top fabricantes
             const fabricantes = {};
             transformadoresData.forEach(t => {
                 if (t.fabricante) {
@@ -1043,8 +1009,6 @@
                 alert("✅ Mantenimiento actualizado correctamente");
             }
         }
-
-        // Eventos de pestañas
         function initTabs() {
             const tabBtns = document.querySelectorAll(".tab-btn");
             tabBtns.forEach(btn => {
@@ -1059,8 +1023,6 @@
                 });
             });
         }
-
-        // Event listeners
         document.getElementById("searchInput")?.addEventListener("input", (e) => { currentSearch = e.target.value; renderDashboard(); });
         document.querySelectorAll(".filter-btn").forEach(btn => {
             btn.addEventListener("click", () => {
