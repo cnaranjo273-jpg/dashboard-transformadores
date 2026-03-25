@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Transformadores - Gestión de Mantenimientos</title>
+    <title>Dashboard EEQ - Gestión de Transformadores</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f0f2f5;
             min-height: 100vh;
             padding: 20px;
         }
@@ -24,18 +24,29 @@
         }
 
         .header {
-            text-align: center;
+            background: linear-gradient(135deg, #003366 0%, #0052a3 100%);
+            border-radius: 15px;
+            padding: 25px 30px;
             margin-bottom: 30px;
             color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header h1::before {
+            content: "⚡";
+            font-size: 2rem;
         }
 
         .header p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
 
@@ -51,17 +62,19 @@
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #009639;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .stat-card h3 {
             font-size: 2rem;
-            color: #667eea;
+            color: #003366;
             margin-bottom: 5px;
         }
 
@@ -74,14 +87,14 @@
             background: white;
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             overflow: hidden;
         }
 
         .tabs {
             display: flex;
             background: #f8f9fa;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .tab-btn {
@@ -102,12 +115,13 @@
 
         .tab-btn:hover {
             background: #e9ecef;
+            color: #003366;
         }
 
         .tab-btn.active {
             background: white;
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
+            color: #009639;
+            border-bottom: 3px solid #009639;
         }
 
         .tab-content {
@@ -130,6 +144,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
+            border: 1px solid #e9ecef;
         }
 
         .search-box input {
@@ -144,7 +159,7 @@
 
         .search-box input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #009639;
         }
 
         .filter-buttons {
@@ -168,9 +183,9 @@
         }
 
         .filter-btn.active {
-            background: #667eea;
+            background: #009639;
             color: white;
-            border-color: #667eea;
+            border-color: #009639;
         }
 
         .subestaciones-grid {
@@ -183,17 +198,18 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e9ecef;
         }
 
         .subestacion-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .subestacion-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #003366 0%, #0052a3 100%);
             color: white;
             padding: 15px 20px;
             cursor: pointer;
@@ -292,7 +308,7 @@
             color: #dc3545;
             font-weight: bold;
         }
-
+        
         .alertas-list {
             display: flex;
             flex-direction: column;
@@ -333,6 +349,7 @@
         .alerta-titulo {
             font-weight: bold;
             font-size: 1.1rem;
+            color: #003366;
         }
 
         .alerta-urgente-badge {
@@ -360,7 +377,7 @@
         }
 
         .btn-programar {
-            background: #667eea;
+            background: #009639;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -371,7 +388,7 @@
         }
 
         .btn-programar:hover {
-            background: #5a67d8;
+            background: #007a2e;
         }
 
         .reportes-grid {
@@ -386,18 +403,19 @@
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid #009639;
         }
 
         .reporte-card h3 {
-            color: #667eea;
+            color: #003366;
             margin-bottom: 15px;
         }
 
         .reporte-valor {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #333;
+            color: #009639;
         }
 
         .reporte-lista {
@@ -405,11 +423,14 @@
             border-radius: 15px;
             padding: 20px;
             margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .reporte-lista h3 {
             margin-bottom: 15px;
-            color: #667eea;
+            color: #003366;
+            border-left: 4px solid #009639;
+            padding-left: 12px;
         }
 
         .reporte-item {
@@ -448,7 +469,11 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-header h2 {
+            color: #003366;
         }
 
         .close-modal {
@@ -475,7 +500,7 @@
         }
 
         .edit-btn {
-            background: #667eea;
+            background: #003366;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -487,7 +512,7 @@
         }
 
         .edit-btn:hover {
-            background: #5a67d8;
+            background: #002244;
         }
 
         .edit-form {
@@ -506,7 +531,7 @@
         }
 
         .save-btn {
-            background: #28a745;
+            background: #009639;
             color: white;
             border: none;
             padding: 10px;
@@ -516,7 +541,7 @@
         }
 
         .save-btn:hover {
-            background: #218838;
+            background: #007a2e;
         }
 
         .empty-state {
@@ -544,8 +569,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏭 Dashboard de Transformadores</h1>
-            <p>Gestión de 82 equipos y mantenimientos programados</p>
+            <h1>Empresa Eléctrica Quito</h1>
+            <p>Dashboard de Gestión de Transformadores - 82 equipos monitoreados</p>
         </div>
 
         <div class="stats-container" id="statsContainer">
@@ -630,6 +655,7 @@
             </div>
         </div>
     </div>
+
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -734,10 +760,12 @@
             {"_id":"t081","nombre_equipo":"Transformador de Potencia T1","subestacion":"Miraflores","capacidad":"15/20","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558409","ano_fabricacion":1972,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-03-15","proxima_mantencion_programada":"2025-03-15","observaciones":"FUERA DE SERVICIO"},
             {"_id":"t082","nombre_equipo":"Transformador de Potencia T2","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"T98676","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-04-10","proxima_mantencion_programada":"2025-04-10","observaciones":"REPARACIÓN PENDIENTE"}
         ];
+
         let currentEditingId = null;
         let currentFilter = "all";
         let currentSearch = "";
         let currentAlertaFilter = "all";
+
         function calcularDiasHastaMantenimiento(fechaProxima) {
             if (!fechaProxima) return null;
             const hoy = new Date();
@@ -844,7 +872,7 @@
                 return `
                     <div class="subestacion-card">
                         <div class="subestacion-header" onclick="toggleSubestacion('${subestacion.replace(/'/g, "\\'")}')">
-                            <h3>📍 ${subestacion}<span class="badge">${transformadores.length} transformadores</span>${operativosCount > 0 ? `<span class="badge" style="background:#28a745;">✓ ${operativosCount}</span>` : ''}${dañadosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠ ${dañadosCount}</span>` : ''}</h3>
+                            <h3>📍 ${subestacion}<span class="badge">${transformadores.length} transformadores</span>${operativosCount > 0 ? `<span class="badge" style="background:#009639;">✓ ${operativosCount}</span>` : ''}${dañadosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠ ${dañadosCount}</span>` : ''}</h3>
                             <span class="toggle-icon" id="icon-${safeId}">▼</span>
                         </div>
                         <div class="transformadores-list" id="list-${safeId}">
@@ -906,10 +934,13 @@
             const operativos = transformadoresData.filter(t => t.estado_actual === "Operativo").length;
             const porcentajeOperativos = Math.round((operativos / total) * 100);
             document.getElementById("reporteOperativos").textContent = `${porcentajeOperativos}%`;
+            
             const alertas = getAlertas();
             document.getElementById("reporteMantenimiento").textContent = alertas.length;
+            
             const subestaciones = new Set(transformadoresData.map(t => t.subestacion));
             document.getElementById("reporteSubestaciones").textContent = subestaciones.size;
+            
             const subestacionesCount = {};
             transformadoresData.forEach(t => {
                 const sub = t.subestacion || "Sin subestación";
@@ -922,6 +953,7 @@
                     <span><strong>${count}</strong> transformadores</span>
                 </div>
             `).join('');
+            
             const estados = {};
             transformadoresData.forEach(t => {
                 const estado = t.estado_actual || "Desconocido";
@@ -933,6 +965,7 @@
                     <span><strong>${count}</strong> equipos (${Math.round((count/total)*100)}%)</span>
                 </div>
             `).join('');
+            
             const fabricantes = {};
             transformadoresData.forEach(t => {
                 if (t.fabricante) {
@@ -1009,6 +1042,7 @@
                 alert("✅ Mantenimiento actualizado correctamente");
             }
         }
+
         function initTabs() {
             const tabBtns = document.querySelectorAll(".tab-btn");
             tabBtns.forEach(btn => {
@@ -1023,6 +1057,7 @@
                 });
             });
         }
+
         document.getElementById("searchInput")?.addEventListener("input", (e) => { currentSearch = e.target.value; renderDashboard(); });
         document.querySelectorAll(".filter-btn").forEach(btn => {
             btn.addEventListener("click", () => {
