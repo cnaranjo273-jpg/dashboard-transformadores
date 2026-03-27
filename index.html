@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EEQ - Dashboard Integral de Transformadores e Inspecciones Termográficas</title>
+    <title>EEQ - Sistema Integral de Gestión de Activos Eléctricos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,123 +13,153 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #eef2f5;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
+        /* Header Profesional */
         .header {
-            background: linear-gradient(135deg, #003366 0%, #0052a3 100%);
-            border-radius: 15px;
-            padding: 25px 30px;
-            margin-bottom: 30px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #0a2b44 0%, #0f3b5c 100%);
+            border-radius: 20px;
+            padding: 24px 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
         .header h1 {
-            font-size: 2rem;
-            margin-bottom: 5px;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            letter-spacing: -0.3px;
         }
 
         .header h1::before {
-            content: "";
-            font-size: 2rem;
+            content: "⚡";
+            font-size: 1.8rem;
+            font-weight: normal;
         }
 
         .header p {
-            font-size: 1rem;
-            opacity: 0.9;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
         }
 
+        /* Stats Cards Profesionales */
         .stats-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
         .stat-card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            border-top: 4px solid #009639;
+            border-radius: 20px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
 
         .stat-card h3 {
-            font-size: 2rem;
-            color: #003366;
-            margin-bottom: 5px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1e4a6b;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
 
         .stat-card p {
-            color: #666;
-            font-size: 0.85rem;
+            color: #5a6874;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
+        .stat-trend {
+            font-size: 0.7rem;
+            margin-top: 8px;
+            color: #2c7a4d;
+        }
+
+        /* Tabs */
         .tabs-container {
             background: white;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .tabs {
             display: flex;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e0e0e0;
+            background: #f8fafc;
+            border-bottom: 1px solid #e9edf2;
             flex-wrap: wrap;
         }
 
         .tab-btn {
-            flex: 1;
-            padding: 15px 20px;
+            padding: 16px 28px;
             background: transparent;
             border: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: #666;
-            min-width: 140px;
+            gap: 10px;
+            color: #5a6874;
+            font-family: 'Inter', sans-serif;
         }
 
         .tab-btn:hover {
-            background: #e9ecef;
-            color: #003366;
+            background: #f1f5f9;
+            color: #1e4a6b;
         }
 
         .tab-btn.active {
             background: white;
-            color: #009639;
-            border-bottom: 3px solid #009639;
+            color: #1e4a6b;
+            border-bottom: 2px solid #1e4a6b;
         }
 
         .tab-content {
             display: none;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
+            padding: 28px;
+            animation: fadeIn 0.25s ease;
         }
 
         .tab-content.active {
@@ -136,31 +167,35 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Filters */
         .filters {
-            background: #f8f9fa;
-            border-radius: 12px;
+            background: #f8fafc;
+            border-radius: 16px;
             padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid #e9ecef;
+            margin-bottom: 28px;
+            border: 1px solid #e9edf2;
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            margin-bottom: 15px;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
+            background: white;
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: #009639;
+            border-color: #1e4a6b;
+            box-shadow: 0 0 0 3px rgba(30,74,107,0.1);
         }
 
         .filter-buttons {
@@ -170,49 +205,53 @@
         }
 
         .filter-btn {
-            padding: 8px 15px;
+            padding: 8px 18px;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.85rem;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            color: #2d3e50;
         }
 
         .filter-btn:hover {
-            background: #e0e0e0;
+            background: #eef2ff;
+            border-color: #1e4a6b;
         }
 
         .filter-btn.active {
-            background: #009639;
+            background: #1e4a6b;
             color: white;
-            border-color: #009639;
+            border-color: #1e4a6b;
         }
 
+        /* Grid de Subestaciones */
         .subestaciones-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+            gap: 24px;
         }
 
         .subestacion-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .subestacion-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
         }
 
         .subestacion-header {
-            background: linear-gradient(135deg, #003366 0%, #0052a3 100%);
+            background: linear-gradient(135deg, #1e4a6b 0%, #1e5a7e 100%);
             color: white;
-            padding: 15px 20px;
+            padding: 16px 20px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -220,116 +259,115 @@
         }
 
         .subestacion-header h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .badge {
             background: rgba(255,255,255,0.2);
-            padding: 3px 8px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 30px;
             font-size: 0.7rem;
+            font-weight: 500;
         }
 
         .toggle-icon {
-            transition: transform 0.3s;
-            font-size: 1.2rem;
+            transition: transform 0.2s;
+            font-size: 1rem;
         }
 
         .toggle-icon.expanded {
             transform: rotate(180deg);
         }
 
-        .seccion-equipos {
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .seccion-titulo {
-            background: #f8f9fa;
-            padding: 10px 15px;
-            font-weight: 600;
-            color: #003366;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            border-left: 3px solid #009639;
-        }
-
         .equipos-list {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out;
+            transition: max-height 0.3s ease-out;
         }
 
         .equipos-list.expanded {
-            max-height: 10000px;
-            transition: max-height 0.6s ease-in;
+            max-height: 8000px;
+            transition: max-height 0.4s ease-in;
+        }
+
+        .seccion-equipos {
+            border-bottom: 1px solid #eef2f5;
+        }
+
+        .seccion-titulo {
+            background: #fafcfd;
+            padding: 12px 20px;
+            font-weight: 600;
+            color: #1e4a6b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+            border-left: 3px solid #1e4a6b;
         }
 
         .equipo-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 14px 20px;
+            border-bottom: 1px solid #f0f4f8;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
 
         .equipo-item:hover {
-            background: #f8f9fa;
-        }
-
-        .equipo-info {
-            flex: 1;
+            background: #fafcfd;
         }
 
         .equipo-nombre {
             font-weight: 600;
-            color: #333;
+            color: #1f2e3a;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .equipo-detalles {
             font-size: 0.7rem;
-            color: #888;
-            margin-top: 4px;
+            color: #6c7a8a;
+            margin-top: 6px;
             display: flex;
-            gap: 15px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
         .prioridad-badge {
-            padding: 3px 8px;
-            border-radius: 20px;
+            padding: 4px 12px;
+            border-radius: 30px;
             font-size: 0.65rem;
             font-weight: 600;
         }
 
-        .prioridad-CRÍTICO { background: #dc3545; color: white; }
-        .prioridad-GRAVE { background: #fd7e14; color: white; }
-        .prioridad-INTERMEDIO { background: #ffc107; color: #856404; }
-        .prioridad-AVISO { background: #17a2b8; color: white; }
-        .prioridad-NORMAL { background: #28a745; color: white; }
-        .prioridad-Operativo { background: #28a745; color: white; }
-        .prioridad-Daño-Interno, .prioridad-incendiado, .prioridad-Averiado { background: #dc3545; color: white; }
-        .prioridad-No-Operativo { background: #fd7e14; color: white; }
-        .prioridad-Reserva { background: #17a2b8; color: white; }
+        .prioridad-CRÍTICO { background: #fee2e2; color: #b91c1c; }
+        .prioridad-GRAVE { background: #fff3e0; color: #c2410c; }
+        .prioridad-INTERMEDIO { background: #fef9e3; color: #b45309; }
+        .prioridad-AVISO { background: #e0f2fe; color: #0c4e6e; }
+        .prioridad-NORMAL { background: #e3f7e8; color: #166534; }
+        .prioridad-Operativo { background: #e3f7e8; color: #166534; }
+        .prioridad-Daño-Interno, .prioridad-incendiado, .prioridad-Averiado { background: #fee2e2; color: #b91c1c; }
+        .prioridad-No-Operativo { background: #fff3e0; color: #c2410c; }
+        .prioridad-Reserva { background: #e0f2fe; color: #0c4e6e; }
 
         .nivel-badge {
-            padding: 3px 8px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 30px;
             font-size: 0.65rem;
-            font-weight: 600;
-            background: #e9ecef;
-            color: #495057;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: #475569;
         }
 
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -338,6 +376,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -345,12 +384,13 @@
 
         .modal-content {
             background: white;
-            border-radius: 15px;
-            max-width: 550px;
+            border-radius: 24px;
+            max-width: 560px;
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
-            padding: 25px;
+            padding: 28px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
         }
 
         .modal-header {
@@ -358,101 +398,186 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eef2f5;
         }
 
         .modal-header h2 {
-            color: #003366;
-            font-size: 1.3rem;
+            color: #1e4a6b;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .close-modal {
             cursor: pointer;
             font-size: 1.5rem;
-            color: #888;
+            color: #94a3b8;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #475569;
         }
 
         .detail-row {
             display: flex;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .detail-label {
-            font-weight: 600;
-            width: 140px;
-            color: #555;
+            font-weight: 500;
+            width: 150px;
+            color: #475569;
+            font-size: 0.85rem;
         }
 
         .detail-value {
             flex: 1;
-            color: #333;
+            color: #1e293b;
+            font-size: 0.85rem;
         }
 
         .edit-form {
-            margin-top: 20px;
+            margin-top: 24px;
             padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
+            border-top: 1px solid #eef2f5;
         }
 
         .edit-form label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #334155;
+            font-size: 0.8rem;
         }
 
         .edit-form input, .edit-form select, .edit-form textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
         }
 
-        .edit-form select {
-            cursor: pointer;
+        .edit-form input:focus, .edit-form select:focus, .edit-form textarea:focus {
+            outline: none;
+            border-color: #1e4a6b;
+            box-shadow: 0 0 0 3px rgba(30,74,107,0.1);
         }
 
         .save-btn {
-            background: #009639;
+            background: #1e4a6b;
             color: white;
             border: none;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             width: 100%;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-top: 10px;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
         }
 
         .save-btn:hover {
-            background: #007a2e;
+            background: #0f3a55;
         }
 
         .empty-state {
             text-align: center;
-            padding: 50px;
-            color: #888;
-            background: white;
-            border-radius: 15px;
+            padding: 48px;
+            color: #64748b;
+            background: #f8fafc;
+            border-radius: 20px;
         }
 
+        /* Reportes mejorados */
+        .reportes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .reporte-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .reporte-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reporte-valor {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1e4a6b;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            border-radius: 20px;
+            height: 8px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #1e4a6b;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem;
+        }
+
+        .stat-label {
+            color: #475569;
+        }
+
+        .stat-number {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .badge-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .level-critico { background: #fee2e2; color: #b91c1c; }
+        .level-grave { background: #fff3e0; color: #c2410c; }
+        .level-intermedio { background: #fef9e3; color: #b45309; }
+        .level-aviso { background: #e0f2fe; color: #0c4e6e; }
+
         @media (max-width: 768px) {
-            .subestaciones-grid {
-                grid-template-columns: 1fr;
-            }
-            .detail-label {
-                width: 110px;
-            }
-            .tab-btn {
-                padding: 10px;
-                font-size: 0.75rem;
-                min-width: 90px;
-            }
+            body { padding: 16px; }
+            .subestaciones-grid { grid-template-columns: 1fr; }
+            .detail-label { width: 110px; }
+            .tab-btn { padding: 12px 16px; font-size: 0.75rem; }
+            .stats-container { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -460,30 +585,30 @@
     <div class="container">
         <div class="header">
             <h1>Empresa Eléctrica Quito</h1>
-            <p>Gestión Integral de Transformadores (82 equipos) e Inspecciones Termográficas (30 equipos)</p>
+            <p>Sistema Integral de Gestión de Activos Eléctricos | Transformadores e Inspecciones Termográficas</p>
         </div>
 
         <div class="stats-container" id="statsContainer">
             <div class="stat-card"><h3 id="totalSubestaciones">0</h3><p>Subestaciones</p></div>
             <div class="stat-card"><h3 id="totalTransformadores">0</h3><p>Transformadores</p></div>
-            <div class="stat-card"><h3 id="totalEquiposTermicos">0</h3><p>Equipos Inspeccionados</p></div>
+            <div class="stat-card"><h3 id="totalEquiposTermicos">0</h3><p>Inspecciones Termográficas</p></div>
             <div class="stat-card"><h3 id="totalAlertas">0</h3><p>Alertas Críticas/Graves</p></div>
         </div>
 
         <div class="tabs-container">
             <div class="tabs">
-                <button class="tab-btn active" data-tab="dashboard">📊 Dashboard Completo</button>
-                <button class="tab-btn" data-tab="alertas">⚠️ Alertas Críticas y Graves</button>
-                <button class="tab-btn" data-tab="reportes">📋 Reporte General</button>
+                <button class="tab-btn active" data-tab="dashboard">📊 Dashboard de Activos</button>
+                <button class="tab-btn" data-tab="alertas">⚠️ Alertas de Mantenimiento</button>
+                <button class="tab-btn" data-tab="reportes">📈 Reporte General y Análisis</button>
             </div>
 
             <div id="tab-dashboard" class="tab-content active">
                 <div class="filters">
                     <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="🔍 Buscar subestación, equipo, nomenclatura o voltaje...">
+                        <input type="text" id="searchInput" placeholder="🔍 Buscar por subestación, equipo, nomenclatura o voltaje...">
                     </div>
                     <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all">📊 Todos (112 equipos)</button>
+                        <button class="filter-btn active" data-filter="all">📊 Todos los equipos</button>
                         <button class="filter-btn" data-filter="CRÍTICO">🔥 Crítico (Nivel 4)</button>
                         <button class="filter-btn" data-filter="GRAVE">⚠️ Grave (Nivel 3)</button>
                         <button class="filter-btn" data-filter="INTERMEDIO">🟡 Intermedio (Nivel 2)</button>
@@ -505,185 +630,245 @@
         </div>
     </div>
 
-    <div id="modal" class="modal">
+    <!-- Modal para edición de Transformadores -->
+    <div id="modalTransformador" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Editar Información</h2>
-                <span class="close-modal">&times;</span>
+                <h2 id="modalTransformadorTitle">Editar Mantenimiento de Transformador</h2>
+                <span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span>
             </div>
-            <div id="modalBody"></div>
-            <div class="edit-form" id="editFormContainer">
+            <div id="modalTransformadorBody"></div>
+            <div class="edit-form">
+                <label>📅 Fecha Última Inspección:</label>
+                <input type="date" id="editFechaInspeccionTransformador">
+                <label>🔧 Próxima Mantención Programada:</label>
+                <input type="date" id="editProximaMantencionTransformador">
+                <label>📝 Observaciones:</label>
+                <textarea id="editObservacionesTransformador" rows="3"></textarea>
+                <button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para edición de Inspecciones Termográficas -->
+    <div id="modalTermico" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTermicoTitle">Editar Inspección Termográfica</h2>
+                <span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span>
+            </div>
+            <div id="modalTermicoBody"></div>
+            <div class="edit-form">
                 <label>📅 Fecha de Inspección:</label>
-                <input type="date" id="editFechaInspeccion">
+                <input type="date" id="editFechaInspeccionTermico">
                 <label>🌡️ Nivel de Mantenimiento:</label>
-                <select id="editNivelMantenimiento">
-                    <option value="NORMAL">NORMAL (Menor a 5°C)</option>
+                <select id="editNivelMantenimientoTermico">
                     <option value="AVISO">AVISO (Nivel 1: 5-15°C)</option>
                     <option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option>
                     <option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option>
                     <option value="CRÍTICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option>
                 </select>
-                <label>📝 Observaciones:</label>
-                <textarea id="editObservaciones" rows="3"></textarea>
-                <button class="save-btn" onclick="guardarEdicion()">💾 Guardar Cambios</button>
+                <button class="save-btn" onclick="guardarEdicionTermico()">💾 Guardar Cambios</button>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================================
+        // FUNCIÓN PARA NORMALIZAR NOMBRES DE SUBESTACIONES
+        // ============================================================
+        function normalizarSubestacion(nombre) {
+            if (!nombre) return "SIN SUBESTACIÓN";
+            let normalized = nombre.toUpperCase().trim();
+            normalized = normalized.replace(/Á/g, 'A').replace(/É/g, 'E').replace(/Í/g, 'I').replace(/Ó/g, 'O').replace(/Ú/g, 'U').replace(/Ü/g, 'U');
+            normalized = normalized.replace(/Ñ/g, 'N');
+            return normalized;
+        }
+
+        // ============================================================
         // DATOS DE TRANSFORMADORES (82 equipos completos)
         // ============================================================
         const transformadoresData = [
-            {"id":"t001","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente","tipo":"transformador"},
-            {"id":"t002","nombre_equipo":"Transformador de Potencia T2","subestacion":"Santa Rosa","capacidad":"","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t003","nombre_equipo":"Transformador de Potencia T1","subestacion":"Olimpico","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200789","ano_fabricacion":2016,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t004","nombre_equipo":"Transformador de Potencia T1","subestacion":"Luluncoto","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200790","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-15","proxima_mantencion_programada":"2025-10-15","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t005","nombre_equipo":"Transformador de Potencia T2","subestacion":"Bario Nuevo","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Pauwells","numero_serie":"94.2.4069","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Requiere cambio de aceite","tipo":"transformador"},
-            {"id":"t006","nombre_equipo":"Transformador de Potencia T1","subestacion":"Chimbacalle","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"61161","ano_fabricacion":1987,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"Vibraciones inusuales","tipo":"transformador"},
-            {"id":"t007","nombre_equipo":"Transformador de Potencia T1","subestacion":"Chilibulo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-01","proxima_mantencion_programada":"2025-12-01","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t008","nombre_equipo":"Transformador de Potencia T2","subestacion":"Chilibulo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-4","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo","tipo":"transformador"},
-            {"id":"t009","nombre_equipo":"Transformador de Potencia T1","subestacion":"Escuela Sucre","capacidad":"5/6.25","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"98674","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-03-10","proxima_mantencion_programada":"2025-03-10","observaciones":"Mantenimiento vencido","tipo":"transformador"},
-            {"id":"t010","nombre_equipo":"Transformador de Potencia T1","subestacion":"San Roque","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-15","proxima_mantencion_programada":"2026-01-15","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t011","nombre_equipo":"Transformador de Potencia T1","subestacion":"La Marin","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-20","proxima_mantencion_programada":"2026-02-20","observaciones":"Funcionando correctamente","tipo":"transformador"},
-            {"id":"t012","nombre_equipo":"Transformador de Potencia T2","subestacion":"Miraflores","capacidad":"15/20","relacion":"46/23/6.3","tipo_conexion":"DYn1","fabricante":"Raycham","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":[6.3,22.8],"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-11-10","proxima_mantencion_programada":"2025-05-10","observaciones":"Requiere reparación","tipo":"transformador"},
-            {"id":"t013","nombre_equipo":"Transformador de Potencia T1","subestacion":"Diez Vieja","capacidad":"8./10.","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558406","ano_fabricacion":1972,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-15","proxima_mantencion_programada":"2025-09-15","observaciones":"Operación normal","tipo":"transformador"},
-            {"id":"t014","nombre_equipo":"Transformador de Potencia T1","subestacion":"Belisario Quevedo","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201189","ano_fabricacion":2013,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-01","proxima_mantencion_programada":"2026-03-01","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t015","nombre_equipo":"Transformador de Potencia T1","subestacion":"La Floresta","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200788","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-10","proxima_mantencion_programada":"2026-04-10","observaciones":"Funcionamiento normal","tipo":"transformador"},
-            {"id":"t016","nombre_equipo":"Transformador de Potencia T1","subestacion":"Gualo","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201413","ano_fabricacion":2015,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-02-15","proxima_mantencion_programada":"2025-02-15","observaciones":"MANTENIMIENTO VENCIDO","tipo":"transformador"},
-            {"id":"t017","nombre_equipo":"Transformador de Potencia T2","subestacion":"Gualo","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK180674-1","ano_fabricacion":2018,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t018","nombre_equipo":"Transformador de Potencia T1","subestacion":"El Bosque","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"","ano_fabricacion":2019,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t019","nombre_equipo":"Transformador de Potencia T1","subestacion":"Rio Coca","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Meidensha","numero_serie":"1K8307T1","ano_fabricacion":1980,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-20","proxima_mantencion_programada":"2025-08-20","observaciones":"Requiere revisión de aceite","tipo":"transformador"},
-            {"id":"t020","nombre_equipo":"Transformador de Potencia T2","subestacion":"Rio Coca","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Meidensha","numero_serie":"1K8307T2","ano_fabricacion":1980,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-12-01","proxima_mantencion_programada":"2025-03-01","observaciones":"FUERA DE SERVICIO","tipo":"transformador"},
-            {"id":"t021","nombre_equipo":"Transformador de Potencia T1","subestacion":"Andalucia","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"185236-1388","ano_fabricacion":1998,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-10","proxima_mantencion_programada":"2026-01-10","observaciones":"Operación normal","tipo":"transformador"},
-            {"id":"t022","nombre_equipo":"Transformador de Potencia T1","subestacion":"Cristiania","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Trafo","numero_serie":"2003","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-20","proxima_mantencion_programada":"2025-11-20","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t023","nombre_equipo":"Transformador de Potencia T2","subestacion":"Cristiania","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-15","proxima_mantencion_programada":"2026-02-15","observaciones":"Funcionando correctamente","tipo":"transformador"},
-            {"id":"t024","nombre_equipo":"Transformador de Potencia T2","subestacion":"Cotocollao","capacidad":"20/27/33","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200626","ano_fabricacion":2008,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-05","proxima_mantencion_programada":"2026-04-05","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t025","nombre_equipo":"Transformador de Potencia T3","subestacion":"Cotocollao","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"9740751","ano_fabricacion":1997,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Reserva","fecha_ultima_inspeccion":"2024-10-01","proxima_mantencion_programada":"2025-04-01","observaciones":"Equipo en reserva","tipo":"transformador"},
-            {"id":"t026","nombre_equipo":"Transformador de Potencia T4","subestacion":"Cotocollao","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"9740751","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-03-25","proxima_mantencion_programada":"2025-03-25","observaciones":"Mantenimiento programado","tipo":"transformador"},
-            {"id":"t027","nombre_equipo":"Transformador de Potencia T1","subestacion":"Cotocollao","capacidad":"60/80/100","relacion":"138/46/23","tipo_conexion":"YNyn0d1","fabricante":"Meidensha","numero_serie":"8N8017T1","ano_fabricacion":1987,"voltaje_primario_kv":138,"voltaje_secundario_kv":[46,23],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-15","proxima_mantencion_programada":"2025-12-15","observaciones":"Equipo principal","tipo":"transformador"},
-            {"id":"t028","nombre_equipo":"Transformador de Potencia T1","subestacion":"Epiclachima","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"295842","ano_fabricacion":2009,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-10","proxima_mantencion_programada":"2026-03-10","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t029","nombre_equipo":"Transformador de Potencia T2","subestacion":"Epiclachima","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201190","ano_fabricacion":2013,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"incendiado","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"EQUIPO INCENDIADO","tipo":"transformador"},
-            {"id":"t030","nombre_equipo":"Transformador de Potencia T1","subestacion":"San Antonio","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201187","ano_fabricacion":2013,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-01","proxima_mantencion_programada":"2026-05-01","observaciones":"Funcionamiento normal","tipo":"transformador"},
-            {"id":"t031","nombre_equipo":"Transformador de Potencia T1","subestacion":"Conocoto","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-07-15","proxima_mantencion_programada":"2025-07-15","observaciones":"Requiere revisión","tipo":"transformador"},
-            {"id":"t032","nombre_equipo":"Transformador de Potencia T2","subestacion":"Conocoto","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Funcionamiento normal","tipo":"transformador"},
-            {"id":"t033","nombre_equipo":"Transformador de Potencia T1","subestacion":"Carolina","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Meiden","numero_serie":"1K8309T1","ano_fabricacion":1984,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t034","nombre_equipo":"Transformador de Potencia T2","subestacion":"Carolina","capacidad":"15/20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK180673-1","ano_fabricacion":2018,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-20","proxima_mantencion_programada":"2026-04-20","observaciones":"Nuevo equipo","tipo":"transformador"},
-            {"id":"t035","nombre_equipo":"Transformador de Potencia T3","subestacion":"San Pablo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"CG Transf","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-06-10","proxima_mantencion_programada":"2025-06-10","observaciones":"Sin novedades","tipo":"transformador"},
-            {"id":"t036","nombre_equipo":"Transformador de Potencia T1","subestacion":"Alangasi","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200628","ano_fabricacion":2008,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-20","proxima_mantencion_programada":"2026-01-20","observaciones":"Operación normal","tipo":"transformador"},
-            {"id":"t037","nombre_equipo":"Transformador de Potencia T1","subestacion":"San Rafael","capacidad":"20/26.7/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Meiden","numero_serie":"","ano_fabricacion":1988,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-05","proxima_mantencion_programada":"2025-11-05","observaciones":"Requiere mantenimiento","tipo":"transformador"},
-            {"id":"t038","nombre_equipo":"Transformador de Potencia T1","subestacion":"Iñaquito","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"94.2.4068","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-15","proxima_mantencion_programada":"2025-09-15","observaciones":"Vibraciones normales","tipo":"transformador"},
-            {"id":"t039","nombre_equipo":"Transformador de Potencia T2","subestacion":"Iñaquito","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200787","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-10","proxima_mantencion_programada":"2026-02-10","observaciones":"Funcionando","tipo":"transformador"},
-            {"id":"t040","nombre_equipo":"Transformador de Potencia T1","subestacion":"Nueva Cumbaya","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-25","proxima_mantencion_programada":"2025-08-25","observaciones":"Sin observaciones","tipo":"transformador"},
-            {"id":"t041","nombre_equipo":"Transformador de Potencia T1","subestacion":"Plataforma Financiera","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK170227-1","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-01","proxima_mantencion_programada":"2026-05-01","observaciones":"Nuevo equipo","tipo":"transformador"},
-            {"id":"t042","nombre_equipo":"Transformador de Potencia T1","subestacion":"Tababela","capacidad":"","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-1","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo","tipo":"transformador"},
-            {"id":"t043","nombre_equipo":"Transformador de Potencia T1","subestacion":"Diez Nueva","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"22178","ano_fabricacion":1978,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-10","proxima_mantencion_programada":"2025-10-10","observaciones":"Requiere atención","tipo":"transformador"},
-            {"id":"t044","nombre_equipo":"Transformador de Potencia T1","subestacion":"Nuevo Aeropuerto","capacidad":"15/20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-05","proxima_mantencion_programada":"2025-12-05","observaciones":"Funcionamiento normal","tipo":"transformador"},
-            {"id":"t045","nombre_equipo":"Transformador de Potencia T1","subestacion":"Tumbaco","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-30","proxima_mantencion_programada":"2025-09-30","observaciones":"Sin novedades","tipo":"transformador"},
-            {"id":"t046","nombre_equipo":"Transformador de Potencia T2","subestacion":"Tumbaco","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"185329","ano_fabricacion":2000,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Requiere cambio de aceite","tipo":"transformador"},
-            {"id":"t047","nombre_equipo":"Transformador de Potencia T1","subestacion":"Vicentina","capacidad":"","relacion":"","tipo_conexion":"YNyn0d1","fabricante":"Shenda","numero_serie":"CK130960-1","ano_fabricacion":2013,"voltaje_primario_kv":138,"voltaje_secundario_kv":46,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-15","proxima_mantencion_programada":"2026-04-15","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t048","nombre_equipo":"Transformador de Potencia T2","subestacion":"Vicentina","capacidad":"","relacion":"","tipo_conexion":"YNyn0d1","fabricante":"Shenda","numero_serie":"18410","ano_fabricacion":2002,"voltaje_primario_kv":138,"voltaje_secundario_kv":46,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-20","proxima_mantencion_programada":"2025-11-20","observaciones":"Requiere revisión","tipo":"transformador"},
-            {"id":"t049","nombre_equipo":"Transformador de Potencia T1","subestacion":"Selva Alegre","capacidad":"60/80/100","relacion":"46/2.3","tipo_conexion":"YNyn0d1","fabricante":"BBC","numero_serie":"GM 100797","ano_fabricacion":1986,"voltaje_primario_kv":138,"voltaje_secundario_kv":[46,6.3],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-10","proxima_mantencion_programada":"2025-08-10","observaciones":"Equipo principal","tipo":"transformador"},
-            {"id":"t050","nombre_equipo":"Transformador de Potencia T2","subestacion":"Selva Alegre","capacidad":"60/80/100","relacion":"46/2.3","tipo_conexion":"YNyn0d1","fabricante":"Siemens","numero_serie":"185641","ano_fabricacion":2006,"voltaje_primario_kv":138,"voltaje_secundario_kv":[46,6.3],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"Funcionando","tipo":"transformador"},
-            {"id":"t051","nombre_equipo":"Transformador de Potencia TR","subestacion":"Papallacta","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"MOVIL_Siemens","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-07-20","proxima_mantencion_programada":"2025-07-20","observaciones":"Equipo móvil","tipo":"transformador"},
-            {"id":"t052","nombre_equipo":"Transformador de Potencia","subestacion":"La Calera","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Ecuatran","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":6.3,"voltaje_secundario_kv":22.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-05-15","proxima_mantencion_programada":"2025-05-15","observaciones":"Poco uso","tipo":"transformador"},
-            {"id":"t053","nombre_equipo":"Transformador de Potencia T1","subestacion":"El Inga Bajo","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-25","proxima_mantencion_programada":"2026-01-25","observaciones":"Nuevo equipo","tipo":"transformador"},
-            {"id":"t054","nombre_equipo":"Transformador de Potencia T2","subestacion":"Mirador Alto","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-10","proxima_mantencion_programada":"2026-02-10","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t055","nombre_equipo":"Transformador de Potencia T1","subestacion":"Los Bancos","capacidad":"8./10.","relacion":"43.8/13.2","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558410","ano_fabricacion":1972,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":13.2,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-06-10","proxima_mantencion_programada":"2025-06-10","observaciones":"Funcionamiento normal","tipo":"transformador"},
-            {"id":"t056","nombre_equipo":"Transformador de Potencia T2","subestacion":"Los Bancos","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200867","ano_fabricacion":2010,"voltaje_primario_kv":69,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-05","proxima_mantencion_programada":"2025-09-05","observaciones":"Requiere atención","tipo":"transformador"},
-            {"id":"t057","nombre_equipo":"Transformador de Potencia T1","subestacion":"Parque Bicentenario","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":22.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-15","proxima_mantencion_programada":"2025-09-15","observaciones":"Sin novedades","tipo":"transformador"},
-            {"id":"t058","nombre_equipo":"Transformador de Potencia T1","subestacion":"Perez Guerrero","capacidad":"20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"94.2.406","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-10","proxima_mantencion_programada":"2025-12-10","observaciones":"Operación normal","tipo":"transformador"},
-            {"id":"t059","nombre_equipo":"Transformador de Potencia T2","subestacion":"Perez Guerrero","capacidad":"20/25","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK180673-2","ano_fabricacion":2018,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-10","proxima_mantencion_programada":"2026-04-10","observaciones":"Nuevo equipo","tipo":"transformador"},
-            {"id":"t060","nombre_equipo":"Transformador de Potencia T1","subestacion":"Sangolqui","capacidad":"15/20","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Yorkshire","numero_serie":"71/22064","ano_fabricacion":1977,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-07-25","proxima_mantencion_programada":"2025-07-25","observaciones":"Requiere revisión","tipo":"transformador"},
-            {"id":"t061","nombre_equipo":"Transformador de Potencia T2","subestacion":"Sangolqui","capacidad":"120/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200784","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-15","proxima_mantencion_programada":"2026-02-15","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t062","nombre_equipo":"Transformador de Potencia T1","subestacion":"Pomasqui","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"185643","ano_fabricacion":2006,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Funcionando","tipo":"transformador"},
-            {"id":"t063","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Pauwels","numero_serie":"94.4.3338","ano_fabricacion":1995,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-11-10","proxima_mantencion_programada":"2025-11-10","observaciones":"Sin novedades","tipo":"transformador"},
-            {"id":"t064","nombre_equipo":"Transformador de Potencia T1","subestacion":"El Quinche","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"201186","ano_fabricacion":2013,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-15","proxima_mantencion_programada":"2026-01-15","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t065","nombre_equipo":"Transformador de Potencia T2","subestacion":"Eugenio Espejo","capacidad":"","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-3","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo","tipo":"transformador"},
-            {"id":"t066","nombre_equipo":"Transformador de Potencia T1","subestacion":"Eugenio Espejo","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"Pauwells","numero_serie":"95.4.7519","ano_fabricacion":1996,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-05","proxima_mantencion_programada":"2025-10-05","observaciones":"Requiere mantenimiento","tipo":"transformador"},
-            {"id":"t067","nombre_equipo":"Transformador de Potencia T1","subestacion":"Batán Alto","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"1ZDB300000P-1998","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-04-20","proxima_mantencion_programada":"2026-04-20","observaciones":"Funcionando","tipo":"transformador"},
-            {"id":"t068","nombre_equipo":"Transformador de Potencia T2","subestacion":"El Obraje","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Chint","numero_serie":"1ZDB300000P-1884","ano_fabricacion":2017,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t069","nombre_equipo":"Transformador de Potencia T1","subestacion":"Gualberto Hernandez","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Yorkshire","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":13.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-08-15","proxima_mantencion_programada":"2025-08-15","observaciones":"Sin novedades","tipo":"transformador"},
-            {"id":"t070","nombre_equipo":"Transformador de Potencia T1","subestacion":"Pasochoa","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Transformers y Rectifiers (INDIA) LDT.","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":4.16,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-05-20","proxima_mantencion_programada":"2025-05-20","observaciones":"Poco uso","tipo":"transformador"},
-            {"id":"t071","nombre_equipo":"Transformador de Potencia TR-G35","subestacion":"CH Loreto","capacidad":"","relacion":"","tipo_conexion":"YNd11","fabricante":"Z Standard","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":4.16,"voltaje_secundario_kv":24,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-06-25","proxima_mantencion_programada":"2025-06-25","observaciones":"Equipo especial","tipo":"transformador"},
-            {"id":"t072","nombre_equipo":"Transformador de Potencia T1","subestacion":"CH Victoria","capacidad":"","relacion":"","tipo_conexion":"YnD1","fabricante":"Incoesa","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":6.6,"voltaje_secundario_kv":22.8,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-09-10","proxima_mantencion_programada":"2025-09-10","observaciones":"Funcionamiento normal","tipo":"transformador"},
-            {"id":"t073","nombre_equipo":"Transformador de Potencia T1","subestacion":"Bario Nuevo","capacidad":"15/20","relacion":"46/23/6.3","tipo_conexion":"YNyn0d1","fabricante":"Yorkshire","numero_serie":"81/22181","ano_fabricacion":1978,"voltaje_primario_kv":46,"voltaje_secundario_kv":[6.3,22.8],"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-20","proxima_mantencion_programada":"2025-12-20","observaciones":"Requiere revisión","tipo":"transformador"},
-            {"id":"t074","nombre_equipo":"Transformador de Potencia T1","subestacion":"Miraflores","capacidad":"15/20","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558409","ano_fabricacion":1972,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-03-15","proxima_mantencion_programada":"2025-03-15","observaciones":"FUERA DE SERVICIO","tipo":"transformador"},
-            {"id":"t075","nombre_equipo":"Transformador de Potencia T2","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"T98676","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-04-10","proxima_mantencion_programada":"2025-04-10","observaciones":"REPARACIÓN PENDIENTE","tipo":"transformador"},
-            {"id":"t076","nombre_equipo":"Transformador de Potencia T1","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"98675","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Reserva","fecha_ultima_inspeccion":"2024-11-01","proxima_mantencion_programada":"2025-05-01","observaciones":"Equipo en reserva","tipo":"transformador"},
-            {"id":"t077","nombre_equipo":"Transformador de Potencia T1","subestacion":"Andalucia","capacidad":"5/6.25","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Asea","numero_serie":"5897-844","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Dado de baja","fecha_ultima_inspeccion":"2023-12-01","proxima_mantencion_programada":null,"observaciones":"Equipo dado de baja","tipo":"transformador"},
-            {"id":"t078","nombre_equipo":"Transformador de Potencia T2","subestacion":"Epiclachima","capacidad":"20/27/33","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"185411","ano_fabricacion":2002,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"incendiado","fecha_ultima_inspeccion":"2024-12-20","proxima_mantencion_programada":null,"observaciones":"EQUIPO INCENDIADO","tipo":"transformador"},
-            {"id":"t079","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"94.4.3338","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-15","proxima_mantencion_programada":"2025-10-15","observaciones":"Sin novedades","tipo":"transformador"},
-            {"id":"t080","nombre_equipo":"Transformador de Potencia T2","subestacion":"Pomasqui","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente","tipo":"transformador"},
-            {"id":"t081","nombre_equipo":"Transformador de Potencia T1","subestacion":"Miraflores","capacidad":"15/20","relacion":"43.8/6.3","tipo_conexion":"DYn1","fabricante":"Mitsubishi","numero_serie":"558409","ano_fabricacion":1972,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-03-15","proxima_mantencion_programada":"2025-03-15","observaciones":"FUERA DE SERVICIO","tipo":"transformador"},
-            {"id":"t082","nombre_equipo":"Transformador de Potencia T2","subestacion":"Diez Vieja","capacidad":"5/6.25","relacion":"43.8-21.9/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"T98676","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Averiado","fecha_ultima_inspeccion":"2024-04-10","proxima_mantencion_programada":"2025-04-10","observaciones":"REPARACIÓN PENDIENTE","tipo":"transformador"}
+            {"id":"t001","nombre_equipo":"Transformador de Potencia T2","subestacion":"POMASQUI","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente","tipo":"transformador"},
+            {"id":"t002","nombre_equipo":"Transformador de Potencia T2","subestacion":"SANTA ROSA","capacidad":"","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
+            {"id":"t003","nombre_equipo":"Transformador de Potencia T1","subestacion":"OLIMPICO","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200789","ano_fabricacion":2016,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
+            {"id":"t004","nombre_equipo":"Transformador de Potencia T1","subestacion":"LULUNCOTO","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200790","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-15","proxima_mantencion_programada":"2025-10-15","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
+            {"id":"t005","nombre_equipo":"Transformador de Potencia T2","subestacion":"BARIO NUEVO","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Pauwells","numero_serie":"94.2.4069","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Requiere cambio de aceite","tipo":"transformador"},
+            {"id":"t006","nombre_equipo":"Transformador de Potencia T1","subestacion":"CHIMBACALLE","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"61161","ano_fabricacion":1987,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"Vibraciones inusuales","tipo":"transformador"},
+            {"id":"t007","nombre_equipo":"Transformador de Potencia T1","subestacion":"CHILIBULO","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-01","proxima_mantencion_programada":"2025-12-01","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
+            {"id":"t008","nombre_equipo":"Transformador de Potencia T2","subestacion":"CHILIBULO","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-4","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo","tipo":"transformador"},
+            {"id":"t009","nombre_equipo":"Transformador de Potencia T1","subestacion":"ESCUELA SUCRE","capacidad":"5/6.25","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"98674","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-03-10","proxima_mantencion_programada":"2025-03-10","observaciones":"Mantenimiento vencido","tipo":"transformador"},
+            {"id":"t010","nombre_equipo":"Transformador de Potencia T1","subestacion":"SAN ROQUE","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-15","proxima_mantencion_programada":"2026-01-15","observaciones":"En buen estado","tipo":"transformador"},
+            {"id":"t011","nombre_equipo":"Transformador de Potencia T1","subestacion":"LA MARIN","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-20","proxima_mantencion_programada":"2026-02-20","observaciones":"Funcionando correctamente","tipo":"transformador"},
+            {"id":"t012","nombre_equipo":"Transformador de Potencia T2","subestacion":"MIRAFLORES","capacidad":"15/20","relacion":"46/23/6.3","tipo_conexion":"DYn1","fabricante":"Raycham","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":[6.3,22.8],"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-11-10","proxima_mantencion_programada":"2025-05-10","observaciones":"Requiere reparación","tipo":"transformador"}
         ];
 
-        // Datos de inspecciones termográficas (30 equipos)
+        // Agregar transformadores del 13 al 82
+        const subestacionesLista = ["POMASQUI","SANTA ROSA","OLIMPICO","LULUNCOTO","BARIO NUEVO","CHIMBACALLE","CHILIBULO","ESCUELA SUCRE","SAN ROQUE","LA MARIN","MIRAFLORES","DIEZ VIEJA","BELISARIO QUEVEDO","LA FLORESTA","GUALO","EL BOSQUE","RIO COCA","ANDALUCIA","CRISTIANIA","COTOCOLLAO","EPICLACHIMA","SAN ANTONIO","CONOCOTO","CAROLINA","SAN PABLO","ALANGASI","SAN RAFAEL","IÑAQUITO","NUEVA CUMBAYA","PLATAFORMA FINANCIERA","TABABELA","DIEZ NUEVA","NUEVO AEROPUERTO","TUMBACO","VICENTINA","SELVA ALEGRE","PAPALLACTA","LA CALERA","EL INGA BAJO","MIRADOR ALTO","LOS BANCOS","PARQUE BICENTENARIO","PEREZ GUERRERO","SANGOLQUI","EL QUINCHE","EUGENIO ESPEJO","BATAN ALTO","EL OBRAJE","GUALBERTO HERNANDEZ","PASOCHOA","CH LORETO","CH VICTORIA"];
+        
+        for (let i = 13; i <= 82; i++) {
+            const idNum = i.toString().padStart(3, '0');
+            const subestacionIndex = Math.floor(Math.random() * subestacionesLista.length);
+            transformadoresData.push({
+                "id":`t${idNum}`,
+                "nombre_equipo":`Transformador de Potencia T${Math.floor(Math.random() * 3) + 1}`,
+                "subestacion":subestacionesLista[subestacionIndex],
+                "capacidad":"15/20",
+                "relacion":"46/6.3",
+                "tipo_conexion":"DYn1",
+                "fabricante":["ABB","Siemens","Shenda","Yawei","Pauwels","Mitsubishi","Meidensha"][Math.floor(Math.random() * 7)],
+                "numero_serie":`SN${Math.floor(Math.random() * 10000)}`,
+                "ano_fabricacion":2000 + Math.floor(Math.random() * 23),
+                "voltaje_primario_kv":46,
+                "voltaje_secundario_kv":6.3,
+                "estado_actual":["Operativo","Operativo","Operativo","Operativo","No Operativo","Daño Interno"][Math.floor(Math.random() * 6)],
+                "fecha_ultima_inspeccion":`202${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
+                "proxima_mantencion_programada":`202${Math.floor(Math.random() * 3) + 5}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
+                "observaciones":"Inspección rutinaria",
+                "tipo":"transformador"
+            });
+        }
+
+        // ============================================================
+        // DATOS DE INSPECCIONES TERMOGRÁFICAS (30 equipos)
+        // ============================================================
         const inspeccionesData = [
-            { id: "ins_001", subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-09", nivel: "CRÍTICO", prioridad: "CRÍTICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_002", subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LÍNEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_003", subestacion: "TUMBACO", equipo: "MÓVIL SHENDA", nomenclatura: "MALLA A TIERRA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_004", subestacion: "SELVA ALEGRE", equipo: "L/T", nomenclatura: "LÍNEA SELVA ALEGRE HACIA MIRAFLORES", voltaje: "46 KV", fecha: "2026-01-15", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_005", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha: "2026-01-15", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_006", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-34", voltaje: "138 KV", fecha: "2026-01-23", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_007", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-21", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_008", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-55", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_009", subestacion: "POMASQUI", equipo: "VENTILADOR T-2", nomenclatura: "PRIMERA ETAPA (M1)", voltaje: "220 V", fecha: "2026-01-05", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_010", subestacion: "CUMBAYÁ", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-100", voltaje: "46 KV", fecha: "2026-01-23", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
-            { id: "ins_011", subestacion: "MIRAFLORES", equipo: "PRIMARIO", nomenclatura: "152-B", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_012", subestacion: "MIRAFLORES", equipo: "DISYUNTOR", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_013", subestacion: "LA FLORESTA", equipo: "BREAKER 3F", nomenclatura: "RECTIFICADOR", voltaje: "220 V", fecha: "2026-01-20", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_014", subestacion: "EL BOSQUE", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-01-12", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_015", subestacion: "ANDALUCÍA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_016", subestacion: "CAROLINA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6.3 KV", fecha: "2026-01-20", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_017", subestacion: "IÑAQUITO", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-02-19", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_018", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "138 KV", fecha: "2026-01-15", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_019", subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_020", subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-D", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_021", subestacion: "POMASQUI", equipo: "DISYUNTOR", nomenclatura: "52-3", voltaje: "138 KV", fecha: "2026-01-05", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_022", subestacion: "CUMBAYÁ", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_023", subestacion: "CUMBAYÁ", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-80", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_024", subestacion: "OLÍMPICO", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-02-26", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_025", subestacion: "LA FLORESTA", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-15", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_026", subestacion: "LOS BANCOS", equipo: "SECCIONADOR", nomenclatura: "89-BT2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_027", subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE DISTRIBUCIÓN", nomenclatura: "N/A", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_028", subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-B", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_029", subestacion: "MÓVIL EL BANTÁN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha: "2026-02-03", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
-            { id: "ins_030", subestacion: "CUMBAYÁ", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" }
+            { id: "ins_001", subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2026-01-09", nivel: "CRÍTICO", prioridad: "CRÍTICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_002", subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LINEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha_inspeccion: "2026-01-21", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_003", subestacion: "TUMBACO", equipo: "MOVIL SHENDA", nomenclatura: "MALLA A TIERRA", voltaje: "46 KV", fecha_inspeccion: "2026-01-21", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_004", subestacion: "SELVA ALEGRE", equipo: "L/T", nomenclatura: "LINEA SELVA ALEGRE HACIA MIRAFLORES", voltaje: "46 KV", fecha_inspeccion: "2026-01-15", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_005", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha_inspeccion: "2026-01-15", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_006", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-34", voltaje: "138 KV", fecha_inspeccion: "2026-01-23", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_007", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-21", voltaje: "138 KV", fecha_inspeccion: "2026-02-19", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_008", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-55", voltaje: "138 KV", fecha_inspeccion: "2026-02-19", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_009", subestacion: "POMASQUI", equipo: "VENTILADOR T-2", nomenclatura: "PRIMERA ETAPA (M1)", voltaje: "220 V", fecha_inspeccion: "2026-01-05", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_010", subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-100", voltaje: "46 KV", fecha_inspeccion: "2026-01-23", nivel: "GRAVE", prioridad: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
+            { id: "ins_011", subestacion: "MIRAFLORES", equipo: "PRIMARIO", nomenclatura: "152-B", voltaje: "6,3 KV", fecha_inspeccion: "2026-01-27", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_012", subestacion: "MIRAFLORES", equipo: "DISYUNTOR", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha_inspeccion: "2026-01-27", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_013", subestacion: "LA FLORESTA", equipo: "BREAKER 3F", nomenclatura: "RECTIFICADOR", voltaje: "220 V", fecha_inspeccion: "2026-01-20", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_014", subestacion: "EL BOSQUE", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha_inspeccion: "2026-01-12", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_015", subestacion: "ANDALUCIA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha_inspeccion: "2026-01-27", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_016", subestacion: "CAROLINA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6.3 KV", fecha_inspeccion: "2026-01-20", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_017", subestacion: "IÑAQUITO", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2026-02-19", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_018", subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "138 KV", fecha_inspeccion: "2026-01-15", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_019", subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-2", voltaje: "69 KV", fecha_inspeccion: "2026-01-29", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_020", subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-D", voltaje: "13,8 KV", fecha_inspeccion: "2026-01-29", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_021", subestacion: "POMASQUI", equipo: "DISYUNTOR", nomenclatura: "52-3", voltaje: "138 KV", fecha_inspeccion: "2026-01-05", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_022", subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha_inspeccion: "2026-01-23", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_023", subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-80", voltaje: "46 KV", fecha_inspeccion: "2026-01-23", nivel: "INTERMEDIO", prioridad: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_024", subestacion: "OLIMPICO", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha_inspeccion: "2026-02-26", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_025", subestacion: "LA FLORESTA", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2026-01-15", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_026", subestacion: "LOS BANCOS", equipo: "SECCIONADOR", nomenclatura: "89-BT2", voltaje: "69 KV", fecha_inspeccion: "2026-01-29", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_027", subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE DISTRIBUCIÓN", nomenclatura: "N/A", voltaje: "13,8 KV", fecha_inspeccion: "2026-01-29", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_028", subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-B", voltaje: "13,8 KV", fecha_inspeccion: "2026-01-29", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_029", subestacion: "MOVIL EL BANTAN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha_inspeccion: "2026-02-03", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" },
+            { id: "ins_030", subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha_inspeccion: "2026-01-23", nivel: "AVISO", prioridad: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico" }
         ];
 
         // Combinar todos los datos
         const todosLosEquipos = [...transformadoresData, ...inspeccionesData];
 
         // Variables globales
-        let currentEditingId = null;
+        let currentEditingTransformadorId = null;
+        let currentEditingTermicoId = null;
         let currentFilter = "all";
         let currentSearch = "";
-        let currentEditingTipo = null;
-
-        function agruparPorSubestacion(data) {
-            const grupos = {};
-            data.forEach(item => {
-                let sub = item.subestacion || "Sin subestación";
-                sub = sub.toUpperCase();
-                if (!grupos[sub]) grupos[sub] = [];
-                grupos[sub].push(item);
-            });
-            return grupos;
-        }
 
         function getPrioridadTransformador(estado) {
             if (estado === "Operativo") return "NORMAL";
             if (estado === "No Operativo") return "GRAVE";
             if (estado === "Daño Interno" || estado === "Averiado" || estado === "incendiado") return "CRÍTICO";
             if (estado === "Reserva") return "AVISO";
-            if (estado === "Dado de baja") return "INTERMEDIO";
             return "NORMAL";
         }
 
         function getPrioridadClass(prioridad) {
             return `prioridad-${prioridad}`;
+        }
+
+        function cerrarModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        function abrirModalTransformador(id) {
+            const equipo = transformadoresData.find(e => e.id === id);
+            if (!equipo) return;
+            currentEditingTransformadorId = id;
+            const modal = document.getElementById("modalTransformador");
+            document.getElementById("modalTransformadorTitle").textContent = `${equipo.subestacion} - ${equipo.nombre_equipo}`;
+            document.getElementById("modalTransformadorBody").innerHTML = `
+                <div class="detail-row"><span class="detail-label">🏭 Fabricante:</span><span class="detail-value">${equipo.fabricante || "No especificado"}</span></div>
+                <div class="detail-row"><span class="detail-label">🔢 Número de Serie:</span><span class="detail-value">${equipo.numero_serie || "No especificado"}</span></div>
+                <div class="detail-row"><span class="detail-label">⚡ Voltajes:</span><span class="detail-value">${equipo.voltaje_primario_kv}/${Array.isArray(equipo.voltaje_secundario_kv) ? equipo.voltaje_secundario_kv.join('/') : equipo.voltaje_secundario_kv} kV</span></div>
+                <div class="detail-row"><span class="detail-label">📊 Capacidad:</span><span class="detail-value">${equipo.capacidad || "No especificada"} MVA</span></div>
+                <div class="detail-row"><span class="detail-label">📅 Última Inspección:</span><span class="detail-value">${equipo.fecha_ultima_inspeccion || "No registrada"}</span></div>
+                <div class="detail-row"><span class="detail-label">🔧 Próxima Mantención:</span><span class="detail-value">${equipo.proxima_mantencion_programada || "No programada"}</span></div>
+                <div class="detail-row"><span class="detail-label">📝 Observaciones:</span><span class="detail-value">${equipo.observaciones || "Sin observaciones"}</span></div>
+            `;
+            document.getElementById("editFechaInspeccionTransformador").value = equipo.fecha_ultima_inspeccion || "";
+            document.getElementById("editProximaMantencionTransformador").value = equipo.proxima_mantencion_programada || "";
+            document.getElementById("editObservacionesTransformador").value = equipo.observaciones || "";
+            modal.style.display = "flex";
+        }
+
+        function abrirModalTermico(id) {
+            const equipo = inspeccionesData.find(e => e.id === id);
+            if (!equipo) return;
+            currentEditingTermicoId = id;
+            const modal = document.getElementById("modalTermico");
+            document.getElementById("modalTermicoTitle").textContent = `${equipo.subestacion} - ${equipo.equipo}`;
+            document.getElementById("modalTermicoBody").innerHTML = `
+                <div class="detail-row"><span class="detail-label">📛 Nomenclatura:</span><span class="detail-value">${equipo.nomenclatura}</span></div>
+                <div class="detail-row"><span class="detail-label">⚡ Voltaje:</span><span class="detail-value">${equipo.voltaje}</span></div>
+                <div class="detail-row"><span class="detail-label">📅 Fecha Inspección:</span><span class="detail-value">${equipo.fecha_inspeccion}</span></div>
+                <div class="detail-row"><span class="detail-label">🌡️ Nivel actual:</span><span class="detail-value"><span class="prioridad-badge ${getPrioridadClass(equipo.nivel)}">${equipo.nivel}</span></span></div>
+                <div class="detail-row"><span class="detail-label">📝 Observación:</span><span class="detail-value">${equipo.observacion}</span></div>
+            `;
+            document.getElementById("editFechaInspeccionTermico").value = equipo.fecha_inspeccion;
+            document.getElementById("editNivelMantenimientoTermico").value = equipo.nivel;
+            modal.style.display = "flex";
+        }
+
+        function guardarEdicionTransformador() {
+            if (!currentEditingTransformadorId) return;
+            const transformador = transformadoresData.find(e => e.id === currentEditingTransformadorId);
+            if (transformador) {
+                transformador.fecha_ultima_inspeccion = document.getElementById("editFechaInspeccionTransformador").value;
+                transformador.proxima_mantencion_programada = document.getElementById("editProximaMantencionTransformador").value;
+                transformador.observaciones = document.getElementById("editObservacionesTransformador").value;
+                renderDashboard();
+                cerrarModal("modalTransformador");
+                alert("✅ Mantenimiento de transformador actualizado correctamente");
+            }
+        }
+
+        function guardarEdicionTermico() {
+            if (!currentEditingTermicoId) return;
+            const termico = inspeccionesData.find(e => e.id === currentEditingTermicoId);
+            if (termico) {
+                termico.fecha_inspeccion = document.getElementById("editFechaInspeccionTermico").value;
+                termico.nivel = document.getElementById("editNivelMantenimientoTermico").value;
+                termico.prioridad = termico.nivel;
+                if (termico.nivel === "CRÍTICO" || termico.nivel === "GRAVE") {
+                    termico.observacion = "ES NECESARIO SU INTERVENCIÓN.";
+                } else {
+                    termico.observacion = "MONITOREO CONSTANTE.";
+                }
+                renderDashboard();
+                cerrarModal("modalTermico");
+                alert("✅ Inspección termográfica actualizada correctamente");
+            }
+        }
+
+        function agruparPorSubestacion(data) {
+            const grupos = {};
+            data.forEach(item => {
+                let sub = item.subestacion || "SIN SUBESTACIÓN";
+                sub = normalizarSubestacion(sub);
+                if (!grupos[sub]) grupos[sub] = [];
+                grupos[sub].push(item);
+            });
+            return grupos;
         }
 
         function filtrarEquipos(equipos) {
@@ -699,7 +884,8 @@
                 }
                 if (currentSearch) {
                     const searchLower = currentSearch.toLowerCase();
-                    return (e.subestacion || "").toLowerCase().includes(searchLower) ||
+                    const subNormalizada = normalizarSubestacion(e.subestacion).toLowerCase();
+                    return subNormalizada.includes(searchLower) ||
                            ((e.nombre_equipo || e.equipo) || "").toLowerCase().includes(searchLower) ||
                            (e.nomenclatura || "").toLowerCase().includes(searchLower) ||
                            (e.voltaje || e.voltaje_primario_kv || "").toString().toLowerCase().includes(searchLower);
@@ -709,7 +895,7 @@
         }
 
         function actualizarEstadisticas(equipos) {
-            const subestaciones = new Set(equipos.map(e => e.subestacion?.toUpperCase() || "SIN SUBESTACIÓN"));
+            const subestaciones = new Set(equipos.map(e => normalizarSubestacion(e.subestacion)));
             const transformadores = equipos.filter(e => e.tipo === "transformador").length;
             const termicos = equipos.filter(e => e.tipo === "termico").length;
             const alertas = equipos.filter(e => {
@@ -718,7 +904,6 @@
                 }
                 return e.prioridad === "CRÍTICO" || e.prioridad === "GRAVE";
             }).length;
-            
             document.getElementById("totalSubestaciones").textContent = subestaciones.size;
             document.getElementById("totalTransformadores").textContent = transformadores;
             document.getElementById("totalEquiposTermicos").textContent = termicos;
@@ -729,17 +914,13 @@
             const equiposFiltrados = filtrarEquipos(todosLosEquipos);
             const grupos = agruparPorSubestacion(equiposFiltrados);
             const subestacionesOrdenadas = Object.keys(grupos).sort();
-            
             actualizarEstadisticas(equiposFiltrados);
-            
             const grid = document.getElementById("subestacionesGrid");
             if (!grid) return;
-            
             if (subestacionesOrdenadas.length === 0) {
                 grid.innerHTML = '<div class="empty-state">🔍 No se encontraron resultados</div>';
                 return;
             }
-            
             grid.innerHTML = subestacionesOrdenadas.map(subestacion => {
                 const equipos = grupos[subestacion];
                 const transformadores = equipos.filter(e => e.tipo === "transformador");
@@ -749,15 +930,10 @@
                     return e.prioridad === "CRÍTICO" || e.prioridad === "GRAVE";
                 }).length;
                 const safeId = subestacion.replace(/[^a-zA-Z0-9]/g, '_');
-                
                 return `
                     <div class="subestacion-card">
                         <div class="subestacion-header" onclick="toggleSubestacion('${subestacion.replace(/'/g, "\\'")}')">
-                            <h3>
-                                📍 ${subestacion}
-                                <span class="badge">${equipos.length} equipos</span>
-                                ${criticosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠️ ${criticosCount}</span>` : ''}
-                            </h3>
+                            <h3>📍 ${subestacion}<span class="badge">${equipos.length} equipos</span>${criticosCount > 0 ? `<span class="badge" style="background:#dc3545;">⚠️ ${criticosCount}</span>` : ''}</h3>
                             <span class="toggle-icon" id="icon-${safeId}">▼</span>
                         </div>
                         <div class="equipos-list" id="list-${safeId}">
@@ -769,19 +945,10 @@
                                         return `
                                             <div class="equipo-item" onclick="abrirModalTransformador('${t.id}')">
                                                 <div class="equipo-info">
-                                                    <div class="equipo-nombre">
-                                                        ⚡ ${t.nombre_equipo}
-                                                        <span class="prioridad-badge ${getPrioridadClass(prioridad)}">${t.estado_actual}</span>
-                                                    </div>
-                                                    <div class="equipo-detalles">
-                                                        🏭 ${t.fabricante || "N/E"} | ⚡ ${t.voltaje_primario_kv}/${Array.isArray(t.voltaje_secundario_kv) ? t.voltaje_secundario_kv.join('/') : t.voltaje_secundario_kv} kV | 📊 ${t.capacidad || "N/E"} MVA
-                                                    </div>
-                                                    <div class="equipo-detalles">
-                                                        📅 Última inspección: ${t.fecha_ultima_inspeccion || "N/R"} | 🔧 Próxima: ${t.proxima_mantencion_programada || "N/P"}
-                                                    </div>
-                                                    <div class="equipo-detalles" style="color: ${prioridad === 'CRÍTICO' || prioridad === 'GRAVE' ? '#dc3545' : '#6c757d'}">
-                                                        📝 ${t.observaciones}
-                                                    </div>
+                                                    <div class="equipo-nombre">⚡ ${t.nombre_equipo}<span class="prioridad-badge ${getPrioridadClass(prioridad)}">${t.estado_actual}</span></div>
+                                                    <div class="equipo-detalles">🏭 ${t.fabricante || "N/E"} | ⚡ ${t.voltaje_primario_kv}/${Array.isArray(t.voltaje_secundario_kv) ? t.voltaje_secundario_kv.join('/') : t.voltaje_secundario_kv} kV | 📊 ${t.capacidad || "N/E"} MVA</div>
+                                                    <div class="equipo-detalles">📅 Última inspección: ${t.fecha_ultima_inspeccion || "N/R"} | 🔧 Próxima: ${t.proxima_mantencion_programada || "N/P"}</div>
+                                                    <div class="equipo-detalles">📝 ${t.observaciones}</div>
                                                 </div>
                                             </div>
                                         `;
@@ -794,17 +961,9 @@
                                     ${termicos.map(e => `
                                         <div class="equipo-item" onclick="abrirModalTermico('${e.id}')">
                                             <div class="equipo-info">
-                                                <div class="equipo-nombre">
-                                                    🔥 ${e.equipo}
-                                                    <span class="prioridad-badge ${getPrioridadClass(e.prioridad)}">${e.prioridad}</span>
-                                                    <span class="nivel-badge">Nivel: ${e.nivel === "CRÍTICO" ? "4" : e.nivel === "GRAVE" ? "3" : e.nivel === "INTERMEDIO" ? "2" : "1"}</span>
-                                                </div>
-                                                <div class="equipo-detalles">
-                                                    📛 ${e.nomenclatura} | ⚡ ${e.voltaje} | 📅 ${e.fecha}
-                                                </div>
-                                                <div class="equipo-detalles" style="color: ${e.prioridad === "CRÍTICO" || e.prioridad === "GRAVE" ? '#dc3545' : '#6c757d'}">
-                                                    📝 ${e.observacion}
-                                                </div>
+                                                <div class="equipo-nombre">🔥 ${e.equipo}<span class="prioridad-badge ${getPrioridadClass(e.prioridad)}">${e.prioridad}</span><span class="nivel-badge">Nivel: ${e.nivel === "CRÍTICO" ? "4" : e.nivel === "GRAVE" ? "3" : e.nivel === "INTERMEDIO" ? "2" : "1"}</span></div>
+                                                <div class="equipo-detalles">📛 ${e.nomenclatura} | ⚡ ${e.voltaje} | 📅 ${e.fecha_inspeccion}</div>
+                                                <div class="equipo-detalles">📝 ${e.observacion}</div>
                                             </div>
                                         </div>
                                     `).join('')}
@@ -814,7 +973,6 @@
                     </div>
                 `;
             }).join('');
-            
             renderAlertas();
             renderReportes();
         }
@@ -828,35 +986,30 @@
             });
             const container = document.getElementById("alertasList");
             if (!container) return;
-            
             if (alertas.length === 0) {
                 container.innerHTML = '<div class="empty-state">✅ No hay alertas críticas o graves</div>';
                 return;
             }
-            
             container.innerHTML = `
-                <div style="background:#f8f9fa; border-radius:15px; padding:20px;">
-                    <h3 style="color:#003366; margin-bottom:20px;">🚨 Equipos con Prioridad Crítica o Grave</h3>
+                <div style="background:#f8fafc; border-radius:20px; padding:24px;">
+                    <h3 style="color:#1e4a6b; margin-bottom:20px; font-size:1.1rem;">🚨 Equipos con Prioridad Crítica o Grave</h3>
                     ${alertas.map(e => {
                         const esTransformador = e.tipo === "transformador";
                         const titulo = esTransformador ? e.nombre_equipo : e.equipo;
                         const prioridad = esTransformador ? getPrioridadTransformador(e.estado_actual) : e.prioridad;
-                        const detalles = esTransformador ? 
-                            `🏭 ${e.fabricante || "N/E"} | ⚡ ${e.voltaje_primario_kv}/${Array.isArray(e.voltaje_secundario_kv) ? e.voltaje_secundario_kv.join('/') : e.voltaje_secundario_kv} kV` :
-                            `📛 ${e.nomenclatura} | ⚡ ${e.voltaje}`;
-                        const fecha = esTransformador ? e.fecha_ultima_inspeccion : e.fecha;
+                        const detalles = esTransformador ? `🏭 ${e.fabricante || "N/E"} | ⚡ ${e.voltaje_primario_kv}/${Array.isArray(e.voltaje_secundario_kv) ? e.voltaje_secundario_kv.join('/') : e.voltaje_secundario_kv} kV` : `📛 ${e.nomenclatura} | ⚡ ${e.voltaje}`;
+                        const fecha = esTransformador ? e.fecha_ultima_inspeccion : e.fecha_inspeccion;
                         const observacion = esTransformador ? e.observaciones : e.observacion;
-                        
                         return `
-                            <div style="background:${prioridad === "CRÍTICO" ? '#f8d7da' : '#fff3cd'}; border-left:5px solid ${prioridad === "CRÍTICO" ? '#dc3545' : '#fd7e14'}; padding:15px; margin-bottom:15px; border-radius:10px;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-                                    <strong style="font-size:1.1rem;">📍 ${e.subestacion} - ${titulo}</strong>
+                            <div style="background:${prioridad === "CRÍTICO" ? '#fff5f5' : '#fff9f0'}; border-left:4px solid ${prioridad === "CRÍTICO" ? '#b91c1c' : '#c2410c'}; padding:16px; margin-bottom:16px; border-radius:16px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:8px;">
+                                    <strong style="font-size:0.95rem;">📍 ${normalizarSubestacion(e.subestacion)} - ${titulo}</strong>
                                     <span class="prioridad-badge ${getPrioridadClass(prioridad)}">${prioridad}</span>
                                 </div>
-                                <div style="margin-top:8px;">${detalles}</div>
-                                <div>📅 Fecha inspección: ${fecha || "N/R"}</div>
-                                <div style="margin-top:8px; font-weight:bold; color:${prioridad === "CRÍTICO" ? '#dc3545' : '#fd7e14'};">⚠️ ${observacion}</div>
-                                <button class="filter-btn" style="margin-top:10px; background:#003366; color:white;" onclick="abrirModalEdicionPorId('${e.id}', ${esTransformador})">✏️ Editar</button>
+                                <div style="font-size:0.8rem; color:#475569;">${detalles}</div>
+                                <div style="font-size:0.8rem; color:#475569; margin:6px 0;">📅 Fecha inspección: ${fecha || "N/R"}</div>
+                                <div style="font-size:0.85rem; font-weight:500; color:${prioridad === "CRÍTICO" ? '#b91c1c' : '#c2410c'}; margin:8px 0;">⚠️ ${observacion}</div>
+                                <button class="filter-btn" style="margin-top:8px; background:#1e4a6b; color:white; border:none;" onclick="${esTransformador ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">✏️ Editar</button>
                             </div>
                         `;
                     }).join('')}
@@ -871,69 +1024,63 @@
             const totalTransformadores = transformadoresData.length;
             const operativos = transformadoresData.filter(t => t.estado_actual === "Operativo").length;
             const noOperativos = totalTransformadores - operativos;
+            const porcentajeOperativos = Math.round((operativos / totalTransformadores) * 100);
+            const porcentajeMantenimientoRealizado = Math.round((transformadoresData.filter(t => t.proxima_mantencion_programada > new Date().toISOString().slice(0,10)).length / totalTransformadores) * 100);
             
             const criticosTermicos = inspeccionesData.filter(e => e.prioridad === "CRÍTICO").length;
             const gravesTermicos = inspeccionesData.filter(e => e.prioridad === "GRAVE").length;
             const intermediosTermicos = inspeccionesData.filter(e => e.prioridad === "INTERMEDIO").length;
             const avisosTermicos = inspeccionesData.filter(e => e.prioridad === "AVISO").length;
+            const totalTermicos = inspeccionesData.length;
             
             const subestacionesCount = {};
-            todosLosEquipos.forEach(e => {
-                let sub = e.subestacion?.toUpperCase() || "SIN SUBESTACIÓN";
-                subestacionesCount[sub] = (subestacionesCount[sub] || 0) + 1;
-            });
+            todosLosEquipos.forEach(e => { let sub = normalizarSubestacion(e.subestacion); subestacionesCount[sub] = (subestacionesCount[sub] || 0) + 1; });
             const topSubestaciones = Object.entries(subestacionesCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
             
             container.innerHTML = `
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-bottom:20px;">
-                    <div class="stat-card" style="border-top-color:#003366;">
-                        <h3 style="color:#003366;">${totalTransformadores}</h3>
-                        <p>Total Transformadores</p>
-                        <small>${operativos} operativos | ${noOperativos} no operativos</small>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px; margin-bottom:28px;">
+                    <div class="reporte-card">
+                        <h3>📊 Estado Operativo de Transformadores</h3>
+                        <div class="reporte-valor">${porcentajeOperativos}%</div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: ${porcentajeOperativos}%;"></div></div>
+                        <div class="stat-row"><span class="stat-label">✅ Operativos:</span><span class="stat-number">${operativos} equipos (${porcentajeOperativos}%)</span></div>
+                        <div class="stat-row"><span class="stat-label">❌ No Operativos/Dañados:</span><span class="stat-number">${noOperativos} equipos (${100 - porcentajeOperativos}%)</span></div>
                     </div>
-                    <div class="stat-card" style="border-top-color:#dc3545;">
-                        <h3 style="color:#dc3545;">${criticosTermicos + gravesTermicos}</h3>
-                        <p>Equipos con Nivel Crítico/Grave</p>
-                        <small>Críticos: ${criticosTermicos} | Graves: ${gravesTermicos}</small>
+                    <div class="reporte-card">
+                        <h3>🔧 Mantenimiento Preventivo</h3>
+                        <div class="reporte-valor">${porcentajeMantenimientoRealizado}%</div>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: ${porcentajeMantenimientoRealizado}%; background:#2c7a4d;"></div></div>
+                        <div class="stat-row"><span class="stat-label">✅ Con mantenimiento programado:</span><span class="stat-number">${Math.round(totalTransformadores * porcentajeMantenimientoRealizado / 100)} equipos</span></div>
+                        <div class="stat-row"><span class="stat-label">⚠️ Mantenimiento vencido o próximo:</span><span class="stat-number">${transformadoresData.filter(t => t.proxima_mantencion_programada && t.proxima_mantencion_programada <= new Date().toISOString().slice(0,10)).length} equipos</span></div>
                     </div>
-                    <div class="stat-card" style="border-top-color:#ffc107;">
-                        <h3 style="color:#ffc107;">${intermediosTermicos + avisosTermicos}</h3>
-                        <p>Equipos con Nivel Intermedio/Aviso</p>
-                        <small>Intermedios: ${intermediosTermicos} | Aviso: ${avisosTermicos}</small>
-                    </div>
-                    <div class="stat-card" style="border-top-color:#009639;">
-                        <h3 style="color:#009639;">${inspeccionesData.length}</h3>
-                        <p>Total Inspecciones Termográficas</p>
+                    <div class="reporte-card">
+                        <h3>🌡️ Niveles Termográficos</h3>
+                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-critico">CRÍTICO (N4)</span></span><span class="stat-number">${criticosTermicos} (${Math.round((criticosTermicos/totalTermicos)*100)}%)</span></div>
+                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-grave">GRAVE (N3)</span></span><span class="stat-number">${gravesTermicos} (${Math.round((gravesTermicos/totalTermicos)*100)}%)</span></div>
+                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-intermedio">INTERMEDIO (N2)</span></span><span class="stat-number">${intermediosTermicos} (${Math.round((intermediosTermicos/totalTermicos)*100)}%)</span></div>
+                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-aviso">AVISO (N1)</span></span><span class="stat-number">${avisosTermicos} (${Math.round((avisosTermicos/totalTermicos)*100)}%)</span></div>
                     </div>
                 </div>
-                
-                <div style="background:white; border-radius:15px; padding:20px; margin-top:20px;">
-                    <h3 style="color:#003366; margin-bottom:15px;">📊 Top 5 Subestaciones con más equipos</h3>
-                    ${topSubestaciones.map(([sub, count]) => `
-                        <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #f0f0f0;">
-                            <span>📍 ${sub}</span>
-                            <span><strong>${count}</strong> equipos</span>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <div style="background:white; border-radius:15px; padding:20px; margin-top:20px;">
-                    <h3 style="color:#003366; margin-bottom:15px;">📋 Resumen de Inspecciones Termográficas</h3>
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #f0f0f0;">
-                        <span>🔥 Crítico (Nivel 4 >75°C)</span>
-                        <span><strong>${criticosTermicos}</strong> equipos</span>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+                    <div class="reporte-card">
+                        <h3>🏆 Top 5 Subestaciones</h3>
+                        ${topSubestaciones.map(([sub, count], idx) => `
+                            <div class="stat-row"><span class="stat-label">${idx+1}. 📍 ${sub}</span><span class="stat-number">${count} equipos</span></div>
+                        `).join('')}
                     </div>
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #f0f0f0;">
-                        <span>⚠️ Grave (Nivel 3 36-75°C)</span>
-                        <span><strong>${gravesTermicos}</strong> equipos</span>
+                    <div class="reporte-card">
+                        <h3>📈 Resumen General</h3>
+                        <div class="stat-row"><span class="stat-label">Total Transformadores:</span><span class="stat-number">${totalTransformadores}</span></div>
+                        <div class="stat-row"><span class="stat-label">Total Inspecciones Termográficas:</span><span class="stat-number">${totalTermicos}</span></div>
+                        <div class="stat-row"><span class="stat-label">Total Activos Monitoreados:</span><span class="stat-number">${todosLosEquipos.length}</span></div>
+                        <div class="stat-row"><span class="stat-label">Alertas Activas:</span><span class="stat-number" style="color:#b91c1c;">${todosLosEquipos.filter(e => { if(e.tipo==="transformador") return e.estado_actual!=="Operativo"; return e.prioridad==="CRÍTICO"||e.prioridad==="GRAVE"; }).length}</span></div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #f0f0f0;">
-                        <span>🟡 Intermedio (Nivel 2 16-35°C)</span>
-                        <span><strong>${intermediosTermicos}</strong> equipos</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #f0f0f0;">
-                        <span>🔵 Aviso (Nivel 1 5-15°C)</span>
-                        <span><strong>${avisosTermicos}</strong> equipos</span>
+                    <div class="reporte-card">
+                        <h3>📋 Distribución por Prioridad</h3>
+                        <div class="stat-row"><span class="stat-label">🔥 Crítico:</span><span class="stat-number">${criticosTermicos + transformadoresData.filter(t => t.estado_actual === "Daño Interno" || t.estado_actual === "Averiado").length}</span></div>
+                        <div class="stat-row"><span class="stat-label">⚠️ Grave:</span><span class="stat-number">${gravesTermicos + transformadoresData.filter(t => t.estado_actual === "No Operativo").length}</span></div>
+                        <div class="stat-row"><span class="stat-label">🟡 Intermedio/Aviso:</span><span class="stat-number">${intermediosTermicos + avisosTermicos + transformadoresData.filter(t => t.estado_actual === "Reserva").length}</span></div>
+                        <div class="stat-row"><span class="stat-label">✅ Normal/Operativo:</span><span class="stat-number">${transformadoresData.filter(t => t.estado_actual === "Operativo").length + (totalTermicos - criticosTermicos - gravesTermicos)}</span></div>
                     </div>
                 </div>
             `;
@@ -952,114 +1099,6 @@
             }
         }
 
-        function abrirModalTransformador(id) {
-            const equipo = transformadoresData.find(e => e.id === id);
-            if (!equipo) return;
-            currentEditingId = id;
-            currentEditingTipo = "transformador";
-            
-            const modal = document.getElementById("modal");
-            document.getElementById("modalTitle").textContent = `${equipo.subestacion} - ${equipo.nombre_equipo}`;
-            
-            document.getElementById("modalBody").innerHTML = `
-                <div class="detail-row"><span class="detail-label">🏭 Fabricante:</span><span class="detail-value">${equipo.fabricante || "No especificado"}</span></div>
-                <div class="detail-row"><span class="detail-label">🔢 Número de Serie:</span><span class="detail-value">${equipo.numero_serie || "No especificado"}</span></div>
-                <div class="detail-row"><span class="detail-label">⚡ Voltajes:</span><span class="detail-value">${equipo.voltaje_primario_kv}/${Array.isArray(equipo.voltaje_secundario_kv) ? equipo.voltaje_secundario_kv.join('/') : equipo.voltaje_secundario_kv} kV</span></div>
-                <div class="detail-row"><span class="detail-label">📊 Capacidad:</span><span class="detail-value">${equipo.capacidad || "No especificada"} MVA</span></div>
-                <div class="detail-row"><span class="detail-label">📅 Última Inspección:</span><span class="detail-value">${equipo.fecha_ultima_inspeccion || "No registrada"}</span></div>
-                <div class="detail-row"><span class="detail-label">🔧 Próxima Mantención:</span><span class="detail-value">${equipo.proxima_mantencion_programada || "No programada"}</span></div>
-                <div class="detail-row"><span class="detail-label">📝 Observaciones:</span><span class="detail-value">${equipo.observaciones || "Sin observaciones"}</span></div>
-            `;
-            
-            document.getElementById("editFechaInspeccion").value = equipo.fecha_ultima_inspeccion || "";
-            document.getElementById("editObservaciones").value = equipo.observaciones || "";
-            
-            const nivelSelect = document.getElementById("editNivelMantenimiento");
-            if (equipo.estado_actual === "Operativo") nivelSelect.value = "NORMAL";
-            else if (equipo.estado_actual === "No Operativo") nivelSelect.value = "INTERMEDIO";
-            else if (equipo.estado_actual === "Reserva") nivelSelect.value = "AVISO";
-            else nivelSelect.value = "CRÍTICO";
-            
-            modal.style.display = "flex";
-        }
-
-        function abrirModalTermico(id) {
-            const equipo = inspeccionesData.find(e => e.id === id);
-            if (!equipo) return;
-            currentEditingId = id;
-            currentEditingTipo = "termico";
-            
-            const modal = document.getElementById("modal");
-            document.getElementById("modalTitle").textContent = `${equipo.subestacion} - ${equipo.equipo}`;
-            
-            document.getElementById("modalBody").innerHTML = `
-                <div class="detail-row"><span class="detail-label">📛 Nomenclatura:</span><span class="detail-value">${equipo.nomenclatura}</span></div>
-                <div class="detail-row"><span class="detail-label">⚡ Voltaje:</span><span class="detail-value">${equipo.voltaje}</span></div>
-                <div class="detail-row"><span class="detail-label">📅 Fecha actual:</span><span class="detail-value">${equipo.fecha}</span></div>
-                <div class="detail-row"><span class="detail-label">🌡️ Nivel actual:</span><span class="detail-value"><span class="prioridad-badge ${getPrioridadClass(equipo.nivel)}">${equipo.nivel}</span></span></div>
-            `;
-            
-            document.getElementById("editFechaInspeccion").value = equipo.fecha;
-            document.getElementById("editNivelMantenimiento").value = equipo.nivel;
-            document.getElementById("editObservaciones").value = equipo.observacion;
-            
-            modal.style.display = "flex";
-        }
-
-        function abrirModalEdicionPorId(id, esTransformador) {
-            if (esTransformador) {
-                abrirModalTransformador(id);
-            } else {
-                abrirModalTermico(id);
-            }
-        }
-
-        function guardarEdicion() {
-            if (!currentEditingId) return;
-            
-            if (currentEditingTipo === "transformador") {
-                const transformador = transformadoresData.find(e => e.id === currentEditingId);
-                if (transformador) {
-                    const nuevaFecha = document.getElementById("editFechaInspeccion").value;
-                    const nuevoNivel = document.getElementById("editNivelMantenimiento").value;
-                    const nuevaObs = document.getElementById("editObservaciones").value;
-                    
-                    if (nuevaFecha) transformador.fecha_ultima_inspeccion = nuevaFecha;
-                    transformador.observaciones = nuevaObs;
-                    
-                    if (nuevoNivel === "CRÍTICO") transformador.estado_actual = "Daño Interno";
-                    else if (nuevoNivel === "GRAVE") transformador.estado_actual = "Averiado";
-                    else if (nuevoNivel === "INTERMEDIO") transformador.estado_actual = "No Operativo";
-                    else if (nuevoNivel === "AVISO") transformador.estado_actual = "Reserva";
-                    else transformador.estado_actual = "Operativo";
-                }
-            } else {
-                const termico = inspeccionesData.find(e => e.id === currentEditingId);
-                if (termico) {
-                    const nuevaFecha = document.getElementById("editFechaInspeccion").value;
-                    const nuevoNivel = document.getElementById("editNivelMantenimiento").value;
-                    
-                    termico.fecha = nuevaFecha;
-                    termico.nivel = nuevoNivel;
-                    termico.prioridad = nuevoNivel;
-                    
-                    if (nuevoNivel === "CRÍTICO" || nuevoNivel === "GRAVE") {
-                        termico.observacion = "ES NECESARIO SU INTERVENCIÓN.";
-                    } else {
-                        termico.observacion = "MONITOREO CONSTANTE.";
-                    }
-                    document.getElementById("editObservaciones").value = termico.observacion;
-                }
-            }
-            
-            renderDashboard();
-            
-            const modal = document.getElementById("modal");
-            modal.style.display = "none";
-            
-            alert("✅ Información actualizada correctamente");
-        }
-
         function initTabs() {
             const tabBtns = document.querySelectorAll(".tab-btn");
             tabBtns.forEach(btn => {
@@ -1075,11 +1114,7 @@
             });
         }
 
-        document.getElementById("searchInput")?.addEventListener("input", (e) => {
-            currentSearch = e.target.value;
-            renderDashboard();
-        });
-        
+        document.getElementById("searchInput")?.addEventListener("input", (e) => { currentSearch = e.target.value; renderDashboard(); });
         document.querySelectorAll(".filter-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -1088,22 +1123,13 @@
                 renderDashboard();
             });
         });
-        
-        document.querySelector(".close-modal")?.addEventListener("click", () => {
-            document.getElementById("modal").style.display = "none";
-        });
-        
-        window.onclick = (event) => {
-            if (event.target === document.getElementById("modal")) {
-                document.getElementById("modal").style.display = "none";
-            }
-        };
-        
-        window.toggleSubestacion = toggleSubestacion;
+        window.onclick = (event) => { if (event.target.classList.contains("modal")) event.target.style.display = "none"; };
         window.abrirModalTransformador = abrirModalTransformador;
         window.abrirModalTermico = abrirModalTermico;
-        window.abrirModalEdicionPorId = abrirModalEdicionPorId;
-        window.guardarEdicion = guardarEdicion;
+        window.guardarEdicionTransformador = guardarEdicionTransformador;
+        window.guardarEdicionTermico = guardarEdicionTermico;
+        window.cerrarModal = cerrarModal;
+        window.toggleSubestacion = toggleSubestacion;
         
         initTabs();
         renderDashboard();
