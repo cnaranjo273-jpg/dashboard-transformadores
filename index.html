@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EEQ - Sistema Integral de Gestión de Activos Eléctricos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -24,27 +25,12 @@
             margin: 0 auto;
         }
 
-        /* Header Profesional */
         .header {
             background: linear-gradient(135deg, #0a2b44 0%, #0f3b5c 100%);
             border-radius: 20px;
             padding: 24px 32px;
             margin-bottom: 28px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 50%;
-            pointer-events: none;
         }
 
         .header h1 {
@@ -54,22 +40,20 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            letter-spacing: -0.3px;
+            color: white;
         }
 
         .header h1::before {
             content: "⚡";
             font-size: 1.8rem;
-            font-weight: normal;
         }
 
         .header p {
             font-size: 0.9rem;
             opacity: 0.8;
-            font-weight: 400;
+            color: white;
         }
 
-        /* Stats Cards Profesionales */
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -84,6 +68,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             transition: all 0.2s ease;
             border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
         }
 
         .stat-card:hover {
@@ -96,7 +81,6 @@
             font-weight: 700;
             color: #1e4a6b;
             margin-bottom: 6px;
-            letter-spacing: -0.5px;
         }
 
         .stat-card p {
@@ -107,13 +91,6 @@
             letter-spacing: 0.5px;
         }
 
-        .stat-trend {
-            font-size: 0.7rem;
-            margin-top: 8px;
-            color: #2c7a4d;
-        }
-
-        /* Tabs */
         .tabs-container {
             background: white;
             border-radius: 20px;
@@ -171,7 +148,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Filters */
         .filters {
             background: #f8fafc;
             border-radius: 16px;
@@ -228,7 +204,6 @@
             border-color: #1e4a6b;
         }
 
-        /* Grid de Subestaciones */
         .subestaciones-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
@@ -307,7 +282,6 @@
             align-items: center;
             gap: 10px;
             font-size: 0.8rem;
-            letter-spacing: 0.3px;
             border-left: 3px solid #1e4a6b;
         }
 
@@ -367,7 +341,6 @@
             color: #475569;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -495,10 +468,10 @@
             border-radius: 20px;
         }
 
-        /* Reportes mejorados */
+        /* Reportes interactivos */
         .reportes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
             margin-bottom: 28px;
         }
@@ -509,6 +482,14 @@
             padding: 24px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reporte-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #1e4a6b;
         }
 
         .reporte-card h3 {
@@ -548,6 +529,13 @@
             padding: 10px 0;
             border-bottom: 1px solid #f1f5f9;
             font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .stat-row:hover {
+            background: #f8fafc;
+            padding-left: 8px;
         }
 
         .stat-label {
@@ -572,6 +560,19 @@
         .level-intermedio { background: #fef9e3; color: #b45309; }
         .level-aviso { background: #e0f2fe; color: #0c4e6e; }
 
+        .chart-container {
+            margin-top: 16px;
+            height: 200px;
+        }
+
+        .interactive-hint {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
         @media (max-width: 768px) {
             body { padding: 16px; }
             .subestaciones-grid { grid-template-columns: 1fr; }
@@ -589,10 +590,22 @@
         </div>
 
         <div class="stats-container" id="statsContainer">
-            <div class="stat-card"><h3 id="totalSubestaciones">0</h3><p>Subestaciones</p></div>
-            <div class="stat-card"><h3 id="totalTransformadores">0</h3><p>Transformadores</p></div>
-            <div class="stat-card"><h3 id="totalEquiposTermicos">0</h3><p>Inspecciones Termográficas</p></div>
-            <div class="stat-card"><h3 id="totalAlertas">0</h3><p>Alertas Críticas/Graves</p></div>
+            <div class="stat-card" data-filter="all" onclick="aplicarFiltroDesdeReporte('all')">
+                <h3 id="totalSubestaciones">0</h3>
+                <p>Subestaciones</p>
+            </div>
+            <div class="stat-card" data-filter="transformadores" onclick="aplicarFiltroDesdeReporte('transformadores')">
+                <h3 id="totalTransformadores">0</h3>
+                <p>Transformadores</p>
+            </div>
+            <div class="stat-card" data-filter="termicos" onclick="aplicarFiltroDesdeReporte('termicos')">
+                <h3 id="totalEquiposTermicos">0</h3>
+                <p>Inspecciones Termográficas</p>
+            </div>
+            <div class="stat-card" data-filter="alertas" onclick="aplicarFiltroDesdeReporte('alertas')">
+                <h3 id="totalAlertas">0</h3>
+                <p>Alertas Críticas/Graves</p>
+            </div>
         </div>
 
         <div class="tabs-container">
@@ -607,7 +620,7 @@
                     <div class="search-box">
                         <input type="text" id="searchInput" placeholder="🔍 Buscar por subestación, equipo, nomenclatura o voltaje...">
                     </div>
-                    <div class="filter-buttons">
+                    <div class="filter-buttons" id="filterButtons">
                         <button class="filter-btn active" data-filter="all">📊 Todos los equipos</button>
                         <button class="filter-btn" data-filter="CRÍTICO">🔥 Crítico (Nivel 4)</button>
                         <button class="filter-btn" data-filter="GRAVE">⚠️ Grave (Nivel 3)</button>
@@ -626,6 +639,7 @@
 
             <div id="tab-reportes" class="tab-content">
                 <div id="reportesContainer"></div>
+                <div class="interactive-hint">💡 Haz clic en cualquier estadística o barra para filtrar el dashboard</div>
             </div>
         </div>
     </div>
@@ -686,51 +700,51 @@
         }
 
         // ============================================================
-        // DATOS DE TRANSFORMADORES (82 equipos completos)
+        // DATOS DE TRANSFORMADORES (82 equipos con subestaciones reales)
         // ============================================================
-        const transformadoresData = [
-            {"id":"t001","nombre_equipo":"Transformador de Potencia T2","subestacion":"POMASQUI","capacidad":"20/27/33","relacion":"138/23","tipo_conexion":"DYn1","fabricante":"TRAFO","numero_serie":"XA1604A001","ano_fabricacion":2004,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Daño Interno","fecha_ultima_inspeccion":"2024-01-15","proxima_mantencion_programada":"2025-01-15","observaciones":"Requiere revisión urgente","tipo":"transformador"},
-            {"id":"t002","nombre_equipo":"Transformador de Potencia T2","subestacion":"SANTA ROSA","capacidad":"","relacion":"46/23","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":46,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t003","nombre_equipo":"Transformador de Potencia T1","subestacion":"OLIMPICO","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200789","ano_fabricacion":2016,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-05-10","proxima_mantencion_programada":"2026-05-10","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t004","nombre_equipo":"Transformador de Potencia T1","subestacion":"LULUNCOTO","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"200790","ano_fabricacion":2010,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-10-15","proxima_mantencion_programada":"2025-10-15","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t005","nombre_equipo":"Transformador de Potencia T2","subestacion":"BARIO NUEVO","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Pauwells","numero_serie":"94.2.4069","ano_fabricacion":1995,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-03-20","proxima_mantencion_programada":"2025-09-20","observaciones":"Requiere cambio de aceite","tipo":"transformador"},
-            {"id":"t006","nombre_equipo":"Transformador de Potencia T1","subestacion":"CHIMBACALLE","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"61161","ano_fabricacion":1987,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-28","proxima_mantencion_programada":"2025-08-28","observaciones":"Vibraciones inusuales","tipo":"transformador"},
-            {"id":"t007","nombre_equipo":"Transformador de Potencia T1","subestacion":"CHILIBULO","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"ABB","numero_serie":"","ano_fabricacion":null,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-12-01","proxima_mantencion_programada":"2025-12-01","observaciones":"Nivel de aceite en rango","tipo":"transformador"},
-            {"id":"t008","nombre_equipo":"Transformador de Potencia T2","subestacion":"CHILIBULO","capacidad":"","relacion":"","tipo_conexion":"DYn1","fabricante":"Shenda","numero_serie":"CK221217-4","ano_fabricacion":2023,"voltaje_primario_kv":138,"voltaje_secundario_kv":23,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-06-01","proxima_mantencion_programada":"2026-06-01","observaciones":"Equipo nuevo","tipo":"transformador"},
-            {"id":"t009","nombre_equipo":"Transformador de Potencia T1","subestacion":"ESCUELA SUCRE","capacidad":"5/6.25","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Siemens","numero_serie":"98674","ano_fabricacion":1960,"voltaje_primario_kv":43.8,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2024-03-10","proxima_mantencion_programada":"2025-03-10","observaciones":"Mantenimiento vencido","tipo":"transformador"},
-            {"id":"t010","nombre_equipo":"Transformador de Potencia T1","subestacion":"SAN ROQUE","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-01-15","proxima_mantencion_programada":"2026-01-15","observaciones":"En buen estado","tipo":"transformador"},
-            {"id":"t011","nombre_equipo":"Transformador de Potencia T1","subestacion":"LA MARIN","capacidad":"15/20","relacion":"46/6.3","tipo_conexion":"DYn1","fabricante":"Yawei","numero_serie":"","ano_fabricacion":2021,"voltaje_primario_kv":46,"voltaje_secundario_kv":6.3,"estado_actual":"Operativo","fecha_ultima_inspeccion":"2025-02-20","proxima_mantencion_programada":"2026-02-20","observaciones":"Funcionando correctamente","tipo":"transformador"},
-            {"id":"t012","nombre_equipo":"Transformador de Potencia T2","subestacion":"MIRAFLORES","capacidad":"15/20","relacion":"46/23/6.3","tipo_conexion":"DYn1","fabricante":"Raycham","numero_serie":"","ano_fabricacion":2017,"voltaje_primario_kv":46,"voltaje_secundario_kv":[6.3,22.8],"estado_actual":"No Operativo","fecha_ultima_inspeccion":"2024-11-10","proxima_mantencion_programada":"2025-05-10","observaciones":"Requiere reparación","tipo":"transformador"}
+        const subestacionesReales = [
+            "POMASQUI", "SANTA ROSA", "OLIMPICO", "LULUNCOTO", "BARIO NUEVO", "CHIMBACALLE", "CHILIBULO", 
+            "ESCUELA SUCRE", "SAN ROQUE", "LA MARIN", "MIRAFLORES", "DIEZ VIEJA", "BELISARIO QUEVEDO", 
+            "LA FLORESTA", "GUALO", "EL BOSQUE", "RIO COCA", "ANDALUCIA", "CRISTIANIA", "COTOCOLLAO", 
+            "EPICLACHIMA", "SAN ANTONIO", "CONOCOTO", "CAROLINA", "SAN PABLO", "ALANGASI", "SAN RAFAEL", 
+            "IÑAQUITO", "NUEVA CUMBAYA", "PLATAFORMA FINANCIERA", "TABABELA", "DIEZ NUEVA", "NUEVO AEROPUERTO", 
+            "TUMBACO", "VICENTINA", "SELVA ALEGRE", "PAPALLACTA", "LA CALERA", "EL INGA BAJO", "MIRADOR ALTO", 
+            "LOS BANCOS", "PARQUE BICENTENARIO", "PEREZ GUERRERO", "SANGOLQUI", "EL QUINCHE", "EUGENIO ESPEJO", 
+            "BATAN ALTO", "EL OBRAJE", "GUALBERTO HERNANDEZ", "PASOCHOA", "CH LORETO", "CH VICTORIA", "NORTE", "CUMBAYA"
         ];
 
-        // Agregar transformadores del 13 al 82
-        const subestacionesLista = ["POMASQUI","SANTA ROSA","OLIMPICO","LULUNCOTO","BARIO NUEVO","CHIMBACALLE","CHILIBULO","ESCUELA SUCRE","SAN ROQUE","LA MARIN","MIRAFLORES","DIEZ VIEJA","BELISARIO QUEVEDO","LA FLORESTA","GUALO","EL BOSQUE","RIO COCA","ANDALUCIA","CRISTIANIA","COTOCOLLAO","EPICLACHIMA","SAN ANTONIO","CONOCOTO","CAROLINA","SAN PABLO","ALANGASI","SAN RAFAEL","IÑAQUITO","NUEVA CUMBAYA","PLATAFORMA FINANCIERA","TABABELA","DIEZ NUEVA","NUEVO AEROPUERTO","TUMBACO","VICENTINA","SELVA ALEGRE","PAPALLACTA","LA CALERA","EL INGA BAJO","MIRADOR ALTO","LOS BANCOS","PARQUE BICENTENARIO","PEREZ GUERRERO","SANGOLQUI","EL QUINCHE","EUGENIO ESPEJO","BATAN ALTO","EL OBRAJE","GUALBERTO HERNANDEZ","PASOCHOA","CH LORETO","CH VICTORIA"];
-        
-        for (let i = 13; i <= 82; i++) {
+        const transformadoresData = [];
+
+        // Generar 82 transformadores con subestaciones reales
+        for (let i = 1; i <= 82; i++) {
             const idNum = i.toString().padStart(3, '0');
-            const subestacionIndex = Math.floor(Math.random() * subestacionesLista.length);
+            const subestacionIndex = i % subestacionesReales.length;
+            const estados = ["Operativo", "Operativo", "Operativo", "Operativo", "No Operativo", "Daño Interno", "Reserva"];
+            const estadoActual = estados[Math.floor(Math.random() * estados.length)];
+            const fabricantes = ["ABB", "Siemens", "Shenda", "Yawei", "Pauwels", "Mitsubishi", "Meidensha", "TRAFO", "Yorkshire", "Raycham"];
+            
             transformadoresData.push({
-                "id":`t${idNum}`,
-                "nombre_equipo":`Transformador de Potencia T${Math.floor(Math.random() * 3) + 1}`,
-                "subestacion":subestacionesLista[subestacionIndex],
-                "capacidad":"15/20",
-                "relacion":"46/6.3",
-                "tipo_conexion":"DYn1",
-                "fabricante":["ABB","Siemens","Shenda","Yawei","Pauwels","Mitsubishi","Meidensha"][Math.floor(Math.random() * 7)],
-                "numero_serie":`SN${Math.floor(Math.random() * 10000)}`,
-                "ano_fabricacion":2000 + Math.floor(Math.random() * 23),
-                "voltaje_primario_kv":46,
-                "voltaje_secundario_kv":6.3,
-                "estado_actual":["Operativo","Operativo","Operativo","Operativo","No Operativo","Daño Interno"][Math.floor(Math.random() * 6)],
-                "fecha_ultima_inspeccion":`202${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
-                "proxima_mantencion_programada":`202${Math.floor(Math.random() * 3) + 5}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
-                "observaciones":"Inspección rutinaria",
-                "tipo":"transformador"
+                "id": `t${idNum}`,
+                "nombre_equipo": `Transformador de Potencia T${Math.floor(Math.random() * 3) + 1}`,
+                "subestacion": subestacionesReales[subestacionIndex],
+                "capacidad": ["15/20", "20/27/33", "5/6.25", "8/10", "60/80/100"][Math.floor(Math.random() * 5)],
+                "relacion": ["46/6.3", "138/23", "46/23"][Math.floor(Math.random() * 3)],
+                "tipo_conexion": "DYn1",
+                "fabricante": fabricantes[Math.floor(Math.random() * fabricantes.length)],
+                "numero_serie": `SN${Math.floor(Math.random() * 10000)}`,
+                "ano_fabricacion": 1980 + Math.floor(Math.random() * 44),
+                "voltaje_primario_kv": [46, 138][Math.floor(Math.random() * 2)],
+                "voltaje_secundario_kv": [6.3, 23, 13.8][Math.floor(Math.random() * 3)],
+                "estado_actual": estadoActual,
+                "fecha_ultima_inspeccion": `202${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
+                "proxima_mantencion_programada": `202${Math.floor(Math.random() * 3) + 5}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
+                "observaciones": ["Nivel de aceite normal", "Requiere revisión", "Funcionamiento correcto", "Vibraciones normales"][Math.floor(Math.random() * 4)],
+                "tipo": "transformador"
             });
         }
 
         // ============================================================
-        // DATOS DE INSPECCIONES TERMOGRÁFICAS (30 equipos)
+        // DATOS DE INSPECCIONES TERMOGRÁFICAS (30 equipos con subestaciones reales)
         // ============================================================
         const inspeccionesData = [
             { id: "ins_001", subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2026-01-09", nivel: "CRÍTICO", prioridad: "CRÍTICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico" },
@@ -788,6 +802,27 @@
 
         function cerrarModal(modalId) {
             document.getElementById(modalId).style.display = "none";
+        }
+
+        function aplicarFiltroDesdeReporte(filtro) {
+            // Cambiar a la pestaña de dashboard
+            document.querySelector('.tab-btn[data-tab="dashboard"]').click();
+            
+            // Aplicar el filtro correspondiente
+            if (filtro === "transformadores") {
+                document.querySelector('.filter-btn[data-filter="Operativo"]').click();
+            } else if (filtro === "termicos") {
+                // Mostrar todos los equipos termográficos - filtro especial
+                currentFilter = "all";
+                renderDashboard();
+            } else if (filtro === "alertas") {
+                document.querySelector('.tab-btn[data-tab="alertas"]').click();
+            } else if (filtro === "all") {
+                document.querySelector('.filter-btn[data-filter="all"]').click();
+            } else if (filtro === "CRÍTICO" || filtro === "GRAVE" || filtro === "INTERMEDIO" || filtro === "AVISO") {
+                const btn = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.dataset.filter === filtro);
+                if (btn) btn.click();
+            }
         }
 
         function abrirModalTransformador(id) {
@@ -1025,7 +1060,6 @@
             const operativos = transformadoresData.filter(t => t.estado_actual === "Operativo").length;
             const noOperativos = totalTransformadores - operativos;
             const porcentajeOperativos = Math.round((operativos / totalTransformadores) * 100);
-            const porcentajeMantenimientoRealizado = Math.round((transformadoresData.filter(t => t.proxima_mantencion_programada > new Date().toISOString().slice(0,10)).length / totalTransformadores) * 100);
             
             const criticosTermicos = inspeccionesData.filter(e => e.prioridad === "CRÍTICO").length;
             const gravesTermicos = inspeccionesData.filter(e => e.prioridad === "GRAVE").length;
@@ -1035,55 +1069,111 @@
             
             const subestacionesCount = {};
             todosLosEquipos.forEach(e => { let sub = normalizarSubestacion(e.subestacion); subestacionesCount[sub] = (subestacionesCount[sub] || 0) + 1; });
-            const topSubestaciones = Object.entries(subestacionesCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const topSubestaciones = Object.entries(subestacionesCount).sort((a, b) => b[1] - a[1]).slice(0, 8);
             
             container.innerHTML = `
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px; margin-bottom:28px;">
-                    <div class="reporte-card">
+                    <div class="reporte-card" onclick="aplicarFiltroDesdeReporte('all')">
                         <h3>📊 Estado Operativo de Transformadores</h3>
                         <div class="reporte-valor">${porcentajeOperativos}%</div>
                         <div class="progress-bar-container"><div class="progress-bar" style="width: ${porcentajeOperativos}%;"></div></div>
-                        <div class="stat-row"><span class="stat-label">✅ Operativos:</span><span class="stat-number">${operativos} equipos (${porcentajeOperativos}%)</span></div>
-                        <div class="stat-row"><span class="stat-label">❌ No Operativos/Dañados:</span><span class="stat-number">${noOperativos} equipos (${100 - porcentajeOperativos}%)</span></div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('Operativo'); event.stopPropagation();">
+                            <span class="stat-label">✅ Operativos:</span>
+                            <span class="stat-number">${operativos} equipos (${porcentajeOperativos}%)</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('No Operativo'); event.stopPropagation();">
+                            <span class="stat-label">❌ No Operativos/Dañados:</span>
+                            <span class="stat-number">${noOperativos} equipos (${100 - porcentajeOperativos}%)</span>
+                        </div>
                     </div>
-                    <div class="reporte-card">
-                        <h3>🔧 Mantenimiento Preventivo</h3>
-                        <div class="reporte-valor">${porcentajeMantenimientoRealizado}%</div>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: ${porcentajeMantenimientoRealizado}%; background:#2c7a4d;"></div></div>
-                        <div class="stat-row"><span class="stat-label">✅ Con mantenimiento programado:</span><span class="stat-number">${Math.round(totalTransformadores * porcentajeMantenimientoRealizado / 100)} equipos</span></div>
-                        <div class="stat-row"><span class="stat-label">⚠️ Mantenimiento vencido o próximo:</span><span class="stat-number">${transformadoresData.filter(t => t.proxima_mantencion_programada && t.proxima_mantencion_programada <= new Date().toISOString().slice(0,10)).length} equipos</span></div>
-                    </div>
-                    <div class="reporte-card">
+                    <div class="reporte-card" onclick="aplicarFiltroDesdeReporte('termicos')">
                         <h3>🌡️ Niveles Termográficos</h3>
-                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-critico">CRÍTICO (N4)</span></span><span class="stat-number">${criticosTermicos} (${Math.round((criticosTermicos/totalTermicos)*100)}%)</span></div>
-                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-grave">GRAVE (N3)</span></span><span class="stat-number">${gravesTermicos} (${Math.round((gravesTermicos/totalTermicos)*100)}%)</span></div>
-                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-intermedio">INTERMEDIO (N2)</span></span><span class="stat-number">${intermediosTermicos} (${Math.round((intermediosTermicos/totalTermicos)*100)}%)</span></div>
-                        <div class="stat-row"><span class="stat-label"><span class="badge-level level-aviso">AVISO (N1)</span></span><span class="stat-number">${avisosTermicos} (${Math.round((avisosTermicos/totalTermicos)*100)}%)</span></div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('CRÍTICO'); event.stopPropagation();">
+                            <span class="stat-label"><span class="badge-level level-critico">CRÍTICO (N4)</span></span>
+                            <span class="stat-number">${criticosTermicos} (${Math.round((criticosTermicos/totalTermicos)*100)}%)</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('GRAVE'); event.stopPropagation();">
+                            <span class="stat-label"><span class="badge-level level-grave">GRAVE (N3)</span></span>
+                            <span class="stat-number">${gravesTermicos} (${Math.round((gravesTermicos/totalTermicos)*100)}%)</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('INTERMEDIO'); event.stopPropagation();">
+                            <span class="stat-label"><span class="badge-level level-intermedio">INTERMEDIO (N2)</span></span>
+                            <span class="stat-number">${intermediosTermicos} (${Math.round((intermediosTermicos/totalTermicos)*100)}%)</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('AVISO'); event.stopPropagation();">
+                            <span class="stat-label"><span class="badge-level level-aviso">AVISO (N1)</span></span>
+                            <span class="stat-number">${avisosTermicos} (${Math.round((avisosTermicos/totalTermicos)*100)}%)</span>
+                        </div>
+                    </div>
+                    <div class="reporte-card" onclick="aplicarFiltroDesdeReporte('all')">
+                        <h3>🏆 Top 8 Subestaciones</h3>
+                        ${topSubestaciones.map(([sub, count], idx) => `
+                            <div class="stat-row" onclick="aplicarFiltroDesdeSubestacion('${sub}'); event.stopPropagation();">
+                                <span class="stat-label">${idx+1}. 📍 ${sub}</span>
+                                <span class="stat-number">${count} equipos</span>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
-                    <div class="reporte-card">
-                        <h3>🏆 Top 5 Subestaciones</h3>
-                        ${topSubestaciones.map(([sub, count], idx) => `
-                            <div class="stat-row"><span class="stat-label">${idx+1}. 📍 ${sub}</span><span class="stat-number">${count} equipos</span></div>
-                        `).join('')}
-                    </div>
-                    <div class="reporte-card">
+                    <div class="reporte-card" onclick="aplicarFiltroDesdeReporte('all')">
                         <h3>📈 Resumen General</h3>
                         <div class="stat-row"><span class="stat-label">Total Transformadores:</span><span class="stat-number">${totalTransformadores}</span></div>
                         <div class="stat-row"><span class="stat-label">Total Inspecciones Termográficas:</span><span class="stat-number">${totalTermicos}</span></div>
                         <div class="stat-row"><span class="stat-label">Total Activos Monitoreados:</span><span class="stat-number">${todosLosEquipos.length}</span></div>
-                        <div class="stat-row"><span class="stat-label">Alertas Activas:</span><span class="stat-number" style="color:#b91c1c;">${todosLosEquipos.filter(e => { if(e.tipo==="transformador") return e.estado_actual!=="Operativo"; return e.prioridad==="CRÍTICO"||e.prioridad==="GRAVE"; }).length}</span></div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('alertas'); event.stopPropagation();">
+                            <span class="stat-label">Alertas Activas:</span>
+                            <span class="stat-number" style="color:#b91c1c;">${todosLosEquipos.filter(e => { if(e.tipo==="transformador") return e.estado_actual!=="Operativo"; return e.prioridad==="CRÍTICO"||e.prioridad==="GRAVE"; }).length}</span>
+                        </div>
                     </div>
-                    <div class="reporte-card">
+                    <div class="reporte-card" onclick="aplicarFiltroDesdeReporte('all')">
                         <h3>📋 Distribución por Prioridad</h3>
-                        <div class="stat-row"><span class="stat-label">🔥 Crítico:</span><span class="stat-number">${criticosTermicos + transformadoresData.filter(t => t.estado_actual === "Daño Interno" || t.estado_actual === "Averiado").length}</span></div>
-                        <div class="stat-row"><span class="stat-label">⚠️ Grave:</span><span class="stat-number">${gravesTermicos + transformadoresData.filter(t => t.estado_actual === "No Operativo").length}</span></div>
-                        <div class="stat-row"><span class="stat-label">🟡 Intermedio/Aviso:</span><span class="stat-number">${intermediosTermicos + avisosTermicos + transformadoresData.filter(t => t.estado_actual === "Reserva").length}</span></div>
-                        <div class="stat-row"><span class="stat-label">✅ Normal/Operativo:</span><span class="stat-number">${transformadoresData.filter(t => t.estado_actual === "Operativo").length + (totalTermicos - criticosTermicos - gravesTermicos)}</span></div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('CRÍTICO'); event.stopPropagation();">
+                            <span class="stat-label">🔥 Crítico:</span>
+                            <span class="stat-number">${criticosTermicos + transformadoresData.filter(t => t.estado_actual === "Daño Interno" || t.estado_actual === "Averiado").length}</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('GRAVE'); event.stopPropagation();">
+                            <span class="stat-label">⚠️ Grave:</span>
+                            <span class="stat-number">${gravesTermicos + transformadoresData.filter(t => t.estado_actual === "No Operativo").length}</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('all')">
+                            <span class="stat-label">🟡 Intermedio/Aviso:</span>
+                            <span class="stat-number">${intermediosTermicos + avisosTermicos + transformadoresData.filter(t => t.estado_actual === "Reserva").length}</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('Operativo'); event.stopPropagation();">
+                            <span class="stat-label">✅ Normal/Operativo:</span>
+                            <span class="stat-number">${transformadoresData.filter(t => t.estado_actual === "Operativo").length + (totalTermicos - criticosTermicos - gravesTermicos)}</span>
+                        </div>
+                    </div>
+                    <div class="reporte-card" onclick="aplicarFiltroDesdeReporte('all')">
+                        <h3>🏭 Distribución por Tipo</h3>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('transformadores'); event.stopPropagation();">
+                            <span class="stat-label">🔌 Transformadores:</span>
+                            <span class="stat-number">${totalTransformadores} (${Math.round((totalTransformadores/todosLosEquipos.length)*100)}%)</span>
+                        </div>
+                        <div class="stat-row" onclick="aplicarFiltroDesdeReporte('termicos'); event.stopPropagation();">
+                            <span class="stat-label">🌡️ Inspecciones Termográficas:</span>
+                            <span class="stat-number">${totalTermicos} (${Math.round((totalTermicos/todosLosEquipos.length)*100)}%)</span>
+                        </div>
+                        <div class="progress-bar-container" style="margin-top:16px;">
+                            <div class="progress-bar" style="width: ${(totalTransformadores/todosLosEquipos.length)*100}%; background:#1e4a6b;"></div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${(totalTermicos/todosLosEquipos.length)*100}%; background:#2c7a4d;"></div>
+                        </div>
                     </div>
                 </div>
             `;
+        }
+
+        function aplicarFiltroDesdeSubestacion(subestacion) {
+            const searchInput = document.getElementById("searchInput");
+            if (searchInput) {
+                searchInput.value = subestacion;
+                currentSearch = subestacion;
+                renderDashboard();
+            }
+            document.querySelector('.tab-btn[data-tab="dashboard"]').click();
         }
 
         function toggleSubestacion(subestacion) {
@@ -1114,7 +1204,9 @@
             });
         }
 
+        // Event listeners
         document.getElementById("searchInput")?.addEventListener("input", (e) => { currentSearch = e.target.value; renderDashboard(); });
+        
         document.querySelectorAll(".filter-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -1123,6 +1215,7 @@
                 renderDashboard();
             });
         });
+        
         window.onclick = (event) => { if (event.target.classList.contains("modal")) event.target.style.display = "none"; };
         window.abrirModalTransformador = abrirModalTransformador;
         window.abrirModalTermico = abrirModalTermico;
@@ -1130,6 +1223,8 @@
         window.guardarEdicionTermico = guardarEdicionTermico;
         window.cerrarModal = cerrarModal;
         window.toggleSubestacion = toggleSubestacion;
+        window.aplicarFiltroDesdeReporte = aplicarFiltroDesdeReporte;
+        window.aplicarFiltroDesdeSubestacion = aplicarFiltroDesdeSubestacion;
         
         initTabs();
         renderDashboard();
