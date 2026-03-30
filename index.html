@@ -627,8 +627,16 @@
             <div class="edit-form">
                 <label>Fecha Última Inspección</label>
                 <input type="date" id="editFechaInspeccionTransformador">
-                <label>Próxima Mantención Programada</label>
-                <input type="date" id="editProximaMantencionTransformador">
+                <label>Próxima Mantención Programada (en semanas)</label>
+                <select id="editSemanasMantencion">
+                    <option value="4">4 semanas (1 mes)</option>
+                    <option value="8">8 semanas (2 meses)</option>
+                    <option value="12">12 semanas (3 meses)</option>
+                    <option value="26">26 semanas (6 meses)</option>
+                    <option value="52" selected>52 semanas (1 año)</option>
+                    <option value="78">78 semanas (1.5 años)</option>
+                    <option value="104">104 semanas (2 años)</option>
+                </select>
                 <label>Observaciones</label>
                 <textarea id="editObservacionesTransformador" rows="2"></textarea>
                 <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
@@ -673,33 +681,43 @@
             "BATAN ALTO", "EL OBRAJE", "GUALBERTO HERNANDEZ", "PASOCHOA", "CH LORETO", "CH VICTORIA", "NORTE", "CUMBAYA"
         ];
 
-        // Función para calcular días hasta próxima mantención
-        function calcularDiasHastaMantenimiento(fecha) {
-            if (!fecha) return null;
+        // Función para calcular semanas hasta la próxima mantención
+        function calcularSemanasHastaMantenimiento(fechaMantencion) {
+            if (!fechaMantencion) return null;
             const hoy = new Date();
-            const fechaMant = new Date(fecha);
+            const fechaMant = new Date(fechaMantencion);
             const diffTime = fechaMant - hoy;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            return diffDays;
+            const diffSemanas = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
+            return diffSemanas;
         }
 
-        function getEstadoMantenimientoClass(dias) {
-            if (dias === null) return "fecha-normal";
-            if (dias < 0) return "fecha-vencida";
-            if (dias <= 30) return "fecha-proxima";
+        // Función para calcular fecha de mantenimiento a partir de fecha de inspección y semanas
+        function calcularFechaMantenimiento(fechaInspeccion, semanas) {
+            if (!fechaInspeccion) return null;
+            const fecha = new Date(fechaInspeccion);
+            fecha.setDate(fecha.getDate() + (semanas * 7));
+            return fecha.toISOString().slice(0,10);
+        }
+
+        function getEstadoMantenimientoClass(semanas) {
+            if (semanas === null) return "fecha-normal";
+            if (semanas < 0) return "fecha-vencida";
+            if (semanas <= 4) return "fecha-proxima"; // 4 semanas = 1 mes
             return "fecha-normal";
         }
 
-        function getEstadoMantenimientoTexto(dias) {
-            if (dias === null) return "No programada";
-            if (dias < 0) return `Vencida hace ${Math.abs(dias)} días`;
-            if (dias === 0) return "Hoy";
-            if (dias <= 30) return `En ${dias} días`;
-            return `En ${dias} días`;
+        function getEstadoMantenimientoTexto(semanas) {
+            if (semanas === null) return "No programada";
+            if (semanas < 0) return `Vencida hace ${Math.abs(semanas)} semanas`;
+            if (semanas === 0) return "Esta semana";
+            if (semanas === 1) return "En 1 semana";
+            if (semanas <= 4) return `En ${semanas} semanas`;
+            if (semanas <= 12) return `En ${semanas} semanas (${Math.floor(semanas/4)} meses)`;
+            return `En ${semanas} semanas (${Math.floor(semanas/52)} año${Math.floor(semanas/52) !== 1 ? 's' : ''})`;
         }
 
         // ============================================================
-        // TRANSFORMADORES (82 equipos con fechas de mantenimiento)
+        // TRANSFORMADORES (82 equipos con mantenimiento en semanas)
         // ============================================================
         const transformadoresData = [];
         const estadosTrans = ["Operativo", "Operativo", "Operativo", "Operativo", "No Operativo", "Daño Interno", "Reserva"];
@@ -707,12 +725,15 @@
 
         for (let i = 1; i <= 82; i++) {
             const subIndex = i % subestacionesCompletas.length;
-            // Generar fechas de mantenimiento realistas
-            const fechaInspeccion = `202${Math.floor(Math.random() * 2) + 4}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`;
-            const diasSuma = Math.floor(Math.random() * 365) + 30;
-            const fechaMantencionDate = new Date(fechaInspeccion);
-            fechaMantencionDate.setDate(fechaMantencionDate.getDate() + diasSuma);
-            const fechaMantencion = fechaMantencionDate.toISOString().slice(0,10);
+            // Generar fecha de última inspección (entre 2024 y 2026)
+            const anoInspeccion = 2024 + Math.floor(Math.random() * 3);
+            const mesInspeccion = Math.floor(Math.random() * 12) + 1;
+            const diaInspeccion = Math.floor(Math.random() * 28) + 1;
+            const fechaInspeccion = `${anoInspeccion}-${mesInspeccion.toString().padStart(2,'0')}-${diaInspeccion.toString().padStart(2,'0')}`;
+            
+            // Ciclo de mantenimiento de 52 semanas (1 año)
+            const semanasMantencion = 52;
+            const fechaMantencion = calcularFechaMantenimiento(fechaInspeccion, semanasMantencion);
             
             transformadoresData.push({
                 id: `t${i.toString().padStart(3,'0')}`,
@@ -725,6 +746,7 @@
                 estado: estadosTrans[Math.floor(Math.random() * estadosTrans.length)],
                 fecha_inspeccion: fechaInspeccion,
                 fecha_mantencion: fechaMantencion,
+                semanas_ciclo: semanasMantencion,
                 numero_serie: `SN${Math.floor(Math.random() * 10000)}`,
                 ano_fabricacion: 1980 + Math.floor(Math.random() * 44),
                 observaciones: ["Nivel de aceite normal", "Requiere revisión", "Funcionamiento correcto", "Vibraciones normales"][Math.floor(Math.random() * 4)],
@@ -803,9 +825,9 @@
             const equipo = transformadoresData.find(e => e.id === id);
             if (!equipo) return;
             currentEditingTransformadorId = id;
-            const diasMant = calcularDiasHastaMantenimiento(equipo.fecha_mantencion);
-            const alertaMant = diasMant !== null && diasMant < 0 ? '<div style="background:#fee2e2; padding:12px; border-radius:8px; margin-bottom:16px; color:#b91c1c;"><strong>⚠️ Mantenimiento vencido</strong> - Programe una nueva fecha</div>' : 
-                              (diasMant !== null && diasMant <= 30 ? '<div style="background:#fef9e3; padding:12px; border-radius:8px; margin-bottom:16px; color:#b45309;"><strong>🔧 Mantenimiento próximo</strong> - Programado en ' + diasMant + ' días</div>' : '');
+            const semanas = calcularSemanasHastaMantenimiento(equipo.fecha_mantencion);
+            const alertaMant = semanas !== null && semanas < 0 ? '<div style="background:#fee2e2; padding:12px; border-radius:8px; margin-bottom:16px; color:#b91c1c;"><strong>⚠️ Mantenimiento vencido</strong> - Programe una nueva fecha</div>' : 
+                              (semanas !== null && semanas <= 4 ? '<div style="background:#fef9e3; padding:12px; border-radius:8px; margin-bottom:16px; color:#b45309;"><strong>🔧 Mantenimiento próximo</strong> - Programado en ' + semanas + ' semanas</div>' : '');
             const modal = document.getElementById("modalTransformador");
             document.getElementById("modalTransformadorTitle").textContent = `${equipo.subestacion} - ${equipo.nombre}`;
             document.getElementById("modalTransformadorBody").innerHTML = `
@@ -817,10 +839,10 @@
                 <div class="detail-row"><span class="detail-label">Capacidad</span><span class="detail-value">${equipo.capacidad} MVA</span></div>
                 <div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value">${equipo.estado}</span></div>
                 <div class="detail-row"><span class="detail-label">Última Inspección</span><span class="detail-value">${equipo.fecha_inspeccion}</span></div>
-                <div class="detail-row"><span class="detail-label">Próxima Mantención</span><span class="detail-value ${getEstadoMantenimientoClass(diasMant)}">${equipo.fecha_mantencion} (${getEstadoMantenimientoTexto(diasMant)})</span></div>
+                <div class="detail-row"><span class="detail-label">Próxima Mantención</span><span class="detail-value ${getEstadoMantenimientoClass(semanas)}">${equipo.fecha_mantencion} (${getEstadoMantenimientoTexto(semanas)})</span></div>
             `;
             document.getElementById("editFechaInspeccionTransformador").value = equipo.fecha_inspeccion || "";
-            document.getElementById("editProximaMantencionTransformador").value = equipo.fecha_mantencion || "";
+            document.getElementById("editSemanasMantencion").value = equipo.semanas_ciclo || 52;
             document.getElementById("editObservacionesTransformador").value = equipo.observaciones || "";
             modal.style.display = "flex";
         }
@@ -847,8 +869,13 @@
             if (!currentEditingTransformadorId) return;
             const t = transformadoresData.find(e => e.id === currentEditingTransformadorId);
             if (t) {
-                t.fecha_inspeccion = document.getElementById("editFechaInspeccionTransformador").value;
-                t.fecha_mantencion = document.getElementById("editProximaMantencionTransformador").value;
+                const nuevaFecha = document.getElementById("editFechaInspeccionTransformador").value;
+                const semanas = parseInt(document.getElementById("editSemanasMantencion").value);
+                if (nuevaFecha) {
+                    t.fecha_inspeccion = nuevaFecha;
+                    t.fecha_mantencion = calcularFechaMantenimiento(nuevaFecha, semanas);
+                    t.semanas_ciclo = semanas;
+                }
                 t.observaciones = document.getElementById("editObservacionesTransformador").value;
                 renderReporteEjecutivo();
                 renderDashboard();
@@ -892,12 +919,12 @@
                     if (e.tipo !== "termico") return false;
                 } else if (currentFilter === "mantenimiento_vencido") {
                     if (e.tipo !== "transformador") return false;
-                    const dias = calcularDiasHastaMantenimiento(e.fecha_mantencion);
-                    if (dias === null || dias >= 0) return false;
+                    const semanas = calcularSemanasHastaMantenimiento(e.fecha_mantencion);
+                    if (semanas === null || semanas >= 0) return false;
                 } else if (currentFilter === "mantenimiento_proximo") {
                     if (e.tipo !== "transformador") return false;
-                    const dias = calcularDiasHastaMantenimiento(e.fecha_mantencion);
-                    if (dias === null || dias < 0 || dias > 30) return false;
+                    const semanas = calcularSemanasHastaMantenimiento(e.fecha_mantencion);
+                    if (semanas === null || semanas < 0 || semanas > 4) return false;
                 }
                 if (currentSearch) {
                     const search = currentSearch.toLowerCase();
@@ -932,14 +959,14 @@
             const intermediosTerm = inspeccionesData.filter(i => i.nivel === "INTERMEDIO").length;
             const avisosTerm = inspeccionesData.filter(i => i.nivel === "AVISO").length;
             
-            // Estadísticas de mantenimiento
+            // Estadísticas de mantenimiento en semanas
             const mantenimientoVencido = transformadoresData.filter(t => {
-                const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
-                return dias !== null && dias < 0;
+                const semanas = calcularSemanasHastaMantenimiento(t.fecha_mantencion);
+                return semanas !== null && semanas < 0;
             }).length;
             const mantenimientoProximo = transformadoresData.filter(t => {
-                const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
-                return dias !== null && dias >= 0 && dias <= 30;
+                const semanas = calcularSemanasHastaMantenimiento(t.fecha_mantencion);
+                return semanas !== null && semanas >= 0 && semanas <= 4;
             }).length;
             const mantenimientoAlDia = totalTrans - mantenimientoVencido - mantenimientoProximo;
             
@@ -968,13 +995,13 @@
                     </div>
                 </div>
                 <div class="executive-card">
-                    <div class="card-header"><h3>Mantenimiento Programado</h3><span>Próximas 30 días</span></div>
+                    <div class="card-header"><h3>Mantenimiento Programado</h3><span>Ciclo de 52 semanas</span></div>
                     <div class="metric-row" onclick="aplicarFiltro('mantenimiento_vencido')">
                         <span class="metric-label">Mantenimiento Vencido</span>
                         <span class="metric-value"><span class="metric-badge badge-critical">${mantenimientoVencido}</span> (${Math.round(mantenimientoVencido/totalTrans*100)}%)</span>
                     </div>
                     <div class="metric-row" onclick="aplicarFiltro('mantenimiento_proximo')">
-                        <span class="metric-label">Próximo (30 días)</span>
+                        <span class="metric-label">Próximo (4 semanas)</span>
                         <span class="metric-value"><span class="metric-badge badge-warning">${mantenimientoProximo}</span> (${Math.round(mantenimientoProximo/totalTrans*100)}%)</span>
                     </div>
                     <div class="metric-row">
@@ -983,6 +1010,7 @@
                     </div>
                     <div class="progress-section">
                         <div class="progress-bar-bg"><div class="progress-fill" style="width: ${(mantenimientoAlDia/totalTrans)*100}%; background:#166534"></div></div>
+                        <div class="stats-row" style="display:flex; justify-content:space-between; margin-top:8px;"><span>Mantenimiento al día</span><span>Meta: 100%</span></div>
                     </div>
                 </div>
                 <div class="executive-card">
@@ -1040,8 +1068,8 @@
                     return e.nivel === "CRITICO" || e.nivel === "GRAVE";
                 }).length;
                 const mantVencidos = trans.filter(t => {
-                    const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
-                    return dias !== null && dias < 0;
+                    const semanas = calcularSemanasHastaMantenimiento(t.fecha_mantencion);
+                    return semanas !== null && semanas < 0;
                 }).length;
                 const safeId = sub.replace(/[^a-zA-Z0-9]/g, '_');
                 return `
@@ -1060,9 +1088,9 @@
                                 <div class="seccion-equipos">
                                     <div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>
                                     ${trans.map(t => {
-                                        const diasMant = calcularDiasHastaMantenimiento(t.fecha_mantencion);
-                                        const mantClass = getEstadoMantenimientoClass(diasMant);
-                                        const mantTexto = getEstadoMantenimientoTexto(diasMant);
+                                        const semanas = calcularSemanasHastaMantenimiento(t.fecha_mantencion);
+                                        const mantClass = getEstadoMantenimientoClass(semanas);
+                                        const mantTexto = getEstadoMantenimientoTexto(semanas);
                                         return `
                                         <div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                                             <div class="equipo-info">
@@ -1107,8 +1135,8 @@
                 return e.nivel === "CRITICO" || e.nivel === "GRAVE";
             });
             const mantenimientoVencido = transformadoresData.filter(t => {
-                const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
-                return dias !== null && dias < 0;
+                const semanas = calcularSemanasHastaMantenimiento(t.fecha_mantencion);
+                return semanas !== null && semanas < 0;
             });
             const container = document.getElementById("alertasList");
             if (!container) return;
@@ -1120,12 +1148,12 @@
                     <div style="background:white; border-radius:16px; padding:20px; margin-bottom:20px; border:1px solid #e9ecef;">
                         <h3 style="color:#b91c1c; margin-bottom:16px;">⚠️ Mantenimiento Vencido (${mantenimientoVencido.length})</h3>
                         ${mantenimientoVencido.map(t => {
-                            const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                            const semanas = calcularSemanasHastaMantenimiento(t.fecha_mantencion);
                             return `
                                 <div style="background:#fff5f5; border-left:4px solid #b91c1c; padding:12px; margin-bottom:12px; border-radius:12px;">
                                     <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
                                         <strong>${t.subestacion} - ${t.nombre}</strong>
-                                        <span class="status-badge status-critical">Mantenimiento vencido hace ${Math.abs(dias)} días</span>
+                                        <span class="status-badge status-critical">Mantenimiento vencido hace ${Math.abs(semanas)} semanas</span>
                                     </div>
                                     <div style="font-size:0.75rem; margin-top:8px;">Próxima mantención programada: ${t.fecha_mantencion}</div>
                                     <button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="abrirModalTransformador('${t.id}')">Programar mantenimiento</button>
