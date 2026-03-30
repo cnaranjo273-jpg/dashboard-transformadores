@@ -259,6 +259,7 @@
         .badge-warning { background: #fef9e3; color: #b45309; }
         .badge-info { background: #e0f2fe; color: #0c4e6e; }
         .badge-success { background: #e3f7e8; color: #166534; }
+        .badge-mantenimiento { background: #e0e7ff; color: #1e40af; }
 
         .progress-section {
             margin-top: 16px;
@@ -323,6 +324,14 @@
         .alert-badge {
             background: #fee2e2;
             color: #b91c1c;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
+        .mantenimiento-badge {
+            background: #e0e7ff;
+            color: #1e40af;
             padding: 2px 8px;
             border-radius: 20px;
             font-size: 0.7rem;
@@ -400,6 +409,19 @@
             flex-wrap: wrap;
         }
 
+        .fecha-vencida {
+            color: #b91c1c;
+            font-weight: 500;
+        }
+
+        .fecha-proxima {
+            color: #c2410c;
+        }
+
+        .fecha-normal {
+            color: #166534;
+        }
+
         .status-badge {
             padding: 4px 10px;
             border-radius: 30px;
@@ -467,7 +489,7 @@
 
         .detail-label {
             font-weight: 500;
-            width: 130px;
+            width: 140px;
             color: #475569;
         }
 
@@ -583,6 +605,8 @@
                     <span class="filter-chip" data-filter="AVISO">Aviso</span>
                     <span class="filter-chip" data-filter="Operativo">Operativos</span>
                     <span class="filter-chip" data-filter="No Operativo">No Operativos</span>
+                    <span class="filter-chip" data-filter="mantenimiento_vencido">Mantenimiento Vencido</span>
+                    <span class="filter-chip" data-filter="mantenimiento_proximo">Mantenimiento Próximo</span>
                 </div>
             </div>
             <div id="dashboardGrid"></div>
@@ -636,7 +660,7 @@
 
     <script>
         // ============================================================
-        // LISTA COMPLETA DE SUBESTACIONES (53 subestaciones reales)
+        // LISTA COMPLETA DE SUBESTACIONES (54 subestaciones reales)
         // ============================================================
         const subestacionesCompletas = [
             "POMASQUI", "SANTA ROSA", "OLIMPICO", "LULUNCOTO", "BARIO NUEVO", "CHIMBACALLE", "CHILIBULO",
@@ -649,8 +673,33 @@
             "BATAN ALTO", "EL OBRAJE", "GUALBERTO HERNANDEZ", "PASOCHOA", "CH LORETO", "CH VICTORIA", "NORTE", "CUMBAYA"
         ];
 
+        // Función para calcular días hasta próxima mantención
+        function calcularDiasHastaMantenimiento(fecha) {
+            if (!fecha) return null;
+            const hoy = new Date();
+            const fechaMant = new Date(fecha);
+            const diffTime = fechaMant - hoy;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        function getEstadoMantenimientoClass(dias) {
+            if (dias === null) return "fecha-normal";
+            if (dias < 0) return "fecha-vencida";
+            if (dias <= 30) return "fecha-proxima";
+            return "fecha-normal";
+        }
+
+        function getEstadoMantenimientoTexto(dias) {
+            if (dias === null) return "No programada";
+            if (dias < 0) return `Vencida hace ${Math.abs(dias)} días`;
+            if (dias === 0) return "Hoy";
+            if (dias <= 30) return `En ${dias} días`;
+            return `En ${dias} días`;
+        }
+
         // ============================================================
-        // TRANSFORMADORES (82 equipos)
+        // TRANSFORMADORES (82 equipos con fechas de mantenimiento)
         // ============================================================
         const transformadoresData = [];
         const estadosTrans = ["Operativo", "Operativo", "Operativo", "Operativo", "No Operativo", "Daño Interno", "Reserva"];
@@ -658,6 +707,13 @@
 
         for (let i = 1; i <= 82; i++) {
             const subIndex = i % subestacionesCompletas.length;
+            // Generar fechas de mantenimiento realistas
+            const fechaInspeccion = `202${Math.floor(Math.random() * 2) + 4}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`;
+            const diasSuma = Math.floor(Math.random() * 365) + 30;
+            const fechaMantencionDate = new Date(fechaInspeccion);
+            fechaMantencionDate.setDate(fechaMantencionDate.getDate() + diasSuma);
+            const fechaMantencion = fechaMantencionDate.toISOString().slice(0,10);
+            
             transformadoresData.push({
                 id: `t${i.toString().padStart(3,'0')}`,
                 nombre: `Transformador de Potencia T${Math.floor(Math.random() * 3) + 1}`,
@@ -667,8 +723,8 @@
                 voltaje_secundario: [6.3, 23, 13.8, 22.8, 4.16][Math.floor(Math.random() * 5)],
                 capacidad: ["15/20", "20/27/33", "5/6.25", "8/10", "60/80/100"][Math.floor(Math.random() * 5)],
                 estado: estadosTrans[Math.floor(Math.random() * estadosTrans.length)],
-                fecha_inspeccion: `202${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
-                fecha_mantencion: `202${Math.floor(Math.random() * 3) + 5}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`,
+                fecha_inspeccion: fechaInspeccion,
+                fecha_mantencion: fechaMantencion,
                 numero_serie: `SN${Math.floor(Math.random() * 10000)}`,
                 ano_fabricacion: 1980 + Math.floor(Math.random() * 44),
                 observaciones: ["Nivel de aceite normal", "Requiere revisión", "Funcionamiento correcto", "Vibraciones normales"][Math.floor(Math.random() * 4)],
@@ -747,15 +803,21 @@
             const equipo = transformadoresData.find(e => e.id === id);
             if (!equipo) return;
             currentEditingTransformadorId = id;
+            const diasMant = calcularDiasHastaMantenimiento(equipo.fecha_mantencion);
+            const alertaMant = diasMant !== null && diasMant < 0 ? '<div style="background:#fee2e2; padding:12px; border-radius:8px; margin-bottom:16px; color:#b91c1c;"><strong>⚠️ Mantenimiento vencido</strong> - Programe una nueva fecha</div>' : 
+                              (diasMant !== null && diasMant <= 30 ? '<div style="background:#fef9e3; padding:12px; border-radius:8px; margin-bottom:16px; color:#b45309;"><strong>🔧 Mantenimiento próximo</strong> - Programado en ' + diasMant + ' días</div>' : '');
             const modal = document.getElementById("modalTransformador");
             document.getElementById("modalTransformadorTitle").textContent = `${equipo.subestacion} - ${equipo.nombre}`;
             document.getElementById("modalTransformadorBody").innerHTML = `
+                ${alertaMant}
                 <div class="detail-row"><span class="detail-label">Fabricante</span><span class="detail-value">${equipo.fabricante}</span></div>
                 <div class="detail-row"><span class="detail-label">Número de Serie</span><span class="detail-value">${equipo.numero_serie}</span></div>
                 <div class="detail-row"><span class="detail-label">Año Fabricación</span><span class="detail-value">${equipo.ano_fabricacion}</span></div>
                 <div class="detail-row"><span class="detail-label">Voltajes</span><span class="detail-value">${equipo.voltaje_primario}/${equipo.voltaje_secundario} kV</span></div>
                 <div class="detail-row"><span class="detail-label">Capacidad</span><span class="detail-value">${equipo.capacidad} MVA</span></div>
                 <div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value">${equipo.estado}</span></div>
+                <div class="detail-row"><span class="detail-label">Última Inspección</span><span class="detail-value">${equipo.fecha_inspeccion}</span></div>
+                <div class="detail-row"><span class="detail-label">Próxima Mantención</span><span class="detail-value ${getEstadoMantenimientoClass(diasMant)}">${equipo.fecha_mantencion} (${getEstadoMantenimientoTexto(diasMant)})</span></div>
             `;
             document.getElementById("editFechaInspeccionTransformador").value = equipo.fecha_inspeccion || "";
             document.getElementById("editProximaMantencionTransformador").value = equipo.fecha_mantencion || "";
@@ -815,7 +877,8 @@
 
         function filtrarEquipos(equipos) {
             return equipos.filter(e => {
-                if (currentFilter !== "all" && currentFilter !== "transformadores" && currentFilter !== "termicos") {
+                if (currentFilter !== "all" && currentFilter !== "transformadores" && currentFilter !== "termicos" && 
+                    currentFilter !== "mantenimiento_vencido" && currentFilter !== "mantenimiento_proximo") {
                     if (e.tipo === "transformador") {
                         if (currentFilter === "Operativo" && e.estado !== "Operativo") return false;
                         if (currentFilter === "No Operativo" && e.estado === "Operativo") return false;
@@ -827,6 +890,14 @@
                     if (e.tipo !== "transformador") return false;
                 } else if (currentFilter === "termicos") {
                     if (e.tipo !== "termico") return false;
+                } else if (currentFilter === "mantenimiento_vencido") {
+                    if (e.tipo !== "transformador") return false;
+                    const dias = calcularDiasHastaMantenimiento(e.fecha_mantencion);
+                    if (dias === null || dias >= 0) return false;
+                } else if (currentFilter === "mantenimiento_proximo") {
+                    if (e.tipo !== "transformador") return false;
+                    const dias = calcularDiasHastaMantenimiento(e.fecha_mantencion);
+                    if (dias === null || dias < 0 || dias > 30) return false;
                 }
                 if (currentSearch) {
                     const search = currentSearch.toLowerCase();
@@ -861,6 +932,17 @@
             const intermediosTerm = inspeccionesData.filter(i => i.nivel === "INTERMEDIO").length;
             const avisosTerm = inspeccionesData.filter(i => i.nivel === "AVISO").length;
             
+            // Estadísticas de mantenimiento
+            const mantenimientoVencido = transformadoresData.filter(t => {
+                const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                return dias !== null && dias < 0;
+            }).length;
+            const mantenimientoProximo = transformadoresData.filter(t => {
+                const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                return dias !== null && dias >= 0 && dias <= 30;
+            }).length;
+            const mantenimientoAlDia = totalTrans - mantenimientoVencido - mantenimientoProximo;
+            
             const subestacionesCount = {};
             todosLosEquipos.forEach(e => {
                 let sub = normalizarSubestacion(e.subestacion);
@@ -883,6 +965,24 @@
                     <div class="progress-section">
                         <div class="progress-bar-bg"><div class="progress-fill" style="width: ${(operativos/totalTrans)*100}%"></div></div>
                         <div class="stats-row" style="display:flex; justify-content:space-between; margin-top:8px;"><span>Meta operativa: >95%</span><span>Actual: ${Math.round(operativos/totalTrans*100)}%</span></div>
+                    </div>
+                </div>
+                <div class="executive-card">
+                    <div class="card-header"><h3>Mantenimiento Programado</h3><span>Próximas 30 días</span></div>
+                    <div class="metric-row" onclick="aplicarFiltro('mantenimiento_vencido')">
+                        <span class="metric-label">Mantenimiento Vencido</span>
+                        <span class="metric-value"><span class="metric-badge badge-critical">${mantenimientoVencido}</span> (${Math.round(mantenimientoVencido/totalTrans*100)}%)</span>
+                    </div>
+                    <div class="metric-row" onclick="aplicarFiltro('mantenimiento_proximo')">
+                        <span class="metric-label">Próximo (30 días)</span>
+                        <span class="metric-value"><span class="metric-badge badge-warning">${mantenimientoProximo}</span> (${Math.round(mantenimientoProximo/totalTrans*100)}%)</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Al día</span>
+                        <span class="metric-value"><span class="metric-badge badge-success">${mantenimientoAlDia}</span> (${Math.round(mantenimientoAlDia/totalTrans*100)}%)</span>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-bar-bg"><div class="progress-fill" style="width: ${(mantenimientoAlDia/totalTrans)*100}%; background:#166534"></div></div>
                     </div>
                 </div>
                 <div class="executive-card">
@@ -913,26 +1013,6 @@
                         </div>
                     `).join('')}
                 </div>
-                <div class="executive-card">
-                    <div class="card-header"><h3>Resumen General</h3><span>total activos: ${todosLosEquipos.length}</span></div>
-                    <div class="metric-row" onclick="aplicarFiltro('transformadores')">
-                        <span class="metric-label">Transformadores</span>
-                        <span class="metric-value">${totalTrans} (${Math.round(totalTrans/todosLosEquipos.length*100)}%)</span>
-                    </div>
-                    <div class="metric-row" onclick="aplicarFiltro('termicos')">
-                        <span class="metric-label">Equipos Termográficos</span>
-                        <span class="metric-value">${inspeccionesData.length} (${Math.round(inspeccionesData.length/todosLosEquipos.length*100)}%)</span>
-                    </div>
-                    <div class="metric-row" onclick="cambiarATabAlertas()">
-                        <span class="metric-label">Alertas Activas</span>
-                        <span class="metric-value"><span class="metric-badge badge-critical">${todosLosEquipos.filter(e => { if(e.tipo==="transformador") return e.estado!=="Operativo"; return e.nivel==="CRITICO"||e.nivel==="GRAVE"; }).length}</span></span>
-                    </div>
-                    <div class="progress-section" style="margin-top:12px">
-                        <div class="progress-bar-bg"><div class="progress-fill" style="width: ${(totalTrans/todosLosEquipos.length)*100}%; background:#2c7a4d"></div></div>
-                        <div class="progress-bar-bg"><div class="progress-fill" style="width: ${(inspeccionesData.length/todosLosEquipos.length)*100}%; background:#1e4a6b"></div></div>
-                        <div class="stats-row" style="display:flex; justify-content:space-between; margin-top:8px;"><span>Transformadores</span><span>Equipos Termográficos</span></div>
-                    </div>
-                </div>
             `;
         }
 
@@ -959,6 +1039,10 @@
                     if (e.tipo === "transformador") return e.estado !== "Operativo";
                     return e.nivel === "CRITICO" || e.nivel === "GRAVE";
                 }).length;
+                const mantVencidos = trans.filter(t => {
+                    const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                    return dias !== null && dias < 0;
+                }).length;
                 const safeId = sub.replace(/[^a-zA-Z0-9]/g, '_');
                 return `
                     <div class="subestacion-card">
@@ -967,6 +1051,7 @@
                                 <span>${sub}</span>
                                 <span class="subestacion-badge">${equipos.length} equipos</span>
                                 ${alertCount > 0 ? `<span class="alert-badge">${alertCount} alertas</span>` : ''}
+                                ${mantVencidos > 0 ? `<span class="mantenimiento-badge">${mantVencidos} mant. vencidos</span>` : ''}
                             </div>
                             <span class="toggle-icon" id="icon-${safeId}">▼</span>
                         </div>
@@ -974,7 +1059,11 @@
                             ${trans.length > 0 ? `
                                 <div class="seccion-equipos">
                                     <div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>
-                                    ${trans.map(t => `
+                                    ${trans.map(t => {
+                                        const diasMant = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                                        const mantClass = getEstadoMantenimientoClass(diasMant);
+                                        const mantTexto = getEstadoMantenimientoTexto(diasMant);
+                                        return `
                                         <div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                                             <div class="equipo-info">
                                                 <div class="equipo-nombre">
@@ -982,11 +1071,11 @@
                                                     <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span>
                                                 </div>
                                                 <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario} kV | ${t.capacidad} MVA</div>
-                                                <div class="equipo-detalles">Última inspección: ${t.fecha_inspeccion} | Próxima: ${t.fecha_mantencion}</div>
+                                                <div class="equipo-detalles">📅 Última inspección: ${t.fecha_inspeccion} | 🔧 Próxima: <span class="${mantClass}">${t.fecha_mantencion} (${mantTexto})</span></div>
                                                 <div class="equipo-detalles">Serie: ${t.numero_serie} | Año: ${t.ano_fabricacion}</div>
                                             </div>
                                         </div>
-                                    `).join('')}
+                                    `}).join('')}
                                 </div>
                             ` : ''}
                             ${terms.length > 0 ? `
@@ -1017,32 +1106,63 @@
                 if (e.tipo === "transformador") return e.estado !== "Operativo";
                 return e.nivel === "CRITICO" || e.nivel === "GRAVE";
             });
+            const mantenimientoVencido = transformadoresData.filter(t => {
+                const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                return dias !== null && dias < 0;
+            });
             const container = document.getElementById("alertasList");
             if (!container) return;
-            if (alertas.length === 0) {
-                container.innerHTML = '<div class="empty-state">No hay alertas activas</div>';
-                return;
-            }
-            container.innerHTML = `
-                <div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;">
-                    <h3 style="color:#1e4a6b; margin-bottom:16px;">Alertas de Mantenimiento (${alertas.length})</h3>
-                    ${alertas.map(a => {
-                        const esTrans = a.tipo === "transformador";
-                        return `
-                            <div style="background:#fff5f5; border-left:4px solid #b91c1c; padding:16px; margin-bottom:12px; border-radius:12px;">
-                                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; margin-bottom:8px;">
-                                    <strong>${a.subestacion} - ${esTrans ? a.nombre : a.equipo}</strong>
-                                    <span class="status-badge status-critical">${esTrans ? a.estado : a.nivel}</span>
+            
+            let html = '';
+            
+            if (mantenimientoVencido.length > 0) {
+                html += `
+                    <div style="background:white; border-radius:16px; padding:20px; margin-bottom:20px; border:1px solid #e9ecef;">
+                        <h3 style="color:#b91c1c; margin-bottom:16px;">⚠️ Mantenimiento Vencido (${mantenimientoVencido.length})</h3>
+                        ${mantenimientoVencido.map(t => {
+                            const dias = calcularDiasHastaMantenimiento(t.fecha_mantencion);
+                            return `
+                                <div style="background:#fff5f5; border-left:4px solid #b91c1c; padding:12px; margin-bottom:12px; border-radius:12px;">
+                                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
+                                        <strong>${t.subestacion} - ${t.nombre}</strong>
+                                        <span class="status-badge status-critical">Mantenimiento vencido hace ${Math.abs(dias)} días</span>
+                                    </div>
+                                    <div style="font-size:0.75rem; margin-top:8px;">Próxima mantención programada: ${t.fecha_mantencion}</div>
+                                    <button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="abrirModalTransformador('${t.id}')">Programar mantenimiento</button>
                                 </div>
-                                <div style="font-size:0.8rem; color:#475569;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div>
-                                <div style="font-size:0.8rem; margin:8px 0;">Fecha: ${esTrans ? a.fecha_inspeccion : a.fecha}</div>
-                                <div style="font-size:0.85rem; font-weight:500; color:#b91c1c;">${esTrans ? a.observaciones : a.observacion}</div>
-                                <button class="filter-chip" style="margin-top:10px; background:#1e4a6b; color:white; border:none;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}">Editar</button>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            
+            if (alertas.length > 0) {
+                html += `
+                    <div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;">
+                        <h3 style="color:#1e4a6b; margin-bottom:16px;">🚨 Equipos con Prioridad Crítica o Grave (${alertas.length})</h3>
+                        ${alertas.map(a => {
+                            const esTrans = a.tipo === "transformador";
+                            return `
+                                <div style="background:${esTrans ? '#fff5f5' : '#fff9f0'}; border-left:4px solid ${esTrans ? '#b91c1c' : '#c2410c'}; padding:12px; margin-bottom:12px; border-radius:12px;">
+                                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
+                                        <strong>${a.subestacion} - ${esTrans ? a.nombre : a.equipo}</strong>
+                                        <span class="status-badge ${esTrans ? 'status-critical' : 'status-grave'}">${esTrans ? a.estado : a.nivel}</span>
+                                    </div>
+                                    <div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div>
+                                    <div style="font-size:0.75rem;">Fecha: ${esTrans ? a.fecha_inspeccion : a.fecha}</div>
+                                    <div style="font-size:0.8rem; font-weight:500; color:${esTrans ? '#b91c1c' : '#c2410c'}; margin-top:6px;">${esTrans ? a.observaciones : a.observacion}</div>
+                                    <button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}">Editar</button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            
+            if (html === '') {
+                html = '<div class="empty-state">No hay alertas activas</div>';
+            }
+            container.innerHTML = html;
         }
 
         function aplicarFiltro(filtro) {
