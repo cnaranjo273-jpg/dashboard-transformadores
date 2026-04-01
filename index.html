@@ -704,8 +704,8 @@
         <span style="font-size: 24px;">+</span>
     </div>
     <div class="fab-options" id="fabOptions">
-        <div class="fab-option" onclick="abrirModalAgregarTransformador()">➕ Agregar Transformador</div>
-        <div class="fab-option" onclick="abrirModalAgregarTermico()">🔍 Agregar Inspección Termográfica</div>
+        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Agregar Transformador</div>
+        <div class="fab-option" onclick="abrirModalAgregarTermico()">Agregar Inspección Termográfica</div>
     </div>
 
     <!-- Modal Editar Transformador -->
@@ -727,6 +727,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div>
                     <div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div>
+                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario"></div>
                 </div>
                 <label>Capacidad (MVA)</label>
                 <input type="text" id="editCapacidadTransformador">
@@ -751,7 +752,7 @@
                 <label>Observaciones</label>
                 <textarea id="editObservacionesTransformador" rows="2"></textarea>
                 <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
-                <button class="delete-btn-modal" onclick="eliminarTransformador()">🗑️ Eliminar Equipo</button>
+                <button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar Equipo</button>
             </div>
         </div>
     </div>
@@ -783,7 +784,7 @@
                     <option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option>
                 </select>
                 <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
-                <button class="delete-btn-modal" onclick="eliminarTermico()">🗑️ Eliminar Equipo</button>
+                <button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar Equipo</button>
             </div>
         </div>
     </div>
@@ -792,7 +793,7 @@
     <div id="modalAgregarTransformador" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>➕ Agregar Nuevo Transformador</h2>
+                <h2>Agregar Nuevo Transformador</h2>
                 <span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span>
             </div>
             <div class="edit-form">
@@ -806,6 +807,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div><label>Voltaje Primario (kV)</label><input type="text" id="newVoltajePrimario" placeholder="Ej: 138"></div>
                     <div><label>Voltaje Secundario (kV)</label><input type="text" id="newVoltajeSecundario" placeholder="Ej: 23"></div>
+                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="newVoltajeTerciario" placeholder="Ej: 23"></div>
                 </div>
                 <label>Capacidad (MVA)</label>
                 <input type="text" id="newCapacidadTransformador" placeholder="Ej: 20/27/33">
@@ -829,7 +831,7 @@
                 <input type="text" id="newTipoConexion" placeholder="Ej: DYn1">
                 <label>Observaciones</label>
                 <textarea id="newObservacionesTransformador" rows="2"></textarea>
-                <button class="save-btn" onclick="agregarNuevoTransformador()">✅ Crear Transformador</button>
+                <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
             </div>
         </div>
     </div>
@@ -838,7 +840,7 @@
     <div id="modalAgregarTermico" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🔍 Agregar Inspección Termográfica</h2>
+                <h2>Agregar Inspección Termográfica</h2>
                 <span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span>
             </div>
             <div class="edit-form">
@@ -899,8 +901,6 @@
             return badges[estado] || "badge-warning";
         }
 
-        // Cargar datos de transformadores desde el archivo proporcionado
-        // Datos reales de los 82 transformadores
         const transformadoresRaw = [
             { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
             { nombre_equipo: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
@@ -984,7 +984,6 @@
             { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." }
         ];
 
-        // Asignar IDs únicos a cada transformador
         transformadoresRaw.forEach((t, index) => {
             transformadoresData.push({
                 id: `t${(index + 1).toString().padStart(3, '0')}`,
