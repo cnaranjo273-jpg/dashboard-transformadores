@@ -6,7 +6,6 @@
     <title>EEQ - Sistema de Gestión de Activos Eléctricos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos iguales al código anterior, se mantienen */
         * {
             margin: 0;
             padding: 0;
@@ -333,6 +332,14 @@
             font-size: 0.7rem;
         }
 
+        .mantenimiento-badge {
+            background: #e0e7ff;
+            color: #1e40af;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
         .toggle-icon {
             font-size: 0.8rem;
             color: #6c7a8a;
@@ -405,6 +412,19 @@
             flex-wrap: wrap;
         }
 
+        .semana-vencida {
+            color: #b91c1c;
+            font-weight: 500;
+        }
+
+        .semana-proxima {
+            color: #c2410c;
+        }
+
+        .semana-normal {
+            color: #166534;
+        }
+
         .status-badge {
             padding: 4px 10px;
             border-radius: 30px;
@@ -438,7 +458,7 @@
         .modal-content {
             background: white;
             border-radius: 20px;
-            max-width: 680px;
+            max-width: 560px;
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
@@ -475,7 +495,7 @@
 
         .detail-label {
             font-weight: 500;
-            width: 150px;
+            width: 140px;
             color: #475569;
         }
 
@@ -506,18 +526,6 @@
             border-radius: 10px;
             font-size: 0.8rem;
             font-family: 'Inter', sans-serif;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .form-row-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
         }
 
         .save-btn {
@@ -624,9 +632,6 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            .form-row-3 {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -634,7 +639,7 @@
     <div class="container">
         <div class="header">
             <h1>Empresa Eléctrica Quito</h1>
-            <p>Sistema de Gestión de Activos Eléctricos | 82 Transformadores de Potencia + 30 Inspecciones Termográficas</p>
+            <p>Sistema de Gestión de Activos Eléctricos | Transformadores de Potencia + Inspecciones Termográficas</p>
         </div>
 
         <div class="kpi-grid" id="kpiGrid">
@@ -699,8 +704,8 @@
         <span style="font-size: 24px;">+</span>
     </div>
     <div class="fab-options" id="fabOptions">
-        <div class="fab-option" onclick="abrirModalAgregarTransformador()">➕ Agregar Transformador</div>
-        <div class="fab-option" onclick="abrirModalAgregarTermico()">🔍 Agregar Inspección Termográfica</div>
+        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Agregar Transformador</div>
+        <div class="fab-option" onclick="abrirModalAgregarTermico()">Agregar Inspección Termográfica</div>
     </div>
 
     <!-- Modal Editar Transformador -->
@@ -717,17 +722,15 @@
                 <label>Subestación</label>
                 <input type="text" id="editSubestacionTransformador" list="subestacionesList">
                 <datalist id="subestacionesList"></datalist>
-                <label>Fabricante / Marca</label>
+                <label>Fabricante</label>
                 <input type="text" id="editFabricanteTransformador">
-                <div class="form-row-3">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div>
                     <div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div>
-                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div>
+                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario"></div>
                 </div>
                 <label>Capacidad (MVA)</label>
                 <input type="text" id="editCapacidadTransformador">
-                <label>Relación de Transformación</label>
-                <input type="text" id="editRelacionTransformador">
                 <label>Estado Actual</label>
                 <select id="editEstadoTransformador">
                     <option value="Operativo">Operativo</option>
@@ -738,16 +741,18 @@
                     <option value="incendiado">Incendiado</option>
                     <option value="Dado de baja">Dado de baja</option>
                 </select>
-                <div class="form-row">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div><label>Número de Serie</label><input type="text" id="editNumeroSerie"></div>
                     <div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion"></div>
                 </div>
+                <label>Relación de Transformación</label>
+                <input type="text" id="editRelacionTransformador">
                 <label>Tipo de Conexión</label>
                 <input type="text" id="editTipoConexion">
                 <label>Observaciones</label>
                 <textarea id="editObservacionesTransformador" rows="2"></textarea>
-                <button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button>
-                <button class="delete-btn-modal" onclick="eliminarTransformador()">🗑️ Eliminar Equipo</button>
+                <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
+                <button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar Equipo</button>
             </div>
         </div>
     </div>
@@ -763,7 +768,6 @@
             <div class="edit-form">
                 <label>Subestación</label>
                 <input type="text" id="editSubestacionTermico" list="subestacionesListTermico">
-                <datalist id="subestacionesListTermico"></datalist>
                 <label>Equipo</label>
                 <input type="text" id="editEquipoTermico">
                 <label>Nomenclatura</label>
@@ -779,8 +783,8 @@
                     <option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option>
                     <option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option>
                 </select>
-                <button class="save-btn" onclick="guardarEdicionTermico()">💾 Guardar Cambios</button>
-                <button class="delete-btn-modal" onclick="eliminarTermico()">🗑️ Eliminar Equipo</button>
+                <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
+                <button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar Equipo</button>
             </div>
         </div>
     </div>
@@ -789,7 +793,7 @@
     <div id="modalAgregarTransformador" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>➕ Agregar Nuevo Transformador</h2>
+                <h2>Agregar Nuevo Transformador</h2>
                 <span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span>
             </div>
             <div class="edit-form">
@@ -798,12 +802,12 @@
                 <label>Subestación *</label>
                 <input type="text" id="newSubestacionTransformador" list="subestacionesListNew">
                 <datalist id="subestacionesListNew"></datalist>
-                <label>Fabricante / Marca</label>
-                <input type="text" id="newFabricanteTransformador" placeholder="Ej: ABB, Siemens, TRAFO">
-                <div class="form-row-3">
+                <label>Fabricante</label>
+                <input type="text" id="newFabricanteTransformador">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div><label>Voltaje Primario (kV)</label><input type="text" id="newVoltajePrimario" placeholder="Ej: 138"></div>
                     <div><label>Voltaje Secundario (kV)</label><input type="text" id="newVoltajeSecundario" placeholder="Ej: 23"></div>
-                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="newVoltajeTerciario" placeholder="Opcional, Ej: 13.8"></div>
+                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="newVoltajeTerciario" placeholder="Ej: 23"></div>
                 </div>
                 <label>Capacidad (MVA)</label>
                 <input type="text" id="newCapacidadTransformador" placeholder="Ej: 20/27/33">
@@ -819,15 +823,15 @@
                     <option value="incendiado">Incendiado</option>
                     <option value="Dado de baja">Dado de baja</option>
                 </select>
-                <div class="form-row">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div><label>Número de Serie</label><input type="text" id="newNumeroSerie"></div>
                     <div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion"></div>
                 </div>
                 <label>Tipo de Conexión</label>
-                <input type="text" id="newTipoConexion" placeholder="Ej: DYn1, YNyn0d1">
+                <input type="text" id="newTipoConexion" placeholder="Ej: DYn1">
                 <label>Observaciones</label>
                 <textarea id="newObservacionesTransformador" rows="2"></textarea>
-                <button class="save-btn" onclick="agregarNuevoTransformador()">✅ Crear Transformador</button>
+                <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
             </div>
         </div>
     </div>
@@ -836,7 +840,7 @@
     <div id="modalAgregarTermico" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🔍 Agregar Inspección Termográfica</h2>
+                <h2>Agregar Inspección Termográfica</h2>
                 <span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span>
             </div>
             <div class="edit-form">
@@ -844,9 +848,9 @@
                 <input type="text" id="newSubestacionTermico" list="subestacionesListTermicoNew">
                 <datalist id="subestacionesListTermicoNew"></datalist>
                 <label>Equipo *</label>
-                <input type="text" id="newEquipoTermico" placeholder="Ej: SECCIONADOR, L/T">
+                <input type="text" id="newEquipoTermico" placeholder="Ej: SECCIONADOR">
                 <label>Nomenclatura</label>
-                <input type="text" id="newNomenclaturaTermico" placeholder="Ej: 89-01">
+                <input type="text" id="newNomenclaturaTermico">
                 <label>Voltaje</label>
                 <input type="text" id="newVoltajeTermico" placeholder="Ej: 46 KV">
                 <label>Fecha de Inspección</label>
@@ -870,6 +874,7 @@
         
         let transformadoresData = [];
 
+        // Función para obtener el estado del transformador
         function getEstadoClass(estado) {
             const estados = {
                 "Operativo": "status-success",
@@ -883,22 +888,102 @@
             return estados[estado] || "status-warning";
         }
 
-        // Datos de transformadores (se mantienen los mismos que en tu código)
+        function getEstadoBadge(estado) {
+            const badges = {
+                "Operativo": "badge-success",
+                "No Operativo": "badge-grave",
+                "Daño Interno": "badge-daño",
+                "Reserva": "badge-reserva",
+                "Averiado": "badge-critical",
+                "incendiado": "badge-critical",
+                "Dado de baja": "badge-baja"
+            };
+            return badges[estado] || "badge-warning";
+        }
+
         const transformadoresRaw = [
-            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, voltaje_terciario_kv: null, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
-            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, voltaje_terciario_kv: null, capacidad: "", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
-            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, voltaje_terciario_kv: null, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
-            // ... (todos los demás transformadores se mantienen igual)
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Luluncoto", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "200790", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Barrio Nuevo", fabricante: "Pauwells", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "94.2.4069", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Chimbacalle", fabricante: "Shenda", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "61161", ano_fabricacion: 1987, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Chilibulo", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Chilibulo", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "CK221217-4", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Escuela Sucre", fabricante: "Siemens", voltaje_primario_kv: 43.8, voltaje_secundario_kv: 6.3, capacidad: "5/6.25", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "98674", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "San Roque", fabricante: "Yawei", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "La Marin", fabricante: "Yawei", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Miraflores", fabricante: "Raycham", voltaje_primario_kv: 46, voltaje_secundario_kv: "6.3/22.8", capacidad: "15/20", relacion: "46/23/6.3", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Mitsubishi", voltaje_primario_kv: 43.8, voltaje_secundario_kv: 6.3, capacidad: "8/10", relacion: "43.8/6.3", estado_actual: "Operativo", numero_serie: "558406", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Belisario Quevedo", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "201189", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "La Floresta", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "200788", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Gualo", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "201413", ano_fabricacion: 2015, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Gualo", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "CK180674-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "El Bosque", fabricante: "Siemens", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 2019, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "1K8307T1", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "1K8307T2", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Siemens", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "185236-1388", ano_fabricacion: 1998, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Cristiania", fabricante: "Trafo", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "2003", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Cristiania", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Cotocollao", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "", estado_actual: "Operativo", numero_serie: "200626", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T3", subestacion: "Cotocollao", fabricante: "Pauwels", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "9740751", ano_fabricacion: 1997, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T4", subestacion: "Cotocollao", fabricante: "Yorkshire", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "9740751", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Cotocollao", fabricante: "Meidensha", voltaje_primario_kv: 138, voltaje_secundario_kv: "46/23", capacidad: "60/80/100", relacion: "138/46/23", estado_actual: "Operativo", numero_serie: "8N8017T1", ano_fabricacion: 1987, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "295842", ano_fabricacion: 2009, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "201190", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "San Antonio", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "201187", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Conocoto", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Conocoto", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Carolina", fabricante: "Meiden", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "1K8309T1", ano_fabricacion: 1984, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Carolina", fabricante: "Shenda", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "15/20", relacion: "46/23", estado_actual: "Operativo", numero_serie: "CK180673-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T3", subestacion: "San Pablo", fabricante: "CG Transf", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Alangasi", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "200628", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "San Rafael", fabricante: "Meiden", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/26.7/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 1988, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Iñaquito", fabricante: "Pauwels", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "94.2.4068", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Iñaquito", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "200787", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Nueva Cumbaya", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Plataforma Financiera", fabricante: "Shenda", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "CK170227-1", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Tababela", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "138/23", estado_actual: "Operativo", numero_serie: "CK221217-1", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Diez Nueva", fabricante: "Yorkshire", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "46/6.3", estado_actual: "Operativo", numero_serie: "22178", ano_fabricacion: 1978, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Nuevo Aeropuerto", fabricante: "Yorkshire", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "15/20", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Tumbaco", fabricante: "Siemens", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Tumbaco", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "185329", ano_fabricacion: 2000, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 46, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "CK130960-1", ano_fabricacion: 2013, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 46, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "18410", ano_fabricacion: 2002, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Selva Alegre", fabricante: "BBC", voltaje_primario_kv: 138, voltaje_secundario_kv: "46/6.3", capacidad: "60/80/100", relacion: "46/2.3", estado_actual: "Operativo", numero_serie: "GM 100797", ano_fabricacion: 1986, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Selva Alegre", fabricante: "Siemens", voltaje_primario_kv: 138, voltaje_secundario_kv: "46/6.3", capacidad: "60/80/100", relacion: "46/2.3", estado_actual: "Operativo", numero_serie: "185641", ano_fabricacion: 2006, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia TR", subestacion: "Papallacta", fabricante: "MOVIL_Siemens", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia", subestacion: "La Calera", fabricante: "Ecuatran", voltaje_primario_kv: 6.3, voltaje_secundario_kv: 22.8, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "El Inga Bajo", fabricante: "Chint", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Mirador Alto", fabricante: "Chint", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Los Bancos", fabricante: "Mitsubishi", voltaje_primario_kv: 43.8, voltaje_secundario_kv: 13.2, capacidad: "8/10", relacion: "43.8/13.2", estado_actual: "Operativo", numero_serie: "558410", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Los Bancos", fabricante: "ABB", voltaje_primario_kv: 69, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "200867", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Parque Bicentenario", fabricante: "Chint", voltaje_primario_kv: 138, voltaje_secundario_kv: 22.8, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Perez Guerrero", fabricante: "Pauwels", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "20", relacion: "46/23", estado_actual: "Operativo", numero_serie: "94.2.406", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Perez Guerrero", fabricante: "Shenda", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/25", relacion: "46/23", estado_actual: "Operativo", numero_serie: "CK180673-2", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Sangolqui", fabricante: "Yorkshire", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "15/20", relacion: "46/23", estado_actual: "Operativo", numero_serie: "71/22064", ano_fabricacion: 1977, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Sangolqui", fabricante: "ABB", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "120/27/33", relacion: "46/23", estado_actual: "Operativo", numero_serie: "200784", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Pomasqui", fabricante: "Siemens", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "185643", ano_fabricacion: 2006, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "Pauwels", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: 1895, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "El Quinche", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "201186", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Eugenio Espejo", fabricante: "Shenda", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "138/23", estado_actual: "Operativo", numero_serie: "CK221217-3", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Eugenio Espejo", fabricante: "Pauwells", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Operativo", numero_serie: "95.4.7519", ano_fabricacion: 1996, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Batán Alto", fabricante: "Chint", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "1ZDB300000P-1998", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "El Obraje", fabricante: "Chint", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "1ZDB300000P-1884", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Gualberto Hernandez", fabricante: "Yorkshire", voltaje_primario_kv: 46, voltaje_secundario_kv: 13.8, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Pasochoa", fabricante: "Transformers y Rectifiers (INDIA) LDT.", voltaje_primario_kv: 46, voltaje_secundario_kv: 4.16, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia TR-G35", subestacion: "CH Loreto", fabricante: "Z Standard", voltaje_primario_kv: 4.16, voltaje_secundario_kv: 24, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YNd11", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "CH Victoria", fabricante: "Incoesa", voltaje_primario_kv: 6.6, voltaje_secundario_kv: 22.8, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Bario Nuevo", fabricante: "Yorkshire", voltaje_primario_kv: 46, voltaje_secundario_kv: "6.3/22.8", capacidad: "15/20", relacion: "46/23/6.3", estado_actual: "Operativo", numero_serie: "81/22181", ano_fabricacion: 1978, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Miraflores", fabricante: "Mitsubishi", voltaje_primario_kv: 46, voltaje_secundario_kv: 6.3, capacidad: "15/20", relacion: "43.8/6.3", estado_actual: "No Operativo", numero_serie: "558409", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario_kv: 43.8, voltaje_secundario_kv: 6.3, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado_actual: "Averiado", numero_serie: "T98676", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario_kv: 43.8, voltaje_secundario_kv: 6.3, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado_actual: "Reserva", numero_serie: "98675", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Asea", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "5/6.25", relacion: "43.8/6.3", estado_actual: "Dado de baja", numero_serie: "5897-844", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario_kv: 46, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "46/23", estado_actual: "incendiado", numero_serie: "185411", ano_fabricacion: 2002, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "ABB", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "", relacion: "", estado_actual: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." },
+            { nombre_equipo: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario_kv: 138, voltaje_secundario_kv: 23, capacidad: "20/27/33", relacion: "138/23", estado_actual: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales." }
         ];
 
-        // Para no repetir todo el código, aquí continúa con el resto de transformadores
-        // (se mantienen los mismos datos que en tu código original)
-        
-        // NOTA: Por razones de espacio, no incluyo todos los 82 transformadores aquí,
-        // pero en tu implementación final deben estar todos los que tenías en el código anterior.
-        // En la versión final, usarás los mismos 82 transformadores que ya tenías definidos.
-
-        // Procesar transformadores
         transformadoresRaw.forEach((t, index) => {
             transformadoresData.push({
                 id: `t${(index + 1).toString().padStart(3, '0')}`,
@@ -907,7 +992,6 @@
                 fabricante: t.fabricante,
                 voltaje_primario: t.voltaje_primario_kv,
                 voltaje_secundario: t.voltaje_secundario_kv,
-                voltaje_terciario: t.voltaje_terciario_kv || null,
                 capacidad: t.capacidad,
                 relacion: t.relacion,
                 estado: t.estado_actual,
@@ -1019,7 +1103,6 @@
                 fabricante: document.getElementById("newFabricanteTransformador").value || "No especificado",
                 voltaje_primario: document.getElementById("newVoltajePrimario").value || "N/A",
                 voltaje_secundario: document.getElementById("newVoltajeSecundario").value || "N/A",
-                voltaje_terciario: document.getElementById("newVoltajeTerciario").value || null,
                 capacidad: document.getElementById("newCapacidadTransformador").value || "N/A",
                 relacion: document.getElementById("newRelacionTransformador").value || "N/A",
                 estado: document.getElementById("newEstadoTransformador").value,
@@ -1077,7 +1160,6 @@
             document.getElementById("editFabricanteTransformador").value = equipo.fabricante;
             document.getElementById("editVoltajePrimario").value = equipo.voltaje_primario;
             document.getElementById("editVoltajeSecundario").value = equipo.voltaje_secundario;
-            document.getElementById("editVoltajeTerciario").value = equipo.voltaje_terciario || "";
             document.getElementById("editCapacidadTransformador").value = equipo.capacidad;
             document.getElementById("editEstadoTransformador").value = equipo.estado;
             document.getElementById("editNumeroSerie").value = equipo.numero_serie;
@@ -1092,14 +1174,10 @@
             
             const modal = document.getElementById("modalTransformador");
             document.getElementById("modalTransformadorTitle").textContent = `${equipo.subestacion} - ${equipo.nombre}`;
-            // Mostrar MARCA/FABRICANTE en lugar del ID
             document.getElementById("modalTransformadorBody").innerHTML = `
-                <div class="detail-row"><span class="detail-label">Marca / Fabricante</span><span class="detail-value"><strong>${equipo.fabricante}</strong></span></div>
+                <div class="detail-row"><span class="detail-label">ID</span><span class="detail-value">${equipo.id}</span></div>
                 <div class="detail-row"><span class="detail-label">Número de Serie</span><span class="detail-value">${equipo.numero_serie}</span></div>
                 <div class="detail-row"><span class="detail-label">Año Fabricación</span><span class="detail-value">${equipo.ano_fabricacion}</span></div>
-                ${equipo.voltaje_terciario ? `<div class="detail-row"><span class="detail-label">Voltaje Terciario</span><span class="detail-value">${equipo.voltaje_terciario} kV</span></div>` : ''}
-                <div class="detail-row"><span class="detail-label">Tipo de Conexión</span><span class="detail-value">${equipo.tipo_conexion}</span></div>
-                <div class="detail-row"><span class="detail-label">Relación</span><span class="detail-value">${equipo.relacion}</span></div>
             `;
             modal.style.display = "flex";
         }
@@ -1123,11 +1201,8 @@
             const modal = document.getElementById("modalTermico");
             document.getElementById("modalTermicoTitle").textContent = `${equipo.subestacion} - ${equipo.equipo}`;
             document.getElementById("modalTermicoBody").innerHTML = `
+                <div class="detail-row"><span class="detail-label">ID</span><span class="detail-value">${equipo.id}</span></div>
                 <div class="detail-row"><span class="detail-label">Nomenclatura</span><span class="detail-value">${equipo.nomenclatura}</span></div>
-                <div class="detail-row"><span class="detail-label">Voltaje</span><span class="detail-value">${equipo.voltaje}</span></div>
-                <div class="detail-row"><span class="detail-label">Fecha Inspección</span><span class="detail-value">${equipo.fecha}</span></div>
-                <div class="detail-row"><span class="detail-label">Nivel</span><span class="detail-value">${equipo.nivel}</span></div>
-                <div class="detail-row"><span class="detail-label">Observación</span><span class="detail-value">${equipo.observacion}</span></div>
             `;
             modal.style.display = "flex";
         }
@@ -1141,7 +1216,6 @@
                 t.fabricante = document.getElementById("editFabricanteTransformador").value;
                 t.voltaje_primario = document.getElementById("editVoltajePrimario").value;
                 t.voltaje_secundario = document.getElementById("editVoltajeSecundario").value;
-                t.voltaje_terciario = document.getElementById("editVoltajeTerciario").value || null;
                 t.capacidad = document.getElementById("editCapacidadTransformador").value;
                 t.estado = document.getElementById("editEstadoTransformador").value;
                 t.numero_serie = document.getElementById("editNumeroSerie").value;
@@ -1361,7 +1435,6 @@
                                 <div class="seccion-equipos">
                                     <div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>
                                     ${trans.map(t => {
-                                        const voltajeTerciarioInfo = t.voltaje_terciario ? ` | Terciario: ${t.voltaje_terciario} kV` : '';
                                         return `
                                         <div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                                             <div class="equipo-info">
@@ -1369,9 +1442,9 @@
                                                     ${t.nombre}
                                                     <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span>
                                                 </div>
-                                                <div class="equipo-detalles">🏭 ${t.fabricante} | ⚡ ${t.voltaje_primario}/${t.voltaje_secundario} kV${voltajeTerciarioInfo} | 📊 ${t.capacidad} MVA</div>
-                                                <div class="equipo-detalles">🔢 Serie: ${t.numero_serie} | 📅 Año: ${t.ano_fabricacion}</div>
-                                                <div class="equipo-detalles">🔌 Relación: ${t.relacion} | 🔗 Conexión: ${t.tipo_conexion}</div>
+                                                <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario} kV | ${t.capacidad} MVA</div>
+                                                <div class="equipo-detalles">Serie: ${t.numero_serie} | Año: ${t.ano_fabricacion}</div>
+                                                <div class="equipo-detalles">Relación: ${t.relacion} | Conexión: ${t.tipo_conexion}</div>
                                             </div>
                                         </div>
                                     `}).join('')}
@@ -1387,8 +1460,8 @@
                                                     ${t.equipo}
                                                     <span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span>
                                                 </div>
-                                                <div class="equipo-detalles">📌 ${t.nomenclatura} | ⚡ ${t.voltaje} | 📅 ${t.fecha}</div>
-                                                <div class="equipo-detalles">📝 ${t.observacion}</div>
+                                                <div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje} | ${t.fecha}</div>
+                                                <div class="equipo-detalles">${t.observacion}</div>
                                             </div>
                                         </div>
                                     `).join('')}
@@ -1424,7 +1497,7 @@
                                     </div>
                                     <div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div>
                                     <div style="font-size:0.8rem; font-weight:500; color:${esTrans ? '#b91c1c' : '#c2410c'}; margin-top:6px;">${esTrans ? a.observaciones : a.observacion}</div>
-                                    <button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}">✏️ Editar</button>
+                                    <button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}">Editar</button>
                                 </div>
                             `;
                         }).join('')}
@@ -1433,7 +1506,7 @@
             }
             
             if (html === '') {
-                html = '<div class="empty-state">✅ No hay alertas activas</div>';
+                html = '<div class="empty-state">No hay alertas activas</div>';
             }
             container.innerHTML = html;
         }
