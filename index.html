@@ -169,8 +169,8 @@
     <!-- FAB Button -->
     <div class="fab" onclick="toggleFabMenu()"><span style="font-size: 24px;">+</span></div>
     <div class="fab-options" id="fabOptions">
-        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Agregar Transformador</div>
-        <div class="fab-option" onclick="abrirModalAgregarTermico()">Agregar Inspección Termográfica</div>
+        <div class="fab-option" onclick="abrirModalAgregarTransformador()">➕ Agregar Transformador</div>
+        <div class="fab-option" onclick="abrirModalAgregarTermico()">🔍 Agregar Inspección Termográfica</div>
     </div>
 
     <!-- MODALES -->
@@ -370,7 +370,12 @@
             { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
             // Dato 80
             { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            
+            // Dato 81
+            { nombre: "Transformador de Potencia T1", subestacion: "San Juan", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2024-001", ano_fabricacion: 2024, tipo_conexion: "DYn1", observaciones: "Nuevo transformador instalado.", tipo: "transformador", deleted: false },
+            // Dato 82
+            { nombre: "Transformador de Potencia T2", subestacion: "San Juan", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2024-002", ano_fabricacion: 2024, tipo_conexion: "DYn1", observaciones: "Nuevo transformador instalado.", tipo: "transformador", deleted: false }
+        ];
+
         // ============================================================
         // DATOS COMPLETOS DE LAS 30 INSPECCIONES TERMOGRÁFICAS
         // ============================================================
@@ -424,9 +429,9 @@
                         const data = doc.data();
                         transformadoresData.push({ id: doc.id, ...data, deleted: data.deleted || false });
                     });
-                    console.log(`Cargados ${transformadoresData.length} transformadores desde Firestore`);
+                    console.log(`✅ Cargados ${transformadoresData.length} transformadores desde Firestore`);
                 } else {
-                    console.log("No hay transformadores en Firestore, cargando los 82 transformadores...");
+                    console.log("📭 No hay transformadores en Firestore, cargando los 82 transformadores...");
                     await cargarTodosLosTransformadores();
                 }
 
@@ -438,18 +443,18 @@
                         const data = doc.data();
                         inspeccionesData.push({ id: doc.id, ...data, deleted: data.deleted || false });
                     });
-                    console.log(`Cargadas ${inspeccionesData.length} inspecciones termográficas desde Firestore`);
+                    console.log(`✅ Cargadas ${inspeccionesData.length} inspecciones termográficas desde Firestore`);
                 } else {
-                    console.log("No hay inspecciones en Firestore, cargando las 30 inspecciones...");
+                    console.log("📭 No hay inspecciones en Firestore, cargando las 30 inspecciones...");
                     await cargarTodasLasInspecciones();
                 }
 
                 actualizarTodo();
                 renderEliminados();
             } catch (error) {
-                console.error("Error al cargar datos desde Firestore:", error);
+                console.error("❌ Error al cargar datos desde Firestore:", error);
                 alert("Error al conectar con la base de datos. Verifica tu conexión a internet.");
-                if (dashboardGrid) dashboardGrid.innerHTML = '<div class="empty-state">Error de conexión. Recarga la página e intenta nuevamente.</div>';
+                if (dashboardGrid) dashboardGrid.innerHTML = '<div class="empty-state">❌ Error de conexión. Recarga la página e intenta nuevamente.</div>';
             }
         }
 
@@ -464,7 +469,7 @@
                     console.error(`Error guardando transformador ${i + 1}:`, error);
                 }
             }
-            console.log(`Cargados ${transformadoresCompletos.length} transformadores iniciales`);
+            console.log(`✅ Cargados ${transformadoresCompletos.length} transformadores iniciales`);
         }
 
         async function cargarTodasLasInspecciones() {
@@ -478,7 +483,7 @@
                     console.error(`Error guardando inspección ${i + 1}:`, error);
                 }
             }
-            console.log(`Cargadas ${inspeccionesCompletas.length} inspecciones iniciales`);
+            console.log(`✅ Cargadas ${inspeccionesCompletas.length} inspecciones iniciales`);
         }
 
         async function guardarTransformadorEnFirestore(transformador) {
@@ -600,7 +605,7 @@
             transformadoresData.push(nuevoTransformador);
             cerrarModal("modalAgregarTransformador");
             actualizarTodo();
-            alert(`Transformador "${nombre}" agregado correctamente`);
+            alert(`✅ Transformador "${nombre}" agregado correctamente`);
         }
 
         async function agregarNuevoTermico() {
@@ -625,7 +630,7 @@
             inspeccionesData.push(nuevoTermico);
             cerrarModal("modalAgregarTermico");
             actualizarTodo();
-            alert(`Inspección termográfica para "${equipo}" agregada correctamente`);
+            alert(`✅ Inspección termográfica para "${equipo}" agregada correctamente`);
         }
 
         function abrirModalTransformador(id) {
@@ -724,7 +729,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTransformador");
-                alert("Transformador eliminado (soft delete). La información permanece en la base de datos.");
+                alert("✅ Transformador eliminado (soft delete). La información permanece en la base de datos.");
             }
         }
 
@@ -739,7 +744,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTransformador");
-                alert("Transformador restaurado correctamente");
+                alert("✅ Transformador restaurado correctamente");
             }
         }
 
@@ -754,7 +759,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTermico");
-                alert("Inspección eliminada (soft delete). La información permanece en la base de datos.");
+                alert("✅ Inspección eliminada (soft delete). La información permanece en la base de datos.");
             }
         }
 
@@ -769,7 +774,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTermico");
-                alert("Inspección restaurada correctamente");
+                alert("✅ Inspección restaurada correctamente");
             }
         }
 
@@ -795,7 +800,7 @@
                 await guardarTransformadorEnFirestore(t);
                 actualizarTodo();
                 cerrarModal("modalTransformador");
-                alert("Datos actualizados correctamente");
+                alert("✅ Datos actualizados correctamente");
             }
         }
 
@@ -815,7 +820,7 @@
                 await guardarTermicoEnFirestore(term);
                 actualizarTodo();
                 cerrarModal("modalTermico");
-                alert("Datos actualizados correctamente");
+                alert("✅ Datos actualizados correctamente");
             }
         }
 
@@ -926,7 +931,7 @@
             if (alertas.length > 0) {
                 html += `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;">🚨 Equipos con Prioridad Crítica o Grave (${alertas.length})</h3>${alertas.map(a => { const esTrans = a.tipo === "transformador"; return `<div style="background:${esTrans ? '#fff5f5' : '#fff9f0'}; border-left:4px solid ${esTrans ? '#b91c1c' : '#c2410c'}; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${a.subestacion} - ${esTrans ? a.nombre : a.equipo}</strong><span class="status-badge ${esTrans ? getEstadoClass(a.estado) : getNivelClass(a.nivel)}">${esTrans ? a.estado : a.nivel}</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div><div style="font-size:0.8rem; font-weight:500; color:${esTrans ? '#b91c1c' : '#c2410c'}; margin-top:6px;">${esTrans ? a.observaciones : a.observacion}</div><button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}">✏️ Editar</button></div>`; }).join('')}</div>`;
             }
-            if (html === '') html = '<div class="empty-state">No hay alertas activas</div>';
+            if (html === '') html = '<div class="empty-state">✅ No hay alertas activas</div>';
             container.innerHTML = html;
         }
 
@@ -935,12 +940,12 @@
             const container = document.getElementById("eliminadosGrid");
             if (!container) return;
             if (eliminados.length === 0) {
-                container.innerHTML = '<div class="empty-state">No hay equipos eliminados. Los equipos que elimines aparecerán aquí.</div>';
+                container.innerHTML = '<div class="empty-state">🗑️ No hay equipos eliminados. Los equipos que elimines aparecerán aquí.</div>';
                 return;
             }
             
             container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;">
-                <h3 style="color:#1e4a6b; margin-bottom:16px;">Equipos Eliminados (${eliminados.length})</h3>
+                <h3 style="color:#1e4a6b; margin-bottom:16px;">🗑️ Equipos Eliminados (${eliminados.length})</h3>
                 ${eliminados.map(e => {
                     const esTrans = e.tipo === "transformador";
                     return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;">
