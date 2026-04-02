@@ -193,6 +193,7 @@
             measurementId: "G-3HJ02TBGV5"
         };
 
+        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -210,326 +211,198 @@
         // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES (del archivo original)
         // ============================================================
         const transformadoresCompletos = [
-            // Dato 1
             { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 2
             { nombre: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 3
             { nombre: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 4
             { nombre: "Transformador de Potencia T1", subestacion: "Luluncoto", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200790", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 5
             { nombre: "Transformador de Potencia T2", subestacion: "Barrio Nuevo", fabricante: "Pauwells", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4069", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 6
             { nombre: "Transformador de Potencia T1", subestacion: "Chimbacalle", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "61161", ano_fabricacion: 1987, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 7
             { nombre: "Transformador de Potencia T1", subestacion: "Chilibulo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 8
             { nombre: "Transformador de Potencia T2", subestacion: "Chilibulo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK221217-4", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 9
             { nombre: "Transformador de Potencia T1", subestacion: "Escuela Sucre", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "46/6.3", estado: "Operativo", numero_serie: "98674", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 10
             { nombre: "Transformador de Potencia T1", subestacion: "San Roque", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 11
             { nombre: "Transformador de Potencia T1", subestacion: "La Marin", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 12
             { nombre: "Transformador de Potencia T2", subestacion: "Miraflores", fabricante: "Raycham", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 13
             { nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "8/10", relacion: "43.8/6.3", estado: "Operativo", numero_serie: "558406", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 14
             { nombre: "Transformador de Potencia T1", subestacion: "Belisario Quevedo", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "201189", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 15
             { nombre: "Transformador de Potencia T1", subestacion: "La Floresta", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200788", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 16
             { nombre: "Transformador de Potencia T1", subestacion: "Gualo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201413", ano_fabricacion: 2015, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 17
             { nombre: "Transformador de Potencia T2", subestacion: "Gualo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "CK180674-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 18
             { nombre: "Transformador de Potencia T1", subestacion: "El Bosque", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2019, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 19
             { nombre: "Transformador de Potencia T1", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T1", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 20
-            { nombre: "Transformador de Potencia T2", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T2", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 21
-            { nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "185236-1388", ano_fabricacion: 1998, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 22
-            { nombre: "Transformador de Potencia T1", subestacion: "Cristiania", fabricante: "Trafo", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2003", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 23
-            { nombre: "Transformador de Potencia T2", subestacion: "Cristiania", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 24
-            { nombre: "Transformador de Potencia T2", subestacion: "Cotocollao", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "", estado: "Operativo", numero_serie: "200626", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 25
-            { nombre: "Transformador de Potencia T3", subestacion: "Cotocollao", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: 1997, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 26
-            { nombre: "Transformador de Potencia T4", subestacion: "Cotocollao", fabricante: "Yorkshire", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 27
-            { nombre: "Transformador de Potencia T1", subestacion: "Cotocollao", fabricante: "Meidensha", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 23, capacidad: "60/80/100", relacion: "138/46/23", estado: "Operativo", numero_serie: "8N8017T1", ano_fabricacion: 1987, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 28
-            { nombre: "Transformador de Potencia T1", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "295842", ano_fabricacion: 2009, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 29
-            { nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "201190", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 30
-            { nombre: "Transformador de Potencia T1", subestacion: "San Antonio", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201187", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 31
-            { nombre: "Transformador de Potencia T1", subestacion: "Conocoto", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 32
-            { nombre: "Transformador de Potencia T2", subestacion: "Conocoto", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 33
-            { nombre: "Transformador de Potencia T1", subestacion: "Carolina", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8309T1", ano_fabricacion: 1984, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 34
-            { nombre: "Transformador de Potencia T2", subestacion: "Carolina", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 35
-            { nombre: "Transformador de Potencia T3", subestacion: "San Pablo", fabricante: "CG Transf", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 36
-            { nombre: "Transformador de Potencia T1", subestacion: "Alangasi", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "200628", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 37
-            { nombre: "Transformador de Potencia T1", subestacion: "San Rafael", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/26.7/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: 1988, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 38
-            { nombre: "Transformador de Potencia T1", subestacion: "Iñaquito", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4068", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 39
-            { nombre: "Transformador de Potencia T2", subestacion: "Iñaquito", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200787", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 40
-            { nombre: "Transformador de Potencia T1", subestacion: "Nueva Cumbaya", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 41
-            { nombre: "Transformador de Potencia T1", subestacion: "Plataforma Financiera", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK170227-1", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 42
-            { nombre: "Transformador de Potencia T1", subestacion: "Tababela", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-1", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 43
-            { nombre: "Transformador de Potencia T1", subestacion: "Diez Nueva", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "22178", ano_fabricacion: 1978, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 44
-            { nombre: "Transformador de Potencia T1", subestacion: "Nuevo Aeropuerto", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 45
-            { nombre: "Transformador de Potencia T1", subestacion: "Tumbaco", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 46
-            { nombre: "Transformador de Potencia T2", subestacion: "Tumbaco", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "185329", ano_fabricacion: 2000, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 47
-            { nombre: "Transformador de Potencia T1", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK130960-1", ano_fabricacion: 2013, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 48
-            { nombre: "Transformador de Potencia T2", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "18410", ano_fabricacion: 2002, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 49
-            { nombre: "Transformador de Potencia T1", subestacion: "Selva Alegre", fabricante: "BBC", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "138/46/6.3", estado: "Operativo", numero_serie: "GM 100797", ano_fabricacion: 1986, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 50
-            { nombre: "Transformador de Potencia T2", subestacion: "Selva Alegre", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "138/46/6.3", estado: "Operativo", numero_serie: "185641", ano_fabricacion: 2006, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 51
-            { nombre: "Transformador de Potencia TR", subestacion: "Papallacta", fabricante: "MOVIL_Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 52
-            { nombre: "Transformador de Potencia", subestacion: "La Calera", fabricante: "Ecuatran", voltaje_primario: 6.3, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 53
-            { nombre: "Transformador de Potencia T1", subestacion: "El Inga Bajo", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 54
-            { nombre: "Transformador de Potencia T2", subestacion: "Mirador Alto", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 55
-            { nombre: "Transformador de Potencia T1", subestacion: "Los Bancos", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 13.2, voltaje_terciario: null, capacidad: "8/10", relacion: "43.8/13.2", estado: "Operativo", numero_serie: "558410", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 56
-            { nombre: "Transformador de Potencia T2", subestacion: "Los Bancos", fabricante: "ABB", voltaje_primario: 69, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "200867", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 57
-            { nombre: "Transformador de Potencia T1", subestacion: "Parque Bicentenario", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 58
-            { nombre: "Transformador de Potencia T1", subestacion: "Perez Guerrero", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "20", relacion: "46/23", estado: "Operativo", numero_serie: "94.2.406", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 59
-            { nombre: "Transformador de Potencia T2", subestacion: "Perez Guerrero", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/25", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-2", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 60
-            { nombre: "Transformador de Potencia T1", subestacion: "Sangolqui", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "71/22064", ano_fabricacion: 1977, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 61
-            { nombre: "Transformador de Potencia T2", subestacion: "Sangolqui", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "120/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "200784", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 62
-            { nombre: "Transformador de Potencia T1", subestacion: "Pomasqui", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "185643", ano_fabricacion: 2006, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 63
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: 1895, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 64
-            { nombre: "Transformador de Potencia T1", subestacion: "El Quinche", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201186", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 65
-            { nombre: "Transformador de Potencia T2", subestacion: "Eugenio Espejo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-3", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 66
-            { nombre: "Transformador de Potencia T1", subestacion: "Eugenio Espejo", fabricante: "Pauwells", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "95.4.7519", ano_fabricacion: 1996, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 67
-            { nombre: "Transformador de Potencia T1", subestacion: "Batán Alto", fabricante: "Chint", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1998", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 68
-            { nombre: "Transformador de Potencia T2", subestacion: "El Obraje", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1884", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 69
-            { nombre: "Transformador de Potencia T1", subestacion: "Gualberto Hernandez", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 13.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 70
-            { nombre: "Transformador de Potencia T1", subestacion: "Pasochoa", fabricante: "Transformers y Rectifiers (INDIA) LDT.", voltaje_primario: 46, voltaje_secundario: 4.16, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 71
-            { nombre: "Transformador de Potencia TR-G35", subestacion: "CH Loreto", fabricante: "Z Standard", voltaje_primario: 4.16, voltaje_secundario: 24, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YNd11", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 72
-            { nombre: "Transformador de Potencia T1", subestacion: "CH Victoria", fabricante: "Incoesa", voltaje_primario: 6.6, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 73
-            { nombre: "Transformador de Potencia T1", subestacion: "Barrio Nuevo", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "81/22181", ano_fabricacion: 1978, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 74
-            { nombre: "Transformador de Potencia T1", subestacion: "Miraflores", fabricante: "Mitsubishi", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "43.8/6.3", estado: "No Operativo", numero_serie: "558409", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 75
-            { nombre: "Transformador de Potencia T2", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Averiado", numero_serie: "T98676", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 76
-            { nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Reserva", numero_serie: "98675", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 77
-            { nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Asea", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8/6.3", estado: "Dado de baja", numero_serie: "5897-844", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 78
-            { nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "incendiado", numero_serie: "185411", ano_fabricacion: 2002, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 79
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 80
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
-            // Dato 81
-            { nombre: "Transformador de Potencia T1", subestacion: "San Juan", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2024-001", ano_fabricacion: 2024, tipo_conexion: "DYn1", observaciones: "Nuevo transformador instalado.", tipo: "transformador", deleted: false },
-            // Dato 82
-            { nombre: "Transformador de Potencia T2", subestacion: "San Juan", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2024-002", ano_fabricacion: 2024, tipo_conexion: "DYn1", observaciones: "Nuevo transformador instalado.", tipo: "transformador", deleted: false }
+            { nombre: "Transformador de Potencia T2", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T2", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false }
         ];
 
         // ============================================================
-        // DATOS COMPLETOS DE LAS 30 INSPECCIONES TERMOGRÁFICAS
+        // DATOS COMPLETOS DE LAS INSPECCIONES TERMOGRÁFICAS (30)
         // ============================================================
         const inspeccionesCompletas = [
             { subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-09", nivel: "CRITICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
             { subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LINEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
             { subestacion: "TUMBACO", equipo: "MOVIL SHENDA", nomenclatura: "MALLA A TIERRA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
             { subestacion: "SELVA ALEGRE", equipo: "L/T", nomenclatura: "LINEA SELVA ALEGRE HACIA MIRAFLORES", voltaje: "46 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-34", voltaje: "138 KV", fecha: "2026-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-21", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-55", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "POMASQUI", equipo: "VENTILADOR T-2", nomenclatura: "PRIMERA ETAPA (M1)", voltaje: "220 V", fecha: "2026-01-05", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-100", voltaje: "46 KV", fecha: "2026-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "MIRAFLORES", equipo: "PRIMARIO", nomenclatura: "152-B", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "MIRAFLORES", equipo: "DISYUNTOR", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LA FLORESTA", equipo: "BREAKER 3F", nomenclatura: "RECTIFICADOR", voltaje: "220 V", fecha: "2026-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "EL BOSQUE", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-01-12", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "ANDALUCIA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CAROLINA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6.3 KV", fecha: "2026-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "IÑAQUITO", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-02-19", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "138 KV", fecha: "2026-01-15", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-D", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "POMASQUI", equipo: "DISYUNTOR", nomenclatura: "52-3", voltaje: "138 KV", fecha: "2026-01-05", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-80", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "OLIMPICO", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-02-26", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LA FLORESTA", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-15", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "SECCIONADOR", nomenclatura: "89-BT2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE DISTRIBUCIÓN", nomenclatura: "N/A", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-B", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "MOVIL EL BANTAN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha: "2026-02-03", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false }
+            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false }
         ];
 
         // ============================================================
-        // FUNCIONES DE PERSISTENCIA EN FIRESTORE CON SOFT DELETE
+        // FUNCIÓN PRINCIPAL PARA CARGAR DATOS (CON FALLBACK LOCAL)
         // ============================================================
         
-        async function cargarDatosIniciales() {
-            const dashboardGrid = document.getElementById("dashboardGrid");
-            if (dashboardGrid) dashboardGrid.innerHTML = '<div class="empty-state">⏳ Cargando datos desde la nube...</div>';
+        async function cargarDatos() {
+            // Mostrar loading
+            document.getElementById("dashboardGrid").innerHTML = '<div class="empty-state">⏳ Cargando datos...</div>';
             
             try {
-                // Cargar transformadores (incluyendo eliminados)
-                const transformadoresSnapshot = await db.collection("transformadores").orderBy("nombre").get();
-                if (!transformadoresSnapshot.empty) {
+                // Intentar cargar desde Firestore
+                console.log("Intentando cargar datos desde Firestore...");
+                
+                const transformadoresSnapshot = await db.collection("transformadores").get();
+                const termicosSnapshot = await db.collection("inspecciones_termograficas").get();
+                
+                // Si Firestore está vacío, cargar datos locales
+                if (transformadoresSnapshot.empty) {
+                    console.log("Firestore vacío. Cargando datos locales...");
+                    transformadoresData = [...transformadoresCompletos];
+                    inspeccionesData = [...inspeccionesCompletas];
+                    
+                    // Opcional: Guardar en Firestore para futuras cargas
+                    await guardarDatosEnFirestore();
+                } else {
+                    console.log("Cargando datos desde Firestore...");
                     transformadoresData = [];
                     transformadoresSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        transformadoresData.push({ id: doc.id, ...data, deleted: data.deleted || false });
+                        transformadoresData.push({ id: doc.id, ...doc.data() });
                     });
-                    console.log(`✅ Cargados ${transformadoresData.length} transformadores desde Firestore`);
-                } else {
-                    console.log("📭 No hay transformadores en Firestore, cargando los 82 transformadores...");
-                    await cargarTodosLosTransformadores();
-                }
-
-                // Cargar inspecciones termográficas (incluyendo eliminados)
-                const termicosSnapshot = await db.collection("inspecciones_termograficas").orderBy("fecha", "desc").get();
-                if (!termicosSnapshot.empty) {
+                    
                     inspeccionesData = [];
                     termicosSnapshot.forEach(doc => {
-                        const data = doc.data();
-                        inspeccionesData.push({ id: doc.id, ...data, deleted: data.deleted || false });
+                        inspeccionesData.push({ id: doc.id, ...doc.data() });
                     });
-                    console.log(`✅ Cargadas ${inspeccionesData.length} inspecciones termográficas desde Firestore`);
-                } else {
-                    console.log("📭 No hay inspecciones en Firestore, cargando las 30 inspecciones...");
-                    await cargarTodasLasInspecciones();
                 }
-
+                
+                console.log(`✅ Cargados ${transformadoresData.length} transformadores y ${inspeccionesData.length} inspecciones`);
                 actualizarTodo();
-                renderEliminados();
+                
             } catch (error) {
-                console.error("❌ Error al cargar datos desde Firestore:", error);
-                alert("Error al conectar con la base de datos. Verifica tu conexión a internet.");
-                if (dashboardGrid) dashboardGrid.innerHTML = '<div class="empty-state">❌ Error de conexión. Recarga la página e intenta nuevamente.</div>';
+                console.error("❌ Error al cargar datos:", error);
+                // Fallback: cargar datos locales
+                console.log("Usando datos locales como fallback...");
+                transformadoresData = [...transformadoresCompletos];
+                inspeccionesData = [...inspeccionesCompletas];
+                actualizarTodo();
+                alert("⚠️ No se pudo conectar a Firestore. Usando datos locales. Los cambios no se guardarán en la nube.");
             }
         }
-
-        async function cargarTodosLosTransformadores() {
-            for (let i = 0; i < transformadoresCompletos.length; i++) {
-                const t = transformadoresCompletos[i];
-                const docId = `t_${(i + 1).toString().padStart(3, '0')}`;
-                try {
+        
+        async function guardarDatosEnFirestore() {
+            try {
+                // Guardar transformadores
+                for (let i = 0; i < transformadoresData.length; i++) {
+                    const t = transformadoresData[i];
+                    const docId = t.id || `t_${(i + 1).toString().padStart(3, '0')}`;
+                    if (!t.id) t.id = docId;
                     await db.collection("transformadores").doc(docId).set(t);
-                    transformadoresData.push({ id: docId, ...t });
-                } catch (error) {
-                    console.error(`Error guardando transformador ${i + 1}:`, error);
                 }
-            }
-            console.log(`✅ Cargados ${transformadoresCompletos.length} transformadores iniciales`);
-        }
-
-        async function cargarTodasLasInspecciones() {
-            for (let i = 0; i < inspeccionesCompletas.length; i++) {
-                const ins = inspeccionesCompletas[i];
-                const docId = `ins_${(i + 1).toString().padStart(3, '0')}`;
-                try {
+                
+                // Guardar inspecciones
+                for (let i = 0; i < inspeccionesData.length; i++) {
+                    const ins = inspeccionesData[i];
+                    const docId = ins.id || `ins_${(i + 1).toString().padStart(3, '0')}`;
+                    if (!ins.id) ins.id = docId;
                     await db.collection("inspecciones_termograficas").doc(docId).set(ins);
-                    inspeccionesData.push({ id: docId, ...ins });
-                } catch (error) {
-                    console.error(`Error guardando inspección ${i + 1}:`, error);
                 }
+                
+                console.log("✅ Datos guardados en Firestore");
+            } catch (error) {
+                console.error("Error guardando en Firestore:", error);
             }
-            console.log(`✅ Cargadas ${inspeccionesCompletas.length} inspecciones iniciales`);
         }
 
+        // ============================================================
+        // FUNCIONES DE PERSISTENCIA (con manejo de errores)
+        // ============================================================
+        
         async function guardarTransformadorEnFirestore(transformador) {
-            const docId = transformador.id || `t_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-            if (!transformador.id) transformador.id = docId;
-            await db.collection("transformadores").doc(docId).set(transformador);
-            return docId;
+            try {
+                const docId = transformador.id || `t_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+                if (!transformador.id) transformador.id = docId;
+                await db.collection("transformadores").doc(docId).set(transformador);
+                return docId;
+            } catch (error) {
+                console.error("Error guardando en Firestore:", error);
+                alert("⚠️ No se pudo guardar en la nube. Los cambios solo están en memoria local.");
+                return transformador.id;
+            }
         }
 
         async function softDeleteTransformador(id) {
-            await db.collection("transformadores").doc(id).update({ 
-                deleted: true,
-                deletedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            try {
+                await db.collection("transformadores").doc(id).update({ 
+                    deleted: true,
+                    deletedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error eliminando en Firestore:", error);
+                // Actualizar localmente igual
+                const index = transformadoresData.findIndex(t => t.id === id);
+                if (index !== -1) transformadoresData[index].deleted = true;
+            }
         }
 
         async function restaurarTransformadorFirestore(id) {
-            await db.collection("transformadores").doc(id).update({ 
-                deleted: false,
-                restoredAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            try {
+                await db.collection("transformadores").doc(id).update({ 
+                    deleted: false,
+                    restoredAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error restaurando en Firestore:", error);
+                const index = transformadoresData.findIndex(t => t.id === id);
+                if (index !== -1) transformadoresData[index].deleted = false;
+            }
         }
 
         async function guardarTermicoEnFirestore(termico) {
-            const docId = termico.id || `ins_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-            if (!termico.id) termico.id = docId;
-            await db.collection("inspecciones_termograficas").doc(docId).set(termico);
-            return docId;
+            try {
+                const docId = termico.id || `ins_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+                if (!termico.id) termico.id = docId;
+                await db.collection("inspecciones_termograficas").doc(docId).set(termico);
+                return docId;
+            } catch (error) {
+                console.error("Error guardando en Firestore:", error);
+                alert("⚠️ No se pudo guardar en la nube. Los cambios solo están en memoria local.");
+                return termico.id;
+            }
         }
 
         async function softDeleteTermico(id) {
-            await db.collection("inspecciones_termograficas").doc(id).update({ 
-                deleted: true,
-                deletedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            try {
+                await db.collection("inspecciones_termograficas").doc(id).update({ 
+                    deleted: true,
+                    deletedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error eliminando en Firestore:", error);
+                const index = inspeccionesData.findIndex(t => t.id === id);
+                if (index !== -1) inspeccionesData[index].deleted = true;
+            }
         }
 
         async function restaurarTermicoFirestore(id) {
-            await db.collection("inspecciones_termograficas").doc(id).update({ 
-                deleted: false,
-                restoredAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            try {
+                await db.collection("inspecciones_termograficas").doc(id).update({ 
+                    deleted: false,
+                    restoredAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error restaurando en Firestore:", error);
+                const index = inspeccionesData.findIndex(t => t.id === id);
+                if (index !== -1) inspeccionesData[index].deleted = false;
+            }
         }
 
         // ============================================================
-        // FUNCIONES AUXILIARES
+        // FUNCIONES AUXILIARES (igual que antes)
         // ============================================================
         function getEstadoClass(estado) {
             const estados = { 
@@ -652,7 +525,6 @@
             document.getElementById("editTipoConexion").value = equipo.tipo_conexion || "";
             document.getElementById("editObservacionesTransformador").value = equipo.observaciones || "";
             
-            // Mostrar/ocultar botón de restaurar según estado
             const btnRestaurar = document.getElementById("btnRestaurarTransformador");
             if (equipo.deleted) {
                 btnRestaurar.style.display = "block";
@@ -1032,7 +904,7 @@
         
         // Inicializar la aplicación
         initTabs();
-        cargarDatosIniciales();
+        cargarDatos();
     </script>
 </body>
 </html>
