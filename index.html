@@ -122,7 +122,7 @@
             <button class="tab-btn active" data-tab="reporte">Reporte Ejecutivo</button>
             <button class="tab-btn" data-tab="dashboard">Dashboard de Activos</button>
             <button class="tab-btn" data-tab="alertas">Alertas de Mantenimiento</button>
-            <button class="tab-btn" data-tab="eliminados">🗑️ Eliminados</button>
+            <button class="tab-btn" data-tab="eliminados">Eliminados</button>
         </div>
 
         <div id="tab-reporte" class="tab-content active"><div class="executive-grid" id="executiveReport"></div></div>
@@ -163,15 +163,15 @@
     <!-- FAB Button -->
     <div class="fab" onclick="toggleFabMenu()"><span style="font-size: 24px;">+</span></div>
     <div class="fab-options" id="fabOptions">
-        <div class="fab-option" onclick="abrirModalAgregarTransformador()">➕ Agregar Transformador</div>
-        <div class="fab-option" onclick="abrirModalAgregarTermico()">🔍 Agregar Inspección Termográfica</div>
+        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Agregar Transformador</div>
+        <div class="fab-option" onclick="abrirModalAgregarTermico()">Agregar Inspección Termográfica</div>
     </div>
 
     <!-- MODALES -->
-    <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTransformadorTitle">Editar Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div><div id="modalTransformadorBody"></div><div class="edit-form"><label>Nombre del Equipo</label><input type="text" id="editNombreTransformador"><label>Subestación</label><input type="text" id="editSubestacionTransformador" list="subestacionesList"><datalist id="subestacionesList"></datalist><label>Fabricante / Marca</label><input type="text" id="editFabricanteTransformador"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"><label>Relación de Transformación</label><input type="text" id="editRelacionTransformador"><label>Estado Actual</label><select id="editEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="editNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion"><label>Observaciones</label><textarea id="editObservacionesTransformador" rows="2"></textarea><button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTransformador()">🗑️ Eliminar (Soft Delete)</button><button id="btnRestaurarTransformador" class="restore-btn-modal" style="display:none;" onclick="restaurarTransformador()">↺ Restaurar</button></div></div></div>
-    <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTermicoTitle">Editar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div><div id="modalTermicoBody"></div><div class="edit-form"><label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesListTermico"><datalist id="subestacionesListTermico"></datalist><label>Equipo</label><input type="text" id="editEquipoTermico"><label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico"><label>Voltaje</label><input type="text" id="editVoltajeTermico"><label>Fecha de Inspección</label><input type="date" id="editFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="editNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select><button class="save-btn" onclick="guardarEdicionTermico()">💾 Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTermico()">🗑️ Eliminar (Soft Delete)</button><button id="btnRestaurarTermico" class="restore-btn-modal" style="display:none;" onclick="restaurarTermico()">↺ Restaurar</button></div></div></div>
-    <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>➕ Agregar Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div><div class="edit-form"><label>Nombre del Equipo *</label><input type="text" id="newNombreTransformador" placeholder="Ej: Transformador de Potencia T1"><label>Subestación *</label><input type="text" id="newSubestacionTransformador" list="subestacionesListNew"><datalist id="subestacionesListNew"></datalist><label>Fabricante / Marca</label><input type="text" id="newFabricanteTransformador" placeholder="Ej: ABB, Siemens"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="newVoltajePrimario" placeholder="Ej: 138"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="newVoltajeSecundario" placeholder="Ej: 23"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="newVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="newCapacidadTransformador" placeholder="Ej: 20/27/33"><label>Relación de Transformación</label><input type="text" id="newRelacionTransformador" placeholder="Ej: 138/23"><label>Estado Actual</label><select id="newEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="newNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"><label>Observaciones</label><textarea id="newObservacionesTransformador" rows="2"></textarea><button class="save-btn" onclick="agregarNuevoTransformador()">✅ Crear Transformador</button></div></div></div>
-    <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>🔍 Agregar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div><div class="edit-form"><label>Subestación *</label><input type="text" id="newSubestacionTermico" list="subestacionesListTermicoNew"><datalist id="subestacionesListTermicoNew"></datalist><label>Equipo *</label><input type="text" id="newEquipoTermico" placeholder="Ej: SECCIONADOR"><label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico"><label>Voltaje</label><input type="text" id="newVoltajeTermico" placeholder="Ej: 46 KV"><label>Fecha de Inspección</label><input type="date" id="newFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="newNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select><button class="save-btn" onclick="agregarNuevoTermico()">✅ Crear Inspección</button></div></div></div>
+    <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTransformadorTitle">Editar Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div><div id="modalTransformadorBody"></div><div class="edit-form"><label>Nombre del Equipo</label><input type="text" id="editNombreTransformador"><label>Subestación</label><input type="text" id="editSubestacionTransformador" list="subestacionesList"><datalist id="subestacionesList"></datalist><label>Fabricante / Marca</label><input type="text" id="editFabricanteTransformador"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"><label>Relación de Transformación</label><input type="text" id="editRelacionTransformador"><label>Estado Actual</label><select id="editEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="editNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion"><label>Observaciones</label><textarea id="editObservacionesTransformador" rows="2"></textarea><button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button><button id="btnRestaurarTransformador" class="restore-btn-modal" style="display:none;" onclick="restaurarTransformador()">↺ Restaurar</button></div></div></div>
+    <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTermicoTitle">Editar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div><div id="modalTermicoBody"></div><div class="edit-form"><label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesListTermico"><datalist id="subestacionesListTermico"></datalist><label>Equipo</label><input type="text" id="editEquipoTermico"><label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico"><label>Voltaje</label><input type="text" id="editVoltajeTermico"><label>Fecha de Inspección</label><input type="date" id="editFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="editNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select><button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button><button id="btnRestaurarTermico" class="restore-btn-modal" style="display:none;" onclick="restaurarTermico()">↺ Restaurar</button></div></div></div>
+    <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Agregar Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div><div class="edit-form"><label>Nombre del Equipo *</label><input type="text" id="newNombreTransformador" placeholder="Ej: Transformador de Potencia T1"><label>Subestación *</label><input type="text" id="newSubestacionTransformador" list="subestacionesListNew"><datalist id="subestacionesListNew"></datalist><label>Fabricante / Marca</label><input type="text" id="newFabricanteTransformador" placeholder="Ej: ABB, Siemens"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="newVoltajePrimario" placeholder="Ej: 138"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="newVoltajeSecundario" placeholder="Ej: 23"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="newVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="newCapacidadTransformador" placeholder="Ej: 20/27/33"><label>Relación de Transformación</label><input type="text" id="newRelacionTransformador" placeholder="Ej: 138/23"><label>Estado Actual</label><select id="newEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="newNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"><label>Observaciones</label><textarea id="newObservacionesTransformador" rows="2"></textarea><button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button></div></div></div>
+    <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Agregar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div><div class="edit-form"><label>Subestación *</label><input type="text" id="newSubestacionTermico" list="subestacionesListTermicoNew"><datalist id="subestacionesListTermicoNew"></datalist><label>Equipo *</label><input type="text" id="newEquipoTermico" placeholder="Ej: SECCIONADOR"><label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico"><label>Voltaje</label><input type="text" id="newVoltajeTermico" placeholder="Ej: 46 KV"><label>Fecha de Inspección</label><input type="date" id="newFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="newNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select><button class="save-btn" onclick="agregarNuevoTermico()">Crear Inspección</button></div></div></div>
 
     <script>
         // ============================================================
@@ -201,7 +201,7 @@
         let currentEditingTermicoId = null;
 
         // ============================================================
-        // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES (del archivo original)
+        // DATOS COMPLETOS DE LOS 80 TRANSFORMADORES
         // ============================================================
         const transformadoresCompletos = [
             // Dato 1
@@ -367,7 +367,7 @@
         ];
 
         // ============================================================
-        // DATOS COMPLETOS DE LAS 30 INSPECCIONES TERMOGRÁFICAS
+        // DATOS DE LAS 30 INSPECCIONES TERMOGRÁFICAS
         // ============================================================
         const inspeccionesCompletas = [
             { subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-09", nivel: "CRITICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
@@ -407,7 +407,7 @@
         // ============================================================
         
         async function cargarDatos() {
-            document.getElementById("dashboardGrid").innerHTML = '<div class="empty-state">⏳ Cargando datos...</div>';
+            document.getElementById("dashboardGrid").innerHTML = '<div class="empty-state">Cargando datos...</div>';
             
             try {
                 console.log("Intentando cargar datos desde Firestore...");
@@ -433,7 +433,7 @@
                         ins.id = docId;
                         await db.collection("inspecciones_termograficas").doc(docId).set(ins);
                     }
-                    console.log("✅ Datos guardados en Firestore");
+                    console.log("Datos guardados en Firestore");
                 } else {
                     console.log("Cargando datos desde Firestore...");
                     transformadoresData = [];
@@ -446,15 +446,15 @@
                     });
                 }
                 
-                console.log(`✅ Cargados ${transformadoresData.length} transformadores y ${inspeccionesData.length} inspecciones`);
+                console.log(`Cargados ${transformadoresData.length} transformadores y ${inspeccionesData.length} inspecciones`);
                 actualizarTodo();
                 
             } catch (error) {
-                console.error("❌ Error al cargar datos:", error);
+                console.error("Error al cargar datos:", error);
                 transformadoresData = [...transformadoresCompletos];
                 inspeccionesData = [...inspeccionesCompletas];
                 actualizarTodo();
-                alert("⚠️ No se pudo conectar a Firestore. Usando datos locales.");
+                alert("No se pudo conectar a Firestore. Usando datos locales.");
             }
         }
 
@@ -595,7 +595,7 @@
             transformadoresData.push(nuevoTransformador);
             cerrarModal("modalAgregarTransformador");
             actualizarTodo();
-            alert(`✅ Transformador "${nombre}" agregado correctamente`);
+            alert(`Transformador "${nombre}" agregado correctamente`);
         }
 
         async function agregarNuevoTermico() {
@@ -620,7 +620,7 @@
             inspeccionesData.push(nuevoTermico);
             cerrarModal("modalAgregarTermico");
             actualizarTodo();
-            alert(`✅ Inspección termográfica para "${equipo}" agregada correctamente`);
+            alert(`Inspección termográfica para "${equipo}" agregada correctamente`);
         }
 
         function abrirModalTransformador(id) {
@@ -664,7 +664,7 @@
                 ${equipo.voltaje_terciario ? `<div class="detail-row"><span class="detail-label">Voltaje Terciario</span><span class="detail-value">${equipo.voltaje_terciario} kV</span></div>` : ''}
                 <div class="detail-row"><span class="detail-label">Tipo de Conexión</span><span class="detail-value">${equipo.tipo_conexion}</span></div>
                 <div class="detail-row"><span class="detail-label">Relación</span><span class="detail-value">${equipo.relacion}</span></div>
-                ${equipo.deleted ? `<div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="status-badge status-deleted">🗑️ ELIMINADO</span></span></div>` : ''}
+                ${equipo.deleted ? `<div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="status-badge status-deleted">ELIMINADO</span></span></div>` : ''}
             `;
             modal.style.display = "flex";
         }
@@ -702,7 +702,7 @@
                 <div class="detail-row"><span class="detail-label">Fecha Inspección</span><span class="detail-value">${equipo.fecha}</span></div>
                 <div class="detail-row"><span class="detail-label">Nivel</span><span class="detail-value">${equipo.nivel}</span></div>
                 <div class="detail-row"><span class="detail-label">Observación</span><span class="detail-value">${equipo.observacion}</span></div>
-                ${equipo.deleted ? `<div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="status-badge status-deleted">🗑️ ELIMINADO</span></span></div>` : ''}
+                ${equipo.deleted ? `<div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="status-badge status-deleted">ELIMINADO</span></span></div>` : ''}
             `;
             modal.style.display = "flex";
         }
@@ -716,7 +716,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTransformador");
-                alert("✅ Transformador eliminado (soft delete).");
+                alert("Transformador eliminado (soft delete).");
             }
         }
 
@@ -729,7 +729,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTransformador");
-                alert("✅ Transformador restaurado");
+                alert("Transformador restaurado");
             }
         }
 
@@ -742,7 +742,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTermico");
-                alert("✅ Inspección eliminada (soft delete).");
+                alert("Inspección eliminada (soft delete).");
             }
         }
 
@@ -755,7 +755,7 @@
                 actualizarTodo();
                 renderEliminados();
                 cerrarModal("modalTermico");
-                alert("✅ Inspección restaurada");
+                alert("Inspección restaurada");
             }
         }
 
@@ -781,7 +781,7 @@
                 await guardarTransformadorEnFirestore(t);
                 actualizarTodo();
                 cerrarModal("modalTransformador");
-                alert("✅ Datos actualizados");
+                alert("Datos actualizados");
             }
         }
 
@@ -801,7 +801,7 @@
                 await guardarTermicoEnFirestore(term);
                 actualizarTodo();
                 cerrarModal("modalTermico");
-                alert("✅ Datos actualizados");
+                alert("Datos actualizados");
             }
         }
 
@@ -894,8 +894,8 @@
                 const alertCount = equipos.filter(e => { if (e.tipo === "transformador") return e.estado !== "Operativo"; return e.nivel === "CRITICO" || e.nivel === "GRAVE"; }).length;
                 const safeId = sub.replace(/[^a-zA-Z0-9]/g, '_');
                 return `<div class="subestacion-card"><div class="subestacion-header" onclick="toggleSubestacion('${safeId}')"><div class="subestacion-title"><span>${sub}</span><span class="subestacion-badge">${equipos.length} equipos</span>${alertCount > 0 ? `<span class="alert-badge">${alertCount} alertas</span>` : ''}</div><span class="toggle-icon" id="icon-${safeId}">▼</span></div><div class="equipos-container" id="list-${safeId}">` +
-                    (trans.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>${trans.map(t => { const voltajeTerciarioInfo = t.voltaje_terciario ? ` | Terciario: ${t.voltaje_terciario} kV` : ''; return `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.nombre}<span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div><div class="equipo-detalles">🏭 ${t.fabricante} | ⚡ ${t.voltaje_primario}/${t.voltaje_secundario} kV${voltajeTerciarioInfo} | 📊 ${t.capacidad} MVA</div><div class="equipo-detalles">🔢 Serie: ${t.numero_serie} | 📅 Año: ${t.ano_fabricacion}</div><div class="equipo-detalles">🔌 Relación: ${t.relacion} | 🔗 Conexión: ${t.tipo_conexion}</div></div></div>`; }).join('')}</div>` : '') +
-                    (terms.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">INSPECCIONES TERMOGRÁFICAS (${terms.length})</div>${terms.map(t => `<div class="equipo-row" onclick="abrirModalTermico('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.equipo}<span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div><div class="equipo-detalles">📌 ${t.nomenclatura} | ⚡ ${t.voltaje} | 📅 ${t.fecha}</div><div class="equipo-detalles">📝 ${t.observacion}</div></div></div>`).join('')}</div>` : '') +
+                    (trans.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>${trans.map(t => { const voltajeTerciarioInfo = t.voltaje_terciario ? ` | Terciario: ${t.voltaje_terciario} kV` : ''; return `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.nombre}<span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div><div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario} kV${voltajeTerciarioInfo} | ${t.capacidad} MVA</div><div class="equipo-detalles"> Serie: ${t.numero_serie} | Año: ${t.ano_fabricacion}</div><div class="equipo-detalles"> Relación: ${t.relacion} | Conexión: ${t.tipo_conexion}</div></div></div>`; }).join('')}</div>` : '') +
+                    (terms.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">INSPECCIONES TERMOGRÁFICAS (${terms.length})</div>${terms.map(t => `<div class="equipo-row" onclick="abrirModalTermico('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.equipo}<span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div><div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje} | ${t.fecha}</div><div class="equipo-detalles">${t.observacion}</div></div></div>`).join('')}</div>` : '') +
                     `</div></div>`;
             }).join('');
         }
@@ -907,9 +907,9 @@
             if (!container) return;
             let html = '';
             if (alertas.length > 0) {
-                html += `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;">🚨 Equipos con Prioridad Crítica o Grave (${alertas.length})</h3>${alertas.map(a => { const esTrans = a.tipo === "transformador"; return `<div style="background:${esTrans ? '#fff5f5' : '#fff9f0'}; border-left:4px solid ${esTrans ? '#b91c1c' : '#c2410c'}; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${a.subestacion} - ${esTrans ? a.nombre : a.equipo}</strong><span class="status-badge ${esTrans ? getEstadoClass(a.estado) : getNivelClass(a.nivel)}">${esTrans ? a.estado : a.nivel}</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div><div style="font-size:0.8rem; font-weight:500; color:${esTrans ? '#b91c1c' : '#c2410c'}; margin-top:6px;">${esTrans ? a.observaciones : a.observacion}</div><button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}">✏️ Editar</button></div>`; }).join('')}</div>`;
+                html += `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;">🚨 Equipos con Prioridad Crítica o Grave (${alertas.length})</h3>${alertas.map(a => { const esTrans = a.tipo === "transformador"; return `<div style="background:${esTrans ? '#fff5f5' : '#fff9f0'}; border-left:4px solid ${esTrans ? '#b91c1c' : '#c2410c'}; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${a.subestacion} - ${esTrans ? a.nombre : a.equipo}</strong><span class="status-badge ${esTrans ? getEstadoClass(a.estado) : getNivelClass(a.nivel)}">${esTrans ? a.estado : a.nivel}</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div><div style="font-size:0.8rem; font-weight:500; color:${esTrans ? '#b91c1c' : '#c2410c'}; margin-top:6px;">${esTrans ? a.observaciones : a.observacion}</div><button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}"> Editar</button></div>`; }).join('')}</div>`;
             }
-            if (html === '') html = '<div class="empty-state">✅ No hay alertas activas</div>';
+            if (html === '') html = '<div class="empty-state">No hay alertas activas</div>';
             container.innerHTML = html;
         }
 
@@ -918,10 +918,10 @@
             const container = document.getElementById("eliminadosGrid");
             if (!container) return;
             if (eliminados.length === 0) {
-                container.innerHTML = '<div class="empty-state">🗑️ No hay equipos eliminados. Los equipos que elimines aparecerán aquí.</div>';
+                container.innerHTML = '<div class="empty-state">No hay equipos eliminados. Los equipos que elimines aparecerán aquí.</div>';
                 return;
             }
-            container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;">🗑️ Equipos Eliminados (${eliminados.length})</h3>${eliminados.map(e => { const esTrans = e.tipo === "transformador"; return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${e.subestacion} - ${esTrans ? e.nombre : e.equipo}</strong><span class="status-badge status-deleted">🗑️ Eliminado</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${e.fabricante} | ${e.voltaje_primario}/${e.voltaje_secundario} kV` : `${e.nomenclatura} | ${e.voltaje}`}</div><div style="font-size:0.7rem; color:#475569; margin-top:4px;">Eliminado el: ${e.deletedAt ? new Date(e.deletedAt.toDate()).toLocaleString() : 'Fecha no disponible'}</div><button class="filter-chip" style="margin-top:8px; background:#16a34a; color:white;" onclick="${esTrans ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">↺ Restaurar</button></div>`; }).join('')}</div>`;
+            container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;"> Equipos Eliminados (${eliminados.length})</h3>${eliminados.map(e => { const esTrans = e.tipo === "transformador"; return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${e.subestacion} - ${esTrans ? e.nombre : e.equipo}</strong><span class="status-badge status-deleted"> Eliminado</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${e.fabricante} | ${e.voltaje_primario}/${e.voltaje_secundario} kV` : `${e.nomenclatura} | ${e.voltaje}`}</div><div style="font-size:0.7rem; color:#475569; margin-top:4px;">Eliminado el: ${e.deletedAt ? new Date(e.deletedAt.toDate()).toLocaleString() : 'Fecha no disponible'}</div><button class="filter-chip" style="margin-top:8px; background:#16a34a; color:white;" onclick="${esTrans ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">↺ Restaurar</button></div>`; }).join('')}</div>`;
         }
 
         function actualizarTodo() { renderReporteEjecutivo(); renderDashboard(); renderAlertas(); renderEliminados(); actualizarKPIs(); }
@@ -949,7 +949,7 @@
             const eliminados = equiposEliminados().filter(e => e.subestacion.toLowerCase().includes(search) || (e.nombre || e.equipo || "").toLowerCase().includes(search));
             const container = document.getElementById("eliminadosGrid");
             if (eliminados.length === 0) { container.innerHTML = '<div class="empty-state">No se encontraron resultados</div>'; return; }
-            container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;">🗑️ Equipos Eliminados (${eliminados.length})</h3>${eliminados.map(e => { const esTrans = e.tipo === "transformador"; return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${e.subestacion} - ${esTrans ? e.nombre : e.equipo}</strong><span class="status-badge status-deleted">🗑️ Eliminado</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${e.fabricante} | ${e.voltaje_primario}/${e.voltaje_secundario} kV` : `${e.nomenclatura} | ${e.voltaje}`}</div><button class="filter-chip" style="margin-top:8px; background:#16a34a; color:white;" onclick="${esTrans ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">↺ Restaurar</button></div>`; }).join('')}</div>`;
+            container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;"> Equipos Eliminados (${eliminados.length})</h3>${eliminados.map(e => { const esTrans = e.tipo === "transformador"; return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${e.subestacion} - ${esTrans ? e.nombre : e.equipo}</strong><span class="status-badge status-deleted"> Eliminado</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${e.fabricante} | ${e.voltaje_primario}/${e.voltaje_secundario} kV` : `${e.nomenclatura} | ${e.voltaje}`}</div><button class="filter-chip" style="margin-top:8px; background:#16a34a; color:white;" onclick="${esTrans ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">↺ Restaurar</button></div>`; }).join('')}</div>`;
         });
         document.querySelectorAll(".filter-chip").forEach(chip => { chip.addEventListener("click", () => { document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active")); chip.classList.add("active"); currentFilter = chip.dataset.filter; renderDashboard(); }); });
         window.onclick = (e) => { if (e.target.classList.contains("modal")) e.target.style.display = "none"; };
