@@ -87,36 +87,36 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>⚡ Empresa Eléctrica Quito</h1>
-            <p>Sistema de Gestión de Activos | 82 Transformadores + 30 Inspecciones Termográficas</p>
+            <h1>Empresa Eléctrica Quito</h1>
+            <p>Sistema de Gestión de Activos</p>
         </div>
 
         <div class="kpi-grid">
-            <div class="kpi-card" onclick="filtrarYMostrarDashboard('all')"><div class="kpi-label">📍 Subestaciones</div><div class="kpi-value" id="totalSubestaciones">0</div></div>
-            <div class="kpi-card" onclick="filtrarYMostrarDashboard('transformadores')"><div class="kpi-label">🔧 Transformadores</div><div class="kpi-value" id="totalTransformadores">0</div></div>
-            <div class="kpi-card" onclick="filtrarYMostrarDashboard('termicos')"><div class="kpi-label">🌡️ Inspecciones</div><div class="kpi-value" id="totalTermicos">0</div></div>
-            <div class="kpi-card" onclick="cambiarATabAlertas()"><div class="kpi-label">⚠️ Mant. Próximos</div><div class="kpi-value" id="totalAlertas" style="color: #dc2626;">0</div></div>
+            <div class="kpi-card" onclick="filtrarYMostrarDashboard('all')"><div class="kpi-label">Subestaciones</div><div class="kpi-value" id="totalSubestaciones">0</div></div>
+            <div class="kpi-card" onclick="filtrarYMostrarDashboard('transformadores')"><div class="kpi-label">Transformadores</div><div class="kpi-value" id="totalTransformadores">0</div></div>
+            <div class="kpi-card" onclick="filtrarYMostrarDashboard('termicos')"><div class="kpi-label">Inspecciones</div><div class="kpi-value" id="totalTermicos">0</div></div>
+            <div class="kpi-card" onclick="cambiarATabAlertas()"><div class="kpi-label">Mant. Próximos</div><div class="kpi-value" id="totalAlertas" style="color: #dc2626;">0</div></div>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="reporte">📊 Reporte Ejecutivo</button>
-            <button class="tab-btn" data-tab="dashboard">🗂️ Dashboard de Activos</button>
-            <button class="tab-btn" data-tab="alertas">📅 Plan de Mantenimiento</button>
+            <button class="tab-btn active" data-tab="reporte">Reporte Ejecutivo</button>
+            <button class="tab-btn" data-tab="dashboard">Dashboard de Activos</button>
+            <button class="tab-btn" data-tab="alertas">Plan de Mantenimiento</button>
         </div>
 
         <div id="tab-reporte" class="tab-content active"><div class="executive-grid" id="executiveReport"></div></div>
         <div id="tab-dashboard" class="tab-content">
             <div class="filters-bar">
-                <div class="search-box"><input type="text" id="searchInput" placeholder="🔍 Buscar por subestación o equipo..."></div>
+                <div class="search-box"><input type="text" id="searchInput" placeholder="Buscar por subestación o equipo..."></div>
                 <div class="filter-group">
                     <span class="filter-chip active" data-filter="all">Todos</span>
-                    <span class="filter-chip" data-filter="Operativo">✅ Operativos</span>
-                    <span class="filter-chip" data-filter="No Operativo">❌ No Operativos</span>
-                    <span class="filter-chip" data-filter="Daño Interno">⚠️ Daño Interno</span>
-                    <span class="filter-chip" data-filter="CRITICO">🔴 Crítico</span>
-                    <span class="filter-chip" data-filter="GRAVE">🟠 Grave</span>
-                    <span class="filter-chip" data-filter="INTERMEDIO">🟡 Intermedio</span>
-                    <span class="filter-chip" data-filter="AVISO">🔵 Aviso</span>
+                    <span class="filter-chip" data-filter="Operativo">Operativos</span>
+                    <span class="filter-chip" data-filter="No Operativo">No Operativos</span>
+                    <span class="filter-chip" data-filter="Daño Interno">Daño Interno</span>
+                    <span class="filter-chip" data-filter="CRITICO">Crítico</span>
+                    <span class="filter-chip" data-filter="GRAVE">Grave</span>
+                    <span class="filter-chip" data-filter="INTERMEDIO">Intermedio</span>
+                    <span class="filter-chip" data-filter="AVISO">Aviso</span>
                 </div>
             </div>
             <div id="dashboardGrid"></div>
@@ -124,16 +124,16 @@
         <div id="tab-alertas" class="tab-content"><div id="alertasList"></div></div>
     </div>
 
-    <div class="fab" onclick="toggleFabMenu()">➕</div>
+    <div class="fab" onclick="toggleFabMenu()"></div>
     <div class="fab-options" id="fabOptions">
-        <div class="fab-option" onclick="abrirModalAgregarTransformador()">🔧 Nuevo Transformador</div>
-        <div class="fab-option" onclick="abrirModalAgregarInspeccion()">🌡️ Nueva Inspección</div>
+        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Nuevo Transformador</div>
+        <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Nueva Inspección</div>
     </div>
 
     <!-- MODALES (Mantenidos igual que antes) -->
     <div id="modalTransformador" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>🔧 Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
+            <div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
             <div class="edit-form">
                 <label>Nombre</label><input type="text" id="editNombreTransformador">
                 <label>Subestación</label><input type="text" id="editSubestacionTransformador">
@@ -154,20 +154,20 @@
                 </select>
                 
                 <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
-                    <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">📅 Plan de Mantenimiento</h3>
+                    <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Mantenimiento</h3>
                     <div class="form-row">
-                        <div><label>📆 Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
-                        <div><label>📅 Próxima Mantención</label><input type="date" id="editProximaMantencion"></div>
+                        <div><label>Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
+                        <div><label>Próxima Mantención</label><input type="date" id="editProximaMantencion"></div>
                     </div>
                     <div id="mantenimientoStatus" style="margin-top: 8px;"></div>
                 </div>
                 
                 <div class="historial-section">
-                    <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">📋 Historial de Mantenimientos</h3>
+                    <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Mantenimientos</h3>
                     <div id="historialTransformadorList" class="historial-list">Cargando...</div>
                     <div class="form-row">
-                        <div><label>📅 Fecha</label><input type="date" id="newHistorialFechaT"></div>
-                        <div><label>🔢 N° OT</label><input type="text" id="newHistorialOTT" placeholder="Ej: OT-2024-001"></div>
+                        <div><label>Fecha</label><input type="date" id="newHistorialFechaT"></div>
+                        <div><label>N° OT</label><input type="text" id="newHistorialOTT" placeholder="Ej: OT-2024-001"></div>
                     </div>
                     <div><label>🔧 Tipo de Trabajo</label>
                         <select id="newHistorialTipoT">
@@ -178,18 +178,18 @@
                             <option value="Cambio de Aceite">Cambio de Aceite</option>
                         </select>
                     </div>
-                    <div><label>📝 Descripción</label><textarea id="newHistorialDescT" rows="2"></textarea></div>
-                    <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTransformador()">➕ Registrar Mantenimiento</button>
+                    <div><label>Descripción</label><textarea id="newHistorialDescT" rows="2"></textarea></div>
+                    <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTransformador()">Registrar Mantenimiento</button>
                 </div>
                 
-                <button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button>
+                <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
             </div>
         </div>
     </div>
 
     <div id="modalTermico" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>🌡️ Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
+            <div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
             <div class="edit-form">
                 <label>Subestación</label><input type="text" id="editSubestacionTermico">
                 <label>Equipo</label><input type="text" id="editEquipoTermico">
@@ -197,47 +197,47 @@
                 <label>Voltaje</label><input type="text" id="editVoltajeTermico">
                 
                 <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
-                    <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">📅 Plan de Inspección</h3>
+                    <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Inspección</h3>
                     <div class="form-row">
-                        <div><label>📆 Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div>
-                        <div><label>📅 Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div>
+                        <div><label>Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div>
+                        <div><label>Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div>
                     </div>
                 </div>
                 
                 <label>Nivel de Criticidad</label>
                 <select id="editNivelMantenimientoTermico">
-                    <option value="AVISO">🔵 AVISO (Nivel 1)</option>
-                    <option value="INTERMEDIO">🟡 INTERMEDIO (Nivel 2)</option>
-                    <option value="GRAVE">🟠 GRAVE (Nivel 3)</option>
-                    <option value="CRITICO">🔴 CRÍTICO (Nivel 4)</option>
+                    <option value="AVISO">AVISO (Nivel 1)</option>
+                    <option value="INTERMEDIO">INTERMEDIO (Nivel 2)</option>
+                    <option value="GRAVE">GRAVE (Nivel 3)</option>
+                    <option value="CRITICO">CRÍTICO (Nivel 4)</option>
                 </select>
                 
                 <div class="historial-section">
-                    <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">📋 Historial de Inspecciones</h3>
+                    <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Inspecciones</h3>
                     <div id="historialTermicoList" class="historial-list">Cargando...</div>
                     <div class="form-row">
-                        <div><label>📅 Fecha</label><input type="date" id="newHistorialFechaTg"></div>
-                        <div><label>🔢 N° OT</label><input type="text" id="newHistorialOTTg"></div>
+                        <div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div>
+                        <div><label>N° OT</label><input type="text" id="newHistorialOTTg"></div>
                     </div>
-                    <div><label>🔧 Tipo</label>
+                    <div><label>Tipo</label>
                         <select id="newHistorialTipoTg">
                             <option value="Inspección Termográfica">Inspección Termográfica</option>
                             <option value="Corrección">Corrección</option>
                             <option value="Mantenimiento">Mantenimiento</option>
                         </select>
                     </div>
-                    <div><label>📝 Descripción</label><textarea id="newHistorialDescTg" rows="2"></textarea></div>
-                    <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">➕ Registrar Inspección</button>
+                    <div><label>Descripción</label><textarea id="newHistorialDescTg" rows="2"></textarea></div>
+                    <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">Registrar Inspección</button>
                 </div>
                 
-                <button class="save-btn" onclick="guardarEdicionTermico()">💾 Guardar Cambios</button>
+                <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
             </div>
         </div>
     </div>
 
     <div id="modalAgregarTransformador" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>🔧 Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
+            <div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
             <div class="edit-form">
                 <label>Nombre *</label><input type="text" id="newNombreTransformador">
                 <label>Subestación *</label><input type="text" id="newSubestacionTransformador">
@@ -255,8 +255,8 @@
                     <option>Operativo</option><option>No Operativo</option><option>Daño Interno</option><option>Reserva</option>
                 </select>
                 <div class="form-row">
-                    <div><label>📅 Próx. Mantención</label><input type="date" id="newProximaMantencion"></div>
-                    <div><label>📆 Año Fab.</label><input type="number" id="newAnoFabricacion"></div>
+                    <div><label>Próx. Mantención</label><input type="date" id="newProximaMantencion"></div>
+                    <div><label>Año Fab.</label><input type="number" id="newAnoFabricacion"></div>
                 </div>
                 <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
             </div>
@@ -265,15 +265,15 @@
 
     <div id="modalAgregarTermico" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>🌡️ Nueva Inspección</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
+            <div class="modal-header"><h2>Nueva Inspección</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
             <div class="edit-form">
                 <label>Subestación *</label><input type="text" id="newSubestacionTermico">
                 <label>Equipo *</label><input type="text" id="newEquipoTermico">
                 <label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico">
                 <label>Voltaje</label><input type="text" id="newVoltajeTermico">
                 <div class="form-row">
-                    <div><label>📆 Fecha</label><input type="date" id="newFechaInspeccionTermico"></div>
-                    <div><label>📅 Próxima</label><input type="date" id="newProximaInspeccionTermico"></div>
+                    <div><label>Fecha</label><input type="date" id="newFechaInspeccionTermico"></div>
+                    <div><label>Próxima</label><input type="date" id="newProximaInspeccionTermico"></div>
                 </div>
                 <label>Nivel</label>
                 <select id="newNivelMantenimientoTermico">
@@ -285,9 +285,6 @@
     </div>
 
     <script>
-        // ============================================================
-        // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES
-        // ============================================================
         const transformadoresData = [
             { id: 't1', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [] },
             { id: 't2', nombre: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, capacidad: "", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [] },
@@ -373,9 +370,6 @@
             { id: 't82', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [] }
         ];
 
-        // ============================================================
-        // DATOS DE LAS 30 INSPECCIONES TERMOGRÁFICAS
-        // ============================================================
         const inspeccionesData = [
             { id: 'i1', subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2024-01-09", proxima_inspeccion: "2025-01-09", nivel: "CRITICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [] },
             { id: 'i2', subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LINEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha_inspeccion: "2024-01-21", proxima_inspeccion: "2025-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [] },
@@ -408,10 +402,7 @@
             { id: 'i29', subestacion: "MOVIL EL BANTAN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha_inspeccion: "2024-02-03", proxima_inspeccion: "2025-02-03", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [] },
             { id: 'i30', subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha_inspeccion: "2024-01-23", proxima_inspeccion: "2025-01-23", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [] }
         ];
-
-        // ============================================================
-        // LÓGICA DE LA APLICACIÓN (MANTENIDA IGUAL)
-        // ============================================================
+        
         let currentFilter = "all";
         let currentSearch = "";
         let currentEditingId = null;
@@ -454,21 +445,21 @@
             
             document.getElementById("executiveReport").innerHTML = `
                 <div class="executive-card">
-                    <div class="card-header"><h3>🔧 Transformadores (${trans.length})</h3></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Operativo')"><span class="metric-label">✅ Operativos</span><span class="metric-value"><span class="metric-badge badge-success">${operativos}</span> ${Math.round(operativos/trans.length*100)}%</span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('No Operativo')"><span class="metric-label">❌ No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${trans.filter(t=>t.estado==='No Operativo').length}</span></span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Daño Interno')"><span class="metric-label">⚠️ Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${trans.filter(t=>t.estado==='Daño Interno').length}</span></span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Reserva')"><span class="metric-label">📦 Reserva</span><span class="metric-value"><span class="metric-badge badge-warning">${trans.filter(t=>t.estado==='Reserva').length}</span></span></div>
+                    <div class="card-header"><h3>Transformadores (${trans.length})</h3></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Operativo')"><span class="metric-label">Operativos</span><span class="metric-value"><span class="metric-badge badge-success">${operativos}</span> ${Math.round(operativos/trans.length*100)}%</span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('No Operativo')"><span class="metric-label">No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${trans.filter(t=>t.estado==='No Operativo').length}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Daño Interno')"><span class="metric-label">Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${trans.filter(t=>t.estado==='Daño Interno').length}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Reserva')"><span class="metric-label">Reserva</span><span class="metric-value"><span class="metric-badge badge-warning">${trans.filter(t=>t.estado==='Reserva').length}</span></span></div>
                 </div>
                 <div class="executive-card">
-                    <div class="card-header"><h3>🌡️ Inspecciones Termográficas (${terms.length})</h3></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('CRITICO')"><span class="metric-label">🔴 Crítico</span><span class="metric-value"><span class="metric-badge badge-critical">${criticos}</span> ${Math.round(criticos/terms.length*100)}%</span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('GRAVE')"><span class="metric-label">🟠 Grave</span><span class="metric-value"><span class="metric-badge badge-grave">${graves}</span> ${Math.round(graves/terms.length*100)}%</span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('INTERMEDIO')"><span class="metric-label">🟡 Intermedio</span><span class="metric-value"><span class="metric-badge badge-warning">${intermedios}</span> ${Math.round(intermedios/terms.length*100)}%</span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('AVISO')"><span class="metric-label">🔵 Aviso</span><span class="metric-value"><span class="metric-badge badge-info">${avisos}</span> ${Math.round(avisos/terms.length*100)}%</span></div>
+                    <div class="card-header"><h3>Inspecciones Termográficas (${terms.length})</h3></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('CRITICO')"><span class="metric-label">Crítico</span><span class="metric-value"><span class="metric-badge badge-critical">${criticos}</span> ${Math.round(criticos/terms.length*100)}%</span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('GRAVE')"><span class="metric-label">Grave</span><span class="metric-value"><span class="metric-badge badge-grave">${graves}</span> ${Math.round(graves/terms.length*100)}%</span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('INTERMEDIO')"><span class="metric-label">Intermedio</span><span class="metric-value"><span class="metric-badge badge-warning">${intermedios}</span> ${Math.round(intermedios/terms.length*100)}%</span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('AVISO')"><span class="metric-label">Aviso</span><span class="metric-value"><span class="metric-badge badge-info">${avisos}</span> ${Math.round(avisos/terms.length*100)}%</span></div>
                 </div>
                 <div class="executive-card">
-                    <div class="card-header"><h3>📍 Top Subestaciones</h3></div>
+                    <div class="card-header"><h3>Top Subestaciones</h3></div>
                     ${topSub.map(([s, c]) => `<div class="metric-row" onclick="buscarSubestacion('${s}')"><span class="metric-label">${s}</span><span class="metric-value">${c} equipos</span></div>`).join('')}
                 </div>
             `;
@@ -502,21 +493,21 @@
                 const g = grupos[s];
                 return `<div class="subestacion-card">
                     <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
-                        <div class="subestacion-title">📍 ${s} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
+                        <div class="subestacion-title">${s} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
                         <span>▼</span>
                     </div>
                     <div class="equipos-container" id="list-${s}">
-                        ${g.trans.length > 0 ? `<div class="seccion-titulo">🔧 TRANSFORMADORES (${g.trans.length})</div>` : ''}
+                        ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
                         ${g.trans.map(t => `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                             <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
                             <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario} kV | ${t.capacidad} MVA</div>
-                            ${t.proxima_mantencion ? `<div class="equipo-detalles">📅 Próx. Mantención: ${t.proxima_mantencion}</div>` : ''}</div>
+                            ${t.proxima_mantencion ? `<div class="equipo-detalles">Próx. Mantención: ${t.proxima_mantencion}</div>` : ''}</div>
                         </div>`).join('')}
-                        ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">🌡️ INSPECCIONES (${g.term.length})</div>` : ''}
+                        ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">INSPECCIONES (${g.term.length})</div>` : ''}
                         ${g.term.map(t => `<div class="equipo-row" onclick="abrirModalTermico('${t.id}')">
                             <div><div class="equipo-nombre">${t.equipo} <span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div>
                             <div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje}</div>
-                            <div class="equipo-detalles">📅 Próx. Inspección: ${t.proxima_inspeccion || 'N/A'}</div></div>
+                            <div class="equipo-detalles">Próx. Inspección: ${t.proxima_inspeccion || 'N/A'}</div></div>
                         </div>`).join('')}
                     </div>
                 </div>`;
@@ -543,14 +534,14 @@
             
             document.getElementById("alertasList").innerHTML = `
                 ${vencidas.length > 0 ? `<div class="executive-card" style="margin-bottom:20px;">
-                    <div class="card-header"><h3>⚠️ Mantenciones VENCIDAS (${vencidas.length})</h3></div>
+                    <div class="card-header"><h3>Mantenciones VENCIDAS (${vencidas.length})</h3></div>
                     ${vencidas.map(e => `<div class="metric-row maintenance-overdue" style="background:#fee2e2;" onclick="${e.tipo==='termico'?`abrirModalTermico('${e.id}')`:`abrirModalTransformador('${e.id}')`}">
-                        <span class="metric-label">🔴 ${e.subestacion} - ${e.nombre||e.equipo}</span>
+                        <span class="metric-label">${e.subestacion} - ${e.nombre||e.equipo}</span>
                         <span class="metric-value">Venció: ${e.proxima_mantencion||e.proxima_inspeccion}</span>
                     </div>`).join('')}
                 </div>` : ''}
                 <div class="executive-card">
-                    <div class="card-header"><h3>📅 Próximos 30 días (${proximas.length})</h3></div>
+                    <div class="card-header"><h3>Próximos 30 días (${proximas.length})</h3></div>
                     ${proximas.length === 0 ? '<div class="empty-state">No hay mantenciones programadas</div>' : 
                     proximas.map(e => `<div class="metric-row" onclick="${e.tipo==='termico'?`abrirModalTermico('${e.id}')`:`abrirModalTransformador('${e.id}')`}">
                         <span class="metric-label">${e.subestacion} - ${e.nombre||e.equipo}</span>
@@ -579,11 +570,11 @@
                 const hoy = new Date(); hoy.setHours(0,0,0,0);
                 const prox = new Date(e.proxima_mantencion); prox.setHours(0,0,0,0);
                 const diff = Math.ceil((prox - hoy) / (1000*60*60*24));
-                if (diff < 0) statusDiv.innerHTML = '<div class="maintenance-alert maintenance-overdue">⚠️ Mantenimiento VENCIDO hace ' + Math.abs(diff) + ' días</div>';
-                else if (diff <= 30) statusDiv.innerHTML = '<div class="maintenance-alert">📅 Mantenimiento programado en ' + diff + ' días</div>';
-                else statusDiv.innerHTML = '<div style="color:#166534;">✅ Mantenimiento al día</div>';
+                if (diff < 0) statusDiv.innerHTML = '<div class="maintenance-alert maintenance-overdue">Mantenimiento VENCIDO hace ' + Math.abs(diff) + ' días</div>';
+                else if (diff <= 30) statusDiv.innerHTML = '<div class="maintenance-alert">Mantenimiento programado en ' + diff + ' días</div>';
+                else statusDiv.innerHTML = '<div style="color:#166534;">Mantenimiento al día</div>';
             } else {
-                statusDiv.innerHTML = '<div style="color:#6c7a8a;">⚠️ No hay fecha programada</div>';
+                statusDiv.innerHTML = '<div style="color:#6c7a8a;">No hay fecha programada</div>';
             }
             
             renderHistorial(e.historial || [], "historialTransformadorList");
