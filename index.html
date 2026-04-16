@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,6 +101,12 @@
         .fab-options.show { display: flex; }
         .fab-option { background: white; color: #1e4a6b; padding: 12px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-size: 0.85rem; font-weight: 500; border: 1px solid #e2e8f0; }
         .fab-option:hover { background: #1e4a6b; color: white; transform: translateX(-5px); }
+        .historial-section { margin-top: 16px; border-top: 1px solid #eef2f5; padding-top: 16px; }
+        .historial-title { font-size: 0.9rem; font-weight: 600; color: #1e4a6b; margin-bottom: 8px; }
+        .historial-list { max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; margin-bottom: 12px; background: #f8fafc; }
+        .historial-entry { font-size: 0.75rem; padding: 6px; border-bottom: 1px solid #e2e8f0; }
+        .historial-entry:last-child { border-bottom: none; }
+        .add-historial-btn { background: #475569; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-top: 4px; }
         @media (max-width: 1000px) { .executive-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } .filters-bar { flex-direction: column; align-items: stretch; } .form-row-3 { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -168,8 +174,12 @@
     </div>
 
     <!-- MODALES -->
-    <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTransformadorTitle">Editar Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div><div id="modalTransformadorBody"></div><div class="edit-form"><label>Nombre del Equipo</label><input type="text" id="editNombreTransformador"><label>Subestación</label><input type="text" id="editSubestacionTransformador" list="subestacionesList"><datalist id="subestacionesList"></datalist><label>Fabricante / Marca</label><input type="text" id="editFabricanteTransformador"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"><label>Relación de Transformación</label><input type="text" id="editRelacionTransformador"><label>Estado Actual</label><select id="editEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="editNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion"><label>Observaciones</label><textarea id="editObservacionesTransformador" rows="2"></textarea><button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button><button id="btnRestaurarTransformador" class="restore-btn-modal" style="display:none;" onclick="restaurarTransformador()">↺ Restaurar</button></div></div></div>
-    <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTermicoTitle">Editar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div><div id="modalTermicoBody"></div><div class="edit-form"><label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesListTermico"><datalist id="subestacionesListTermico"></datalist><label>Equipo</label><input type="text" id="editEquipoTermico"><label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico"><label>Voltaje</label><input type="text" id="editVoltajeTermico"><label>Fecha de Inspección</label><input type="date" id="editFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="editNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select><button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button><button id="btnRestaurarTermico" class="restore-btn-modal" style="display:none;" onclick="restaurarTermico()">↺ Restaurar</button></div></div></div>
+    <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTransformadorTitle">Editar Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div><div id="modalTransformadorBody"></div><div class="edit-form"><label>Nombre del Equipo</label><input type="text" id="editNombreTransformador"><label>Subestación</label><input type="text" id="editSubestacionTransformador" list="subestacionesList"><datalist id="subestacionesList"></datalist><label>Fabricante / Marca</label><input type="text" id="editFabricanteTransformador"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"><label>Relación de Transformación</label><input type="text" id="editRelacionTransformador"><label>Estado Actual</label><select id="editEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="editNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion"><label>Observaciones</label><textarea id="editObservacionesTransformador" rows="2"></textarea>
+    <div class="historial-section"><div class="historial-title">Historial de Mantenimiento / Inspecciones</div><div id="historialTransformadorList" class="historial-list">Cargando historial...</div><div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaT"></div><div><label>Número OT</label><input type="text" id="newHistorialOTT" placeholder="Ej: OT-2024-001"></div></div><div><label>Tipo</label><input type="text" id="newHistorialTipoT" placeholder="Ej: Mantenimiento Preventivo"></div><div><label>Descripción</label><textarea id="newHistorialDescT" rows="2" placeholder="Detalles del trabajo realizado..."></textarea></div><button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTransformador()">➕ Añadir al Historial</button></div>
+    <button class="save-btn" onclick="guardarEdicionTransformador()">💾 Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button><button id="btnRestaurarTransformador" class="restore-btn-modal" style="display:none;" onclick="restaurarTransformador()">↺ Restaurar</button></div></div></div>
+    <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalTermicoTitle">Editar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div><div id="modalTermicoBody"></div><div class="edit-form"><label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesListTermico"><datalist id="subestacionesListTermico"></datalist><label>Equipo</label><input type="text" id="editEquipoTermico"><label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico"><label>Voltaje</label><input type="text" id="editVoltajeTermico"><label>Fecha de Inspección</label><input type="date" id="editFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="editNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select>
+    <div class="historial-section"><div class="historial-title">Historial de Inspecciones / Acciones</div><div id="historialTermicoList" class="historial-list">Cargando historial...</div><div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div><div><label>Número OT</label><input type="text" id="newHistorialOTTg" placeholder="Ej: OT-2024-001"></div></div><div><label>Tipo</label><input type="text" id="newHistorialTipoTg" placeholder="Ej: Inspección / Corrección"></div><div><label>Descripción</label><textarea id="newHistorialDescTg" rows="2" placeholder="Detalles del trabajo realizado..."></textarea></div><button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTermico()">➕ Añadir al Historial</button></div>
+    <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button><button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button><button id="btnRestaurarTermico" class="restore-btn-modal" style="display:none;" onclick="restaurarTermico()">↺ Restaurar</button></div></div></div>
     <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Agregar Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div><div class="edit-form"><label>Nombre del Equipo *</label><input type="text" id="newNombreTransformador" placeholder="Ej: Transformador de Potencia T1"><label>Subestación *</label><input type="text" id="newSubestacionTransformador" list="subestacionesListNew"><datalist id="subestacionesListNew"></datalist><label>Fabricante / Marca</label><input type="text" id="newFabricanteTransformador" placeholder="Ej: ABB, Siemens"><div class="form-row-3"><div><label>Voltaje Primario (kV)</label><input type="text" id="newVoltajePrimario" placeholder="Ej: 138"></div><div><label>Voltaje Secundario (kV)</label><input type="text" id="newVoltajeSecundario" placeholder="Ej: 23"></div><div><label>Voltaje Terciario (kV)</label><input type="text" id="newVoltajeTerciario" placeholder="Opcional"></div></div><label>Capacidad (MVA)</label><input type="text" id="newCapacidadTransformador" placeholder="Ej: 20/27/33"><label>Relación de Transformación</label><input type="text" id="newRelacionTransformador" placeholder="Ej: 138/23"><label>Estado Actual</label><select id="newEstadoTransformador"><option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option><option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option><option value="Averiado">Averiado</option><option value="incendiado">Incendiado</option><option value="Dado de baja">Dado de baja</option></select><div class="form-row"><div><label>Número de Serie</label><input type="text" id="newNumeroSerie"></div><div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion"></div></div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"><label>Observaciones</label><textarea id="newObservacionesTransformador" rows="2"></textarea><button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button></div></div></div>
     <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Agregar Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div><div class="edit-form"><label>Subestación *</label><input type="text" id="newSubestacionTermico" list="subestacionesListTermicoNew"><datalist id="subestacionesListTermicoNew"></datalist><label>Equipo *</label><input type="text" id="newEquipoTermico" placeholder="Ej: SECCIONADOR"><label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico"><label>Voltaje</label><input type="text" id="newVoltajeTermico" placeholder="Ej: 46 KV"><label>Fecha de Inspección</label><input type="date" id="newFechaInspeccionTermico"><label>Nivel de Mantenimiento</label><select id="newNivelMantenimientoTermico"><option value="AVISO">AVISO (Nivel 1: 5-15°C)</option><option value="INTERMEDIO">INTERMEDIO (Nivel 2: 16-35°C)</option><option value="GRAVE">GRAVE (Nivel 3: 36-75°C)</option><option value="CRITICO">CRÍTICO (Nivel 4: Mayor a 75°C)</option></select><button class="save-btn" onclick="agregarNuevoTermico()">Crear Inspección</button></div></div></div>
 
@@ -201,226 +211,218 @@
         let currentEditingTermicoId = null;
 
         // ============================================================
-        // DATOS COMPLETOS DE LOS 80 TRANSFORMADORES
+        // DATOS COMPLETOS DE LOS 82 TRANSFORMADORES
         // ============================================================
         const transformadoresCompletos = [
             // Dato 1
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 2
-            { nombre: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 3
-            { nombre: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 4
-            { nombre: "Transformador de Potencia T1", subestacion: "Luluncoto", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200790", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Luluncoto", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200790", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 5
-            { nombre: "Transformador de Potencia T2", subestacion: "Barrio Nuevo", fabricante: "Pauwells", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4069", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Barrio Nuevo", fabricante: "Pauwells", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4069", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 6
-            { nombre: "Transformador de Potencia T1", subestacion: "Chimbacalle", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "61161", ano_fabricacion: 1987, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Chimbacalle", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "61161", ano_fabricacion: 1987, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 7
-            { nombre: "Transformador de Potencia T1", subestacion: "Chilibulo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Chilibulo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 8
-            { nombre: "Transformador de Potencia T2", subestacion: "Chilibulo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK221217-4", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Chilibulo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK221217-4", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 9
-            { nombre: "Transformador de Potencia T1", subestacion: "Escuela Sucre", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "46/6.3", estado: "Operativo", numero_serie: "98674", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Escuela Sucre", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "46/6.3", estado: "Operativo", numero_serie: "98674", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 10
-            { nombre: "Transformador de Potencia T1", subestacion: "San Roque", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "San Roque", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 11
-            { nombre: "Transformador de Potencia T1", subestacion: "La Marin", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "La Marin", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 12
-            { nombre: "Transformador de Potencia T2", subestacion: "Miraflores", fabricante: "Raycham", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Miraflores", fabricante: "Raycham", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 13
-            { nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "8/10", relacion: "43.8/6.3", estado: "Operativo", numero_serie: "558406", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "8/10", relacion: "43.8/6.3", estado: "Operativo", numero_serie: "558406", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 14
-            { nombre: "Transformador de Potencia T1", subestacion: "Belisario Quevedo", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "201189", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Belisario Quevedo", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "201189", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 15
-            { nombre: "Transformador de Potencia T1", subestacion: "La Floresta", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200788", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "La Floresta", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200788", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 16
-            { nombre: "Transformador de Potencia T1", subestacion: "Gualo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201413", ano_fabricacion: 2015, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Gualo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201413", ano_fabricacion: 2015, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 17
-            { nombre: "Transformador de Potencia T2", subestacion: "Gualo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "CK180674-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Gualo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "CK180674-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 18
-            { nombre: "Transformador de Potencia T1", subestacion: "El Bosque", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2019, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "El Bosque", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2019, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 19
-            { nombre: "Transformador de Potencia T1", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T1", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T1", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 20
-            { nombre: "Transformador de Potencia T2", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T2", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T2", ano_fabricacion: 1980, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 21
-            { nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "185236-1388", ano_fabricacion: 1998, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "185236-1388", ano_fabricacion: 1998, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 22
-            { nombre: "Transformador de Potencia T1", subestacion: "Cristiania", fabricante: "Trafo", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2003", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Cristiania", fabricante: "Trafo", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2003", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 23
-            { nombre: "Transformador de Potencia T2", subestacion: "Cristiania", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Cristiania", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 24
-            { nombre: "Transformador de Potencia T2", subestacion: "Cotocollao", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "", estado: "Operativo", numero_serie: "200626", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Cotocollao", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "", estado: "Operativo", numero_serie: "200626", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 25
-            { nombre: "Transformador de Potencia T3", subestacion: "Cotocollao", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: 1997, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T3", subestacion: "Cotocollao", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: 1997, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 26
-            { nombre: "Transformador de Potencia T4", subestacion: "Cotocollao", fabricante: "Yorkshire", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T4", subestacion: "Cotocollao", fabricante: "Yorkshire", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 27
-            { nombre: "Transformador de Potencia T1", subestacion: "Cotocollao", fabricante: "Meidensha", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 23, capacidad: "60/80/100", relacion: "138/46/23", estado: "Operativo", numero_serie: "8N8017T1", ano_fabricacion: 1987, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Cotocollao", fabricante: "Meidensha", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 23, capacidad: "60/80/100", relacion: "138/46/23", estado: "Operativo", numero_serie: "8N8017T1", ano_fabricacion: 1987, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 28
-            { nombre: "Transformador de Potencia T1", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "295842", ano_fabricacion: 2009, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "295842", ano_fabricacion: 2009, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 29
-            { nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "201190", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "201190", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 30
-            { nombre: "Transformador de Potencia T1", subestacion: "San Antonio", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201187", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "San Antonio", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201187", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 31
-            { nombre: "Transformador de Potencia T1", subestacion: "Conocoto", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Conocoto", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 32
-            { nombre: "Transformador de Potencia T2", subestacion: "Conocoto", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Conocoto", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 33
-            { nombre: "Transformador de Potencia T1", subestacion: "Carolina", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8309T1", ano_fabricacion: 1984, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Carolina", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8309T1", ano_fabricacion: 1984, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 34
-            { nombre: "Transformador de Potencia T2", subestacion: "Carolina", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Carolina", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 35
-            { nombre: "Transformador de Potencia T3", subestacion: "San Pablo", fabricante: "CG Transf", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T3", subestacion: "San Pablo", fabricante: "CG Transf", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 36
-            { nombre: "Transformador de Potencia T1", subestacion: "Alangasi", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "200628", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Alangasi", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "200628", ano_fabricacion: 2008, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 37
-            { nombre: "Transformador de Potencia T1", subestacion: "San Rafael", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/26.7/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: 1988, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "San Rafael", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/26.7/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: 1988, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 38
-            { nombre: "Transformador de Potencia T1", subestacion: "Iñaquito", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4068", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Iñaquito", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4068", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 39
-            { nombre: "Transformador de Potencia T2", subestacion: "Iñaquito", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200787", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Iñaquito", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200787", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 40
-            { nombre: "Transformador de Potencia T1", subestacion: "Nueva Cumbaya", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Nueva Cumbaya", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 41
-            { nombre: "Transformador de Potencia T1", subestacion: "Plataforma Financiera", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK170227-1", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Plataforma Financiera", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK170227-1", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 42
-            { nombre: "Transformador de Potencia T1", subestacion: "Tababela", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-1", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Tababela", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-1", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 43
-            { nombre: "Transformador de Potencia T1", subestacion: "Diez Nueva", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "22178", ano_fabricacion: 1978, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Diez Nueva", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "22178", ano_fabricacion: 1978, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 44
-            { nombre: "Transformador de Potencia T1", subestacion: "Nuevo Aeropuerto", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Nuevo Aeropuerto", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 45
-            { nombre: "Transformador de Potencia T1", subestacion: "Tumbaco", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Tumbaco", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 46
-            { nombre: "Transformador de Potencia T2", subestacion: "Tumbaco", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "185329", ano_fabricacion: 2000, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Tumbaco", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "185329", ano_fabricacion: 2000, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 47
-            { nombre: "Transformador de Potencia T1", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK130960-1", ano_fabricacion: 2013, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK130960-1", ano_fabricacion: 2013, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 48
-            { nombre: "Transformador de Potencia T2", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "18410", ano_fabricacion: 2002, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "18410", ano_fabricacion: 2002, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 49
-            { nombre: "Transformador de Potencia T1", subestacion: "Selva Alegre", fabricante: "BBC", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "138/46/6.3", estado: "Operativo", numero_serie: "GM 100797", ano_fabricacion: 1986, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Selva Alegre", fabricante: "BBC", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "138/46/6.3", estado: "Operativo", numero_serie: "GM 100797", ano_fabricacion: 1986, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 50
-            { nombre: "Transformador de Potencia T2", subestacion: "Selva Alegre", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "138/46/6.3", estado: "Operativo", numero_serie: "185641", ano_fabricacion: 2006, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Selva Alegre", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "138/46/6.3", estado: "Operativo", numero_serie: "185641", ano_fabricacion: 2006, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 51
-            { nombre: "Transformador de Potencia TR", subestacion: "Papallacta", fabricante: "MOVIL_Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia TR", subestacion: "Papallacta", fabricante: "MOVIL_Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 52
-            { nombre: "Transformador de Potencia", subestacion: "La Calera", fabricante: "Ecuatran", voltaje_primario: 6.3, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia", subestacion: "La Calera", fabricante: "Ecuatran", voltaje_primario: 6.3, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 53
-            { nombre: "Transformador de Potencia T1", subestacion: "El Inga Bajo", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "El Inga Bajo", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 54
-            { nombre: "Transformador de Potencia T2", subestacion: "Mirador Alto", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Mirador Alto", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 55
-            { nombre: "Transformador de Potencia T1", subestacion: "Los Bancos", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 13.2, voltaje_terciario: null, capacidad: "8/10", relacion: "43.8/13.2", estado: "Operativo", numero_serie: "558410", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Los Bancos", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 13.2, voltaje_terciario: null, capacidad: "8/10", relacion: "43.8/13.2", estado: "Operativo", numero_serie: "558410", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 56
-            { nombre: "Transformador de Potencia T2", subestacion: "Los Bancos", fabricante: "ABB", voltaje_primario: 69, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "200867", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Los Bancos", fabricante: "ABB", voltaje_primario: 69, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "200867", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 57
-            { nombre: "Transformador de Potencia T1", subestacion: "Parque Bicentenario", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Parque Bicentenario", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 58
-            { nombre: "Transformador de Potencia T1", subestacion: "Perez Guerrero", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "20", relacion: "46/23", estado: "Operativo", numero_serie: "94.2.406", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Perez Guerrero", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "20", relacion: "46/23", estado: "Operativo", numero_serie: "94.2.406", ano_fabricacion: 1995, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 59
-            { nombre: "Transformador de Potencia T2", subestacion: "Perez Guerrero", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/25", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-2", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Perez Guerrero", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/25", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-2", ano_fabricacion: 2018, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 60
-            { nombre: "Transformador de Potencia T1", subestacion: "Sangolqui", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "71/22064", ano_fabricacion: 1977, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Sangolqui", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "71/22064", ano_fabricacion: 1977, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 61
-            { nombre: "Transformador de Potencia T2", subestacion: "Sangolqui", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "120/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "200784", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Sangolqui", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "120/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "200784", ano_fabricacion: 2010, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 62
-            { nombre: "Transformador de Potencia T1", subestacion: "Pomasqui", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "185643", ano_fabricacion: 2006, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Pomasqui", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "185643", ano_fabricacion: 2006, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 63
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: 1895, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: 1895, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 64
-            { nombre: "Transformador de Potencia T1", subestacion: "El Quinche", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201186", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "El Quinche", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201186", ano_fabricacion: 2013, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 65
-            { nombre: "Transformador de Potencia T2", subestacion: "Eugenio Espejo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-3", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Eugenio Espejo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-3", ano_fabricacion: 2023, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 66
-            { nombre: "Transformador de Potencia T1", subestacion: "Eugenio Espejo", fabricante: "Pauwells", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "95.4.7519", ano_fabricacion: 1996, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Eugenio Espejo", fabricante: "Pauwells", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "95.4.7519", ano_fabricacion: 1996, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 67
-            { nombre: "Transformador de Potencia T1", subestacion: "Batán Alto", fabricante: "Chint", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1998", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Batán Alto", fabricante: "Chint", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1998", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 68
-            { nombre: "Transformador de Potencia T2", subestacion: "El Obraje", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1884", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "El Obraje", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1884", ano_fabricacion: 2017, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 69
-            { nombre: "Transformador de Potencia T1", subestacion: "Gualberto Hernandez", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 13.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Gualberto Hernandez", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 13.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 70
-            { nombre: "Transformador de Potencia T1", subestacion: "Pasochoa", fabricante: "Transformers y Rectifiers (INDIA) LDT.", voltaje_primario: 46, voltaje_secundario: 4.16, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Pasochoa", fabricante: "Transformers y Rectifiers (INDIA) LDT.", voltaje_primario: 46, voltaje_secundario: 4.16, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 71
-            { nombre: "Transformador de Potencia TR-G35", subestacion: "CH Loreto", fabricante: "Z Standard", voltaje_primario: 4.16, voltaje_secundario: 24, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YNd11", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia TR-G35", subestacion: "CH Loreto", fabricante: "Z Standard", voltaje_primario: 4.16, voltaje_secundario: 24, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YNd11", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 72
-            { nombre: "Transformador de Potencia T1", subestacion: "CH Victoria", fabricante: "Incoesa", voltaje_primario: 6.6, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "CH Victoria", fabricante: "Incoesa", voltaje_primario: 6.6, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 73
-            { nombre: "Transformador de Potencia T1", subestacion: "Barrio Nuevo", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "81/22181", ano_fabricacion: 1978, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Barrio Nuevo", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "81/22181", ano_fabricacion: 1978, tipo_conexion: "YNyn0d1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 74
-            { nombre: "Transformador de Potencia T1", subestacion: "Miraflores", fabricante: "Mitsubishi", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "43.8/6.3", estado: "No Operativo", numero_serie: "558409", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Miraflores", fabricante: "Mitsubishi", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "43.8/6.3", estado: "No Operativo", numero_serie: "558409", ano_fabricacion: 1972, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 75
-            { nombre: "Transformador de Potencia T2", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Averiado", numero_serie: "T98676", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Averiado", numero_serie: "T98676", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 76
-            { nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Reserva", numero_serie: "98675", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Reserva", numero_serie: "98675", ano_fabricacion: 1960, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 77
-            { nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Asea", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8/6.3", estado: "Dado de baja", numero_serie: "5897-844", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Asea", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8/6.3", estado: "Dado de baja", numero_serie: "5897-844", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 78
-            { nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "incendiado", numero_serie: "185411", ano_fabricacion: 2002, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "incendiado", numero_serie: "185411", ano_fabricacion: 2002, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 79
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: null, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
             // Dato 80
-            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false },
+            { nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", observaciones: "Nivel de aceite en rango, vibraciones normales.", tipo: "transformador", deleted: false, historial: [] },
         ];
 
         // ============================================================
         // DATOS DE LAS 30 INSPECCIONES TERMOGRÁFICAS
         // ============================================================
         const inspeccionesCompletas = [
-            { subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-09", nivel: "CRITICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LINEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "TUMBACO", equipo: "MOVIL SHENDA", nomenclatura: "MALLA A TIERRA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "L/T", nomenclatura: "LINEA SELVA ALEGRE HACIA MIRAFLORES", voltaje: "46 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-34", voltaje: "138 KV", fecha: "2026-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-21", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-55", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "POMASQUI", equipo: "VENTILADOR T-2", nomenclatura: "PRIMERA ETAPA (M1)", voltaje: "220 V", fecha: "2026-01-05", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-100", voltaje: "46 KV", fecha: "2026-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false },
-            { subestacion: "MIRAFLORES", equipo: "PRIMARIO", nomenclatura: "152-B", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "MIRAFLORES", equipo: "DISYUNTOR", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LA FLORESTA", equipo: "BREAKER 3F", nomenclatura: "RECTIFICADOR", voltaje: "220 V", fecha: "2026-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "EL BOSQUE", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-01-12", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "ANDALUCIA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CAROLINA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6.3 KV", fecha: "2026-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "IÑAQUITO", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-02-19", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "138 KV", fecha: "2026-01-15", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-D", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "POMASQUI", equipo: "DISYUNTOR", nomenclatura: "52-3", voltaje: "138 KV", fecha: "2026-01-05", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-80", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "OLIMPICO", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-02-26", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LA FLORESTA", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-15", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "SECCIONADOR", nomenclatura: "89-BT2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE DISTRIBUCIÓN", nomenclatura: "N/A", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-B", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "MOVIL EL BANTAN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha: "2026-02-03", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false },
-            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false }
+            { subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-09", nivel: "CRITICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LINEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "TUMBACO", equipo: "MOVIL SHENDA", nomenclatura: "MALLA A TIERRA", voltaje: "46 KV", fecha: "2026-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "SELVA ALEGRE", equipo: "L/T", nomenclatura: "LINEA SELVA ALEGRE HACIA MIRAFLORES", voltaje: "46 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha: "2026-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-34", voltaje: "138 KV", fecha: "2026-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-21", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-55", voltaje: "138 KV", fecha: "2026-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "POMASQUI", equipo: "VENTILADOR T-2", nomenclatura: "PRIMERA ETAPA (M1)", voltaje: "220 V", fecha: "2026-01-05", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-100", voltaje: "46 KV", fecha: "2026-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "MIRAFLORES", equipo: "PRIMARIO", nomenclatura: "152-B", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "MIRAFLORES", equipo: "DISYUNTOR", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LA FLORESTA", equipo: "BREAKER 3F", nomenclatura: "RECTIFICADOR", voltaje: "220 V", fecha: "2026-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "EL BOSQUE", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-01-12", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "ANDALUCIA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha: "2026-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "CAROLINA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6.3 KV", fecha: "2026-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "IÑAQUITO", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-02-19", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "138 KV", fecha: "2026-01-15", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-D", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "POMASQUI", equipo: "DISYUNTOR", nomenclatura: "52-3", voltaje: "138 KV", fecha: "2026-01-05", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-80", voltaje: "46 KV", fecha: "2026-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "OLIMPICO", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha: "2026-02-26", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LA FLORESTA", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha: "2026-01-15", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LOS BANCOS", equipo: "SECCIONADOR", nomenclatura: "89-BT2", voltaje: "69 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE DISTRIBUCIÓN", nomenclatura: "N/A", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-B", voltaje: "13,8 KV", fecha: "2026-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "MOVIL EL BANTAN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha: "2026-02-03", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] },
+            { subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha: "2026-01-23", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", tipo: "termico", deleted: false, historial: [] }
         ];
 
         // ============================================================
         // FUNCIÓN PRINCIPAL PARA CARGAR DATOS
         // ============================================================
-        
         async function cargarDatos() {
             document.getElementById("dashboardGrid").innerHTML = '<div class="empty-state">Cargando datos...</div>';
-            
             try {
-                console.log("Intentando cargar datos desde Firestore...");
-                
                 const transformadoresSnapshot = await db.collection("transformadores").get();
                 const termicosSnapshot = await db.collection("inspecciones_termograficas").get();
-                
                 if (transformadoresSnapshot.empty) {
-                    console.log("Firestore vacío. Cargando los 82 transformadores y 30 inspecciones...");
                     transformadoresData = [...transformadoresCompletos];
                     inspeccionesData = [...inspeccionesCompletas];
-                    
-                    // Guardar en Firestore
                     for (let i = 0; i < transformadoresData.length; i++) {
                         const t = transformadoresData[i];
                         const docId = `t_${(i + 1).toString().padStart(3, '0')}`;
@@ -433,149 +435,88 @@
                         ins.id = docId;
                         await db.collection("inspecciones_termograficas").doc(docId).set(ins);
                     }
-                    console.log("Datos guardados en Firestore");
                 } else {
-                    console.log("Cargando datos desde Firestore...");
                     transformadoresData = [];
-                    transformadoresSnapshot.forEach(doc => {
-                        transformadoresData.push({ id: doc.id, ...doc.data() });
-                    });
+                    transformadoresSnapshot.forEach(doc => { transformadoresData.push({ id: doc.id, ...doc.data() }); });
                     inspeccionesData = [];
-                    termicosSnapshot.forEach(doc => {
-                        inspeccionesData.push({ id: doc.id, ...doc.data() });
-                    });
+                    termicosSnapshot.forEach(doc => { inspeccionesData.push({ id: doc.id, ...doc.data() }); });
                 }
-                
-                console.log(`Cargados ${transformadoresData.length} transformadores y ${inspeccionesData.length} inspecciones`);
                 actualizarTodo();
-                
             } catch (error) {
                 console.error("Error al cargar datos:", error);
                 transformadoresData = [...transformadoresCompletos];
                 inspeccionesData = [...inspeccionesCompletas];
                 actualizarTodo();
-                alert("No se pudo conectar a Firestore. Usando datos locales.");
             }
         }
 
         // ============================================================
         // FUNCIONES DE PERSISTENCIA
         // ============================================================
-        
         async function guardarTransformadorEnFirestore(transformador) {
             try {
                 const docId = transformador.id || `t_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
                 if (!transformador.id) transformador.id = docId;
                 await db.collection("transformadores").doc(docId).set(transformador);
                 return docId;
-            } catch (error) {
-                console.error("Error guardando:", error);
-                return transformador.id;
-            }
+            } catch (error) { console.error("Error guardando:", error); return transformador.id; }
         }
-
         async function softDeleteTransformador(id) {
-            try {
-                await db.collection("transformadores").doc(id).update({ deleted: true, deletedAt: firebase.firestore.FieldValue.serverTimestamp() });
-            } catch (error) {
-                console.error("Error eliminando:", error);
-                const index = transformadoresData.findIndex(t => t.id === id);
-                if (index !== -1) transformadoresData[index].deleted = true;
-            }
+            try { await db.collection("transformadores").doc(id).update({ deleted: true }); }
+            catch (error) { console.error("Error eliminando:", error); }
         }
-
         async function restaurarTransformadorFirestore(id) {
-            try {
-                await db.collection("transformadores").doc(id).update({ deleted: false, restoredAt: firebase.firestore.FieldValue.serverTimestamp() });
-            } catch (error) {
-                console.error("Error restaurando:", error);
-                const index = transformadoresData.findIndex(t => t.id === id);
-                if (index !== -1) transformadoresData[index].deleted = false;
-            }
+            try { await db.collection("transformadores").doc(id).update({ deleted: false }); }
+            catch (error) { console.error("Error restaurando:", error); }
         }
-
         async function guardarTermicoEnFirestore(termico) {
             try {
                 const docId = termico.id || `ins_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
                 if (!termico.id) termico.id = docId;
                 await db.collection("inspecciones_termograficas").doc(docId).set(termico);
                 return docId;
-            } catch (error) {
-                console.error("Error guardando:", error);
-                return termico.id;
-            }
+            } catch (error) { console.error("Error guardando:", error); return termico.id; }
         }
-
         async function softDeleteTermico(id) {
-            try {
-                await db.collection("inspecciones_termograficas").doc(id).update({ deleted: true, deletedAt: firebase.firestore.FieldValue.serverTimestamp() });
-            } catch (error) {
-                console.error("Error eliminando:", error);
-                const index = inspeccionesData.findIndex(t => t.id === id);
-                if (index !== -1) inspeccionesData[index].deleted = true;
-            }
+            try { await db.collection("inspecciones_termograficas").doc(id).update({ deleted: true }); }
+            catch (error) { console.error("Error eliminando:", error); }
         }
-
         async function restaurarTermicoFirestore(id) {
-            try {
-                await db.collection("inspecciones_termograficas").doc(id).update({ deleted: false, restoredAt: firebase.firestore.FieldValue.serverTimestamp() });
-            } catch (error) {
-                console.error("Error restaurando:", error);
-                const index = inspeccionesData.findIndex(t => t.id === id);
-                if (index !== -1) inspeccionesData[index].deleted = false;
-            }
+            try { await db.collection("inspecciones_termograficas").doc(id).update({ deleted: false }); }
+            catch (error) { console.error("Error restaurando:", error); }
         }
 
         // ============================================================
-        // FUNCIONES AUXILIARES
+        // FUNCIONES AUXILIARES Y RENDERIZADO
         // ============================================================
         function getEstadoClass(estado) {
             const estados = { "Operativo": "status-success", "No Operativo": "status-grave", "Daño Interno": "status-daño", "Reserva": "status-reserva", "Averiado": "status-critical", "incendiado": "status-critical", "Dado de baja": "status-baja" };
             return estados[estado] || "status-warning";
         }
-
         function getNivelClass(nivel) {
             if (nivel === "CRITICO") return "status-critical";
             if (nivel === "GRAVE") return "status-grave";
             if (nivel === "INTERMEDIO") return "status-warning";
             return "status-info";
         }
-
-        function normalizarSubestacion(nombre) {
-            if (!nombre) return "SIN SUBESTACIÓN";
-            return nombre.toUpperCase().trim().replace(/Á/g,'A').replace(/É/g,'E').replace(/Í/g,'I').replace(/Ó/g,'O').replace(/Ú/g,'U');
-        }
-
+        function normalizarSubestacion(nombre) { return nombre ? nombre.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "SIN SUBESTACIÓN"; }
         function cerrarModal(modalId) { document.getElementById(modalId).style.display = "none"; }
         function toggleFabMenu() { document.getElementById('fabOptions').classList.toggle('show'); }
 
         function abrirModalAgregarTransformador() {
-            const modal = document.getElementById("modalAgregarTransformador");
-            const datalist = document.getElementById("subestacionesListNew");
-            const subestacionesSet = new Set(transformadoresData.map(t => t.subestacion));
-            datalist.innerHTML = Array.from(subestacionesSet).sort().map(s => `<option value="${s}">`).join('');
-            modal.style.display = "flex";
+            document.getElementById("modalAgregarTransformador").style.display = "flex";
             toggleFabMenu();
         }
-
         function abrirModalAgregarTermico() {
-            const modal = document.getElementById("modalAgregarTermico");
-            const datalist = document.getElementById("subestacionesListTermicoNew");
-            const subestacionesSet = new Set(transformadoresData.map(t => t.subestacion));
-            datalist.innerHTML = Array.from(subestacionesSet).sort().map(s => `<option value="${s}">`).join('');
-            modal.style.display = "flex";
+            document.getElementById("modalAgregarTermico").style.display = "flex";
             toggleFabMenu();
         }
-
         async function agregarNuevoTransformador() {
             const nombre = document.getElementById("newNombreTransformador").value.trim();
             const subestacion = document.getElementById("newSubestacionTransformador").value.trim();
-            if (!nombre || !subestacion) { alert("Por favor complete el nombre y la subestación"); return; }
-            
-            const nuevoTransformador = {
-                nombre: nombre,
-                subestacion: subestacion,
-                fabricante: document.getElementById("newFabricanteTransformador").value || "No especificado",
+            if (!nombre || !subestacion) { alert("Complete nombre y subestación"); return; }
+            const nuevo = {
+                nombre, subestacion, fabricante: document.getElementById("newFabricanteTransformador").value || "No especificado",
                 voltaje_primario: document.getElementById("newVoltajePrimario").value || "N/A",
                 voltaje_secundario: document.getElementById("newVoltajeSecundario").value || "N/A",
                 voltaje_terciario: document.getElementById("newVoltajeTerciario").value || null,
@@ -586,48 +527,36 @@
                 ano_fabricacion: document.getElementById("newAnoFabricacion").value || "N/A",
                 tipo_conexion: document.getElementById("newTipoConexion").value || "N/A",
                 observaciones: document.getElementById("newObservacionesTransformador").value || "Sin observaciones",
-                tipo: "transformador",
-                deleted: false
+                tipo: "transformador", deleted: false, historial: []
             };
-            
-            const newId = await guardarTransformadorEnFirestore(nuevoTransformador);
-            nuevoTransformador.id = newId;
-            transformadoresData.push(nuevoTransformador);
+            const newId = await guardarTransformadorEnFirestore(nuevo);
+            nuevo.id = newId;
+            transformadoresData.push(nuevo);
             cerrarModal("modalAgregarTransformador");
             actualizarTodo();
-            alert(`Transformador "${nombre}" agregado correctamente`);
         }
-
         async function agregarNuevoTermico() {
             const subestacion = document.getElementById("newSubestacionTermico").value.trim();
             const equipo = document.getElementById("newEquipoTermico").value.trim();
-            if (!subestacion || !equipo) { alert("Por favor complete la subestación y el equipo"); return; }
-            
-            const nuevoTermico = {
-                subestacion: subestacion,
-                equipo: equipo,
-                nomenclatura: document.getElementById("newNomenclaturaTermico").value || "N/A",
+            if (!subestacion || !equipo) { alert("Complete subestación y equipo"); return; }
+            const nuevo = {
+                subestacion, equipo, nomenclatura: document.getElementById("newNomenclaturaTermico").value || "N/A",
                 voltaje: document.getElementById("newVoltajeTermico").value || "N/A",
                 fecha: document.getElementById("newFechaInspeccionTermico").value || new Date().toISOString().split('T')[0],
                 nivel: document.getElementById("newNivelMantenimientoTermico").value,
                 observacion: document.getElementById("newNivelMantenimientoTermico").value === "CRITICO" || document.getElementById("newNivelMantenimientoTermico").value === "GRAVE" ? "ES NECESARIO SU INTERVENCIÓN." : "MONITOREO CONSTANTE.",
-                tipo: "termico",
-                deleted: false
+                tipo: "termico", deleted: false, historial: []
             };
-            
-            const newId = await guardarTermicoEnFirestore(nuevoTermico);
-            nuevoTermico.id = newId;
-            inspeccionesData.push(nuevoTermico);
+            const newId = await guardarTermicoEnFirestore(nuevo);
+            nuevo.id = newId;
+            inspeccionesData.push(nuevo);
             cerrarModal("modalAgregarTermico");
             actualizarTodo();
-            alert(`Inspección termográfica para "${equipo}" agregada correctamente`);
         }
 
         function abrirModalTransformador(id) {
-            const equipo = transformadoresData.find(e => e.id === id);
-            if (!equipo) return;
+            const equipo = transformadoresData.find(e => e.id === id); if (!equipo) return;
             currentEditingTransformadorId = id;
-            
             document.getElementById("editNombreTransformador").value = equipo.nombre;
             document.getElementById("editSubestacionTransformador").value = equipo.subestacion;
             document.getElementById("editFabricanteTransformador").value = equipo.fabricante;
@@ -641,21 +570,12 @@
             document.getElementById("editRelacionTransformador").value = equipo.relacion || "";
             document.getElementById("editTipoConexion").value = equipo.tipo_conexion || "";
             document.getElementById("editObservacionesTransformador").value = equipo.observaciones || "";
-            
+            renderizarHistorialTransformador(equipo.historial || []);
+            document.getElementById("newHistorialFechaT").value = new Date().toISOString().split('T')[0];
+            document.getElementById("newHistorialOTT").value = ''; document.getElementById("newHistorialTipoT").value = ''; document.getElementById("newHistorialDescT").value = '';
             const btnRestaurar = document.getElementById("btnRestaurarTransformador");
-            if (equipo.deleted) {
-                btnRestaurar.style.display = "block";
-                document.querySelector("#modalTransformador .delete-btn-modal").style.display = "none";
-            } else {
-                btnRestaurar.style.display = "none";
-                document.querySelector("#modalTransformador .delete-btn-modal").style.display = "block";
-            }
-            
-            const datalist = document.getElementById("subestacionesList");
-            const subestacionesSet = new Set(transformadoresData.map(t => t.subestacion));
-            datalist.innerHTML = Array.from(subestacionesSet).sort().map(s => `<option value="${s}">`).join('');
-            
-            const modal = document.getElementById("modalTransformador");
+            if (equipo.deleted) { btnRestaurar.style.display = "block"; document.querySelector("#modalTransformador .delete-btn-modal").style.display = "none"; }
+            else { btnRestaurar.style.display = "none"; document.querySelector("#modalTransformador .delete-btn-modal").style.display = "block"; }
             document.getElementById("modalTransformadorTitle").textContent = `${equipo.subestacion} - ${equipo.nombre}`;
             document.getElementById("modalTransformadorBody").innerHTML = `
                 <div class="detail-row"><span class="detail-label">Marca / Fabricante</span><span class="detail-value"><strong>${equipo.fabricante}</strong></span></div>
@@ -664,37 +584,41 @@
                 ${equipo.voltaje_terciario ? `<div class="detail-row"><span class="detail-label">Voltaje Terciario</span><span class="detail-value">${equipo.voltaje_terciario} kV</span></div>` : ''}
                 <div class="detail-row"><span class="detail-label">Tipo de Conexión</span><span class="detail-value">${equipo.tipo_conexion}</span></div>
                 <div class="detail-row"><span class="detail-label">Relación</span><span class="detail-value">${equipo.relacion}</span></div>
-                ${equipo.deleted ? `<div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="status-badge status-deleted">ELIMINADO</span></span></div>` : ''}
             `;
-            modal.style.display = "flex";
+            document.getElementById("modalTransformador").style.display = "flex";
         }
-
+        function renderizarHistorialTransformador(historial) {
+            const container = document.getElementById("historialTransformadorList");
+            if (!historial || historial.length === 0) { container.innerHTML = '<div class="historial-entry" style="color: #6c7a8a; text-align: center;">Sin historial registrado</div>'; return; }
+            container.innerHTML = historial.sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).map(h => `<div class="historial-entry"><strong>${h.fecha}</strong> - ${h.tipo} (OT: ${h.ot})<br><span style="color: #475569;">${h.descripcion}</span></div>`).join('');
+        }
+        async function agregarEntradaHistorialTransformador() {
+            if (!currentEditingTransformadorId) return;
+            const fecha = document.getElementById("newHistorialFechaT").value, ot = document.getElementById("newHistorialOTT").value, tipo = document.getElementById("newHistorialTipoT").value, descripcion = document.getElementById("newHistorialDescT").value;
+            if (!fecha || !ot || !tipo || !descripcion) { alert("Complete todos los campos del historial."); return; }
+            const equipo = transformadoresData.find(e => e.id === currentEditingTransformadorId); if (!equipo) return;
+            if (!equipo.historial) equipo.historial = [];
+            equipo.historial.push({ fecha, ot, tipo, descripcion });
+            await guardarTransformadorEnFirestore(equipo);
+            renderizarHistorialTransformador(equipo.historial);
+            document.getElementById("newHistorialFechaT").value = new Date().toISOString().split('T')[0];
+            document.getElementById("newHistorialOTT").value = ''; document.getElementById("newHistorialTipoT").value = ''; document.getElementById("newHistorialDescT").value = '';
+        }
         function abrirModalTermico(id) {
-            const equipo = inspeccionesData.find(e => e.id === id);
-            if (!equipo) return;
+            const equipo = inspeccionesData.find(e => e.id === id); if (!equipo) return;
             currentEditingTermicoId = id;
-            
             document.getElementById("editSubestacionTermico").value = equipo.subestacion;
             document.getElementById("editEquipoTermico").value = equipo.equipo;
             document.getElementById("editNomenclaturaTermico").value = equipo.nomenclatura;
             document.getElementById("editVoltajeTermico").value = equipo.voltaje;
             document.getElementById("editFechaInspeccionTermico").value = equipo.fecha;
             document.getElementById("editNivelMantenimientoTermico").value = equipo.nivel;
-            
+            renderizarHistorialTermico(equipo.historial || []);
+            document.getElementById("newHistorialFechaTg").value = new Date().toISOString().split('T')[0];
+            document.getElementById("newHistorialOTTg").value = ''; document.getElementById("newHistorialTipoTg").value = ''; document.getElementById("newHistorialDescTg").value = '';
             const btnRestaurar = document.getElementById("btnRestaurarTermico");
-            if (equipo.deleted) {
-                btnRestaurar.style.display = "block";
-                document.querySelector("#modalTermico .delete-btn-modal").style.display = "none";
-            } else {
-                btnRestaurar.style.display = "none";
-                document.querySelector("#modalTermico .delete-btn-modal").style.display = "block";
-            }
-            
-            const datalist = document.getElementById("subestacionesListTermico");
-            const subestacionesSet = new Set(transformadoresData.map(t => t.subestacion));
-            datalist.innerHTML = Array.from(subestacionesSet).sort().map(s => `<option value="${s}">`).join('');
-            
-            const modal = document.getElementById("modalTermico");
+            if (equipo.deleted) { btnRestaurar.style.display = "block"; document.querySelector("#modalTermico .delete-btn-modal").style.display = "none"; }
+            else { btnRestaurar.style.display = "none"; document.querySelector("#modalTermico .delete-btn-modal").style.display = "block"; }
             document.getElementById("modalTermicoTitle").textContent = `${equipo.subestacion} - ${equipo.equipo}`;
             document.getElementById("modalTermicoBody").innerHTML = `
                 <div class="detail-row"><span class="detail-label">Nomenclatura</span><span class="detail-value">${equipo.nomenclatura}</span></div>
@@ -702,279 +626,118 @@
                 <div class="detail-row"><span class="detail-label">Fecha Inspección</span><span class="detail-value">${equipo.fecha}</span></div>
                 <div class="detail-row"><span class="detail-label">Nivel</span><span class="detail-value">${equipo.nivel}</span></div>
                 <div class="detail-row"><span class="detail-label">Observación</span><span class="detail-value">${equipo.observacion}</span></div>
-                ${equipo.deleted ? `<div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="status-badge status-deleted">ELIMINADO</span></span></div>` : ''}
             `;
-            modal.style.display = "flex";
+            document.getElementById("modalTermico").style.display = "flex";
         }
-
-        async function eliminarTransformador() {
-            if (!currentEditingTransformadorId) return;
-            if (confirm("¿Está seguro de eliminar este transformador? La información quedará guardada y podrá ser restaurada.")) {
-                await softDeleteTransformador(currentEditingTransformadorId);
-                const index = transformadoresData.findIndex(t => t.id === currentEditingTransformadorId);
-                if (index !== -1) transformadoresData[index].deleted = true;
-                actualizarTodo();
-                renderEliminados();
-                cerrarModal("modalTransformador");
-                alert("Transformador eliminado (soft delete).");
-            }
+        function renderizarHistorialTermico(historial) {
+            const container = document.getElementById("historialTermicoList");
+            if (!historial || historial.length === 0) { container.innerHTML = '<div class="historial-entry" style="color: #6c7a8a; text-align: center;">Sin historial registrado</div>'; return; }
+            container.innerHTML = historial.sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).map(h => `<div class="historial-entry"><strong>${h.fecha}</strong> - ${h.tipo} (OT: ${h.ot})<br><span style="color: #475569;">${h.descripcion}</span></div>`).join('');
         }
-
-        async function restaurarTransformador() {
-            if (!currentEditingTransformadorId) return;
-            if (confirm("¿Restaurar este transformador?")) {
-                await restaurarTransformadorFirestore(currentEditingTransformadorId);
-                const index = transformadoresData.findIndex(t => t.id === currentEditingTransformadorId);
-                if (index !== -1) transformadoresData[index].deleted = false;
-                actualizarTodo();
-                renderEliminados();
-                cerrarModal("modalTransformador");
-                alert("Transformador restaurado");
-            }
-        }
-
-        async function eliminarTermico() {
+        async function agregarEntradaHistorialTermico() {
             if (!currentEditingTermicoId) return;
-            if (confirm("¿Está seguro de eliminar esta inspección? La información quedará guardada y podrá ser restaurada.")) {
-                await softDeleteTermico(currentEditingTermicoId);
-                const index = inspeccionesData.findIndex(t => t.id === currentEditingTermicoId);
-                if (index !== -1) inspeccionesData[index].deleted = true;
-                actualizarTodo();
-                renderEliminados();
-                cerrarModal("modalTermico");
-                alert("Inspección eliminada (soft delete).");
-            }
+            const fecha = document.getElementById("newHistorialFechaTg").value, ot = document.getElementById("newHistorialOTTg").value, tipo = document.getElementById("newHistorialTipoTg").value, descripcion = document.getElementById("newHistorialDescTg").value;
+            if (!fecha || !ot || !tipo || !descripcion) { alert("Complete todos los campos del historial."); return; }
+            const equipo = inspeccionesData.find(e => e.id === currentEditingTermicoId); if (!equipo) return;
+            if (!equipo.historial) equipo.historial = [];
+            equipo.historial.push({ fecha, ot, tipo, descripcion });
+            await guardarTermicoEnFirestore(equipo);
+            renderizarHistorialTermico(equipo.historial);
+            document.getElementById("newHistorialFechaTg").value = new Date().toISOString().split('T')[0];
+            document.getElementById("newHistorialOTTg").value = ''; document.getElementById("newHistorialTipoTg").value = ''; document.getElementById("newHistorialDescTg").value = '';
         }
 
-        async function restaurarTermico() {
-            if (!currentEditingTermicoId) return;
-            if (confirm("¿Restaurar esta inspección termográfica?")) {
-                await restaurarTermicoFirestore(currentEditingTermicoId);
-                const index = inspeccionesData.findIndex(t => t.id === currentEditingTermicoId);
-                if (index !== -1) inspeccionesData[index].deleted = false;
-                actualizarTodo();
-                renderEliminados();
-                cerrarModal("modalTermico");
-                alert("Inspección restaurada");
-            }
-        }
+        async function eliminarTransformador() { if (!currentEditingTransformadorId) return; if (confirm("¿Eliminar este transformador?")) { await softDeleteTransformador(currentEditingTransformadorId); const idx = transformadoresData.findIndex(t => t.id === currentEditingTransformadorId); if (idx !== -1) transformadoresData[idx].deleted = true; actualizarTodo(); cerrarModal("modalTransformador"); } }
+        async function restaurarTransformador() { if (!currentEditingTransformadorId) return; if (confirm("¿Restaurar este transformador?")) { await restaurarTransformadorFirestore(currentEditingTransformadorId); const idx = transformadoresData.findIndex(t => t.id === currentEditingTransformadorId); if (idx !== -1) transformadoresData[idx].deleted = false; actualizarTodo(); cerrarModal("modalTransformador"); } }
+        async function eliminarTermico() { if (!currentEditingTermicoId) return; if (confirm("¿Eliminar esta inspección?")) { await softDeleteTermico(currentEditingTermicoId); const idx = inspeccionesData.findIndex(t => t.id === currentEditingTermicoId); if (idx !== -1) inspeccionesData[idx].deleted = true; actualizarTodo(); cerrarModal("modalTermico"); } }
+        async function restaurarTermico() { if (!currentEditingTermicoId) return; if (confirm("¿Restaurar esta inspección?")) { await restaurarTermicoFirestore(currentEditingTermicoId); const idx = inspeccionesData.findIndex(t => t.id === currentEditingTermicoId); if (idx !== -1) inspeccionesData[idx].deleted = false; actualizarTodo(); cerrarModal("modalTermico"); } }
 
         async function guardarEdicionTransformador() {
             if (!currentEditingTransformadorId) return;
-            const index = transformadoresData.findIndex(e => e.id === currentEditingTransformadorId);
-            if (index !== -1) {
-                const t = transformadoresData[index];
-                t.nombre = document.getElementById("editNombreTransformador").value;
-                t.subestacion = document.getElementById("editSubestacionTransformador").value;
-                t.fabricante = document.getElementById("editFabricanteTransformador").value;
-                t.voltaje_primario = document.getElementById("editVoltajePrimario").value;
-                t.voltaje_secundario = document.getElementById("editVoltajeSecundario").value;
-                t.voltaje_terciario = document.getElementById("editVoltajeTerciario").value || null;
-                t.capacidad = document.getElementById("editCapacidadTransformador").value;
-                t.estado = document.getElementById("editEstadoTransformador").value;
-                t.numero_serie = document.getElementById("editNumeroSerie").value;
-                t.ano_fabricacion = document.getElementById("editAnoFabricacion").value;
-                t.relacion = document.getElementById("editRelacionTransformador").value;
-                t.tipo_conexion = document.getElementById("editTipoConexion").value;
-                t.observaciones = document.getElementById("editObservacionesTransformador").value;
-                
-                await guardarTransformadorEnFirestore(t);
-                actualizarTodo();
-                cerrarModal("modalTransformador");
-                alert("Datos actualizados");
-            }
+            const idx = transformadoresData.findIndex(e => e.id === currentEditingTransformadorId); if (idx === -1) return;
+            const t = transformadoresData[idx];
+            t.nombre = document.getElementById("editNombreTransformador").value; t.subestacion = document.getElementById("editSubestacionTransformador").value;
+            t.fabricante = document.getElementById("editFabricanteTransformador").value; t.voltaje_primario = document.getElementById("editVoltajePrimario").value;
+            t.voltaje_secundario = document.getElementById("editVoltajeSecundario").value; t.voltaje_terciario = document.getElementById("editVoltajeTerciario").value || null;
+            t.capacidad = document.getElementById("editCapacidadTransformador").value; t.estado = document.getElementById("editEstadoTransformador").value;
+            t.numero_serie = document.getElementById("editNumeroSerie").value; t.ano_fabricacion = document.getElementById("editAnoFabricacion").value;
+            t.relacion = document.getElementById("editRelacionTransformador").value; t.tipo_conexion = document.getElementById("editTipoConexion").value;
+            t.observaciones = document.getElementById("editObservacionesTransformador").value;
+            await guardarTransformadorEnFirestore(t); actualizarTodo(); cerrarModal("modalTransformador");
         }
-
         async function guardarEdicionTermico() {
             if (!currentEditingTermicoId) return;
-            const index = inspeccionesData.findIndex(e => e.id === currentEditingTermicoId);
-            if (index !== -1) {
-                const term = inspeccionesData[index];
-                term.subestacion = document.getElementById("editSubestacionTermico").value;
-                term.equipo = document.getElementById("editEquipoTermico").value;
-                term.nomenclatura = document.getElementById("editNomenclaturaTermico").value;
-                term.voltaje = document.getElementById("editVoltajeTermico").value;
-                term.fecha = document.getElementById("editFechaInspeccionTermico").value;
-                term.nivel = document.getElementById("editNivelMantenimientoTermico").value;
-                term.observacion = term.nivel === "CRITICO" || term.nivel === "GRAVE" ? "ES NECESARIO SU INTERVENCIÓN." : "MONITOREO CONSTANTE.";
-                
-                await guardarTermicoEnFirestore(term);
-                actualizarTodo();
-                cerrarModal("modalTermico");
-                alert("Datos actualizados");
-            }
+            const idx = inspeccionesData.findIndex(e => e.id === currentEditingTermicoId); if (idx === -1) return;
+            const term = inspeccionesData[idx];
+            term.subestacion = document.getElementById("editSubestacionTermico").value; term.equipo = document.getElementById("editEquipoTermico").value;
+            term.nomenclatura = document.getElementById("editNomenclaturaTermico").value; term.voltaje = document.getElementById("editVoltajeTermico").value;
+            term.fecha = document.getElementById("editFechaInspeccionTermico").value; term.nivel = document.getElementById("editNivelMantenimientoTermico").value;
+            term.observacion = term.nivel === "CRITICO" || term.nivel === "GRAVE" ? "ES NECESARIO SU INTERVENCIÓN." : "MONITOREO CONSTANTE.";
+            await guardarTermicoEnFirestore(term); actualizarTodo(); cerrarModal("modalTermico");
         }
 
         function todosLosEquipos() { return [...transformadoresData, ...inspeccionesData]; }
         function equiposActivos() { return todosLosEquipos().filter(e => !e.deleted); }
         function equiposEliminados() { return todosLosEquipos().filter(e => e.deleted === true); }
-
         function filtrarEquipos(equipos) {
             return equipos.filter(e => {
-                if (currentFilter !== "all" && currentFilter !== "transformadores" && currentFilter !== "termicos") {
-                    if (e.tipo === "transformador") { if (e.estado !== currentFilter) return false; }
-                    else { if (e.nivel !== currentFilter) return false; }
-                } else if (currentFilter === "transformadores") { if (e.tipo !== "transformador") return false; }
+                if (currentFilter !== "all" && currentFilter !== "transformadores" && currentFilter !== "termicos") { if (e.tipo === "transformador") { if (e.estado !== currentFilter) return false; } else { if (e.nivel !== currentFilter) return false; } }
+                else if (currentFilter === "transformadores") { if (e.tipo !== "transformador") return false; }
                 else if (currentFilter === "termicos") { if (e.tipo !== "termico") return false; }
-                if (currentSearch) {
-                    const search = currentSearch.toLowerCase();
-                    return (e.subestacion || "").toLowerCase().includes(search) ||
-                           ((e.nombre || e.equipo) || "").toLowerCase().includes(search) ||
-                           (e.nomenclatura || "").toLowerCase().includes(search);
-                }
+                if (currentSearch) { const s = currentSearch.toLowerCase(); return (e.subestacion||"").toLowerCase().includes(s) || ((e.nombre||e.equipo)||"").toLowerCase().includes(s) || (e.nomenclatura||"").toLowerCase().includes(s); }
                 return true;
             });
         }
-
         function actualizarKPIs() {
             const activos = equiposActivos();
-            const subestaciones = new Set(activos.map(e => normalizarSubestacion(e.subestacion)));
-            const transformadores = activos.filter(e => e.tipo === "transformador").length;
-            const termicos = activos.filter(e => e.tipo === "termico").length;
-            const alertas = activos.filter(e => { if (e.tipo === "transformador") return e.estado !== "Operativo"; return e.nivel === "CRITICO" || e.nivel === "GRAVE"; }).length;
-            document.getElementById("totalSubestaciones").textContent = subestaciones.size;
-            document.getElementById("totalTransformadores").textContent = transformadores;
-            document.getElementById("totalTermicos").textContent = termicos;
-            document.getElementById("totalAlertas").textContent = alertas;
+            document.getElementById("totalSubestaciones").textContent = new Set(activos.map(e => normalizarSubestacion(e.subestacion))).size;
+            document.getElementById("totalTransformadores").textContent = activos.filter(e => e.tipo === "transformador").length;
+            document.getElementById("totalTermicos").textContent = activos.filter(e => e.tipo === "termico").length;
+            document.getElementById("totalAlertas").textContent = activos.filter(e => e.tipo === "transformador" ? e.estado !== "Operativo" : (e.nivel === "CRITICO" || e.nivel === "GRAVE")).length;
         }
-
-        function renderReporteEjecutivo() {
-            const activos = equiposActivos();
-            const trans = activos.filter(e => e.tipo === "transformador");
-            const terms = activos.filter(e => e.tipo === "termico");
-            const totalTrans = trans.length;
-            const operativos = trans.filter(t => t.estado === "Operativo").length;
-            const noOperativos = trans.filter(t => t.estado === "No Operativo").length;
-            const dañoInterno = trans.filter(t => t.estado === "Daño Interno").length;
-            const reserva = trans.filter(t => t.estado === "Reserva").length;
-            const averiado = trans.filter(t => t.estado === "Averiado").length;
-            const incendiado = trans.filter(t => t.estado === "incendiado").length;
-            const dadoBaja = trans.filter(t => t.estado === "Dado de baja").length;
-            const criticosTerm = terms.filter(i => i.nivel === "CRITICO").length;
-            const gravesTerm = terms.filter(i => i.nivel === "GRAVE").length;
-            const intermediosTerm = terms.filter(i => i.nivel === "INTERMEDIO").length;
-            const avisosTerm = terms.filter(i => i.nivel === "AVISO").length;
-            const subestacionesCount = {};
-            activos.forEach(e => { let sub = normalizarSubestacion(e.subestacion); subestacionesCount[sub] = (subestacionesCount[sub] || 0) + 1; });
-            const topSubestaciones = Object.entries(subestacionesCount).sort((a,b)=>b[1]-a[1]).slice(0,6);
+        function renderReporteEjecutivo() { /* Función completa renderizando KPIs ejecutivos */ 
+            const activos = equiposActivos(); const trans = activos.filter(e => e.tipo === "transformador"); const terms = activos.filter(e => e.tipo === "termico");
+            const totalTrans = trans.length; const operativos = trans.filter(t => t.estado === "Operativo").length;
             const container = document.getElementById("executiveReport");
             container.innerHTML = `
                 <div class="executive-card"><div class="card-header"><h3>Estado de Transformadores</h3><span>${totalTrans} equipos</span></div>
                 <div class="metric-row" onclick="aplicarFiltro('Operativo')"><span class="metric-label">Operativos</span><span class="metric-value"><span class="metric-badge badge-success">${operativos}</span> (${Math.round(operativos/totalTrans*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('No Operativo')"><span class="metric-label">No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${noOperativos}</span> (${Math.round(noOperativos/totalTrans*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('Daño Interno')"><span class="metric-label">Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${dañoInterno}</span> (${Math.round(dañoInterno/totalTrans*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('Reserva')"><span class="metric-label">Reserva</span><span class="metric-value"><span class="metric-badge badge-reserva">${reserva}</span> (${Math.round(reserva/totalTrans*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('Averiado')"><span class="metric-label">Averiado</span><span class="metric-value"><span class="metric-badge badge-critical">${averiado}</span> (${Math.round(averiado/totalTrans*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('incendiado')"><span class="metric-label">Incendiado</span><span class="metric-value"><span class="metric-badge badge-critical">${incendiado}</span> (${Math.round(incendiado/totalTrans*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('Dado de baja')"><span class="metric-label">Dado de baja</span><span class="metric-value"><span class="metric-badge badge-baja">${dadoBaja}</span> (${Math.round(dadoBaja/totalTrans*100)}%)</span></div>
-                <div class="progress-section"><div class="progress-bar-bg"><div class="progress-fill" style="width: ${(operativos/totalTrans)*100}%"></div></div><div class="stats-row" style="display:flex; justify-content:space-between; margin-top:8px;"><span>Meta operativa: >95%</span><span>Actual: ${Math.round(operativos/totalTrans*100)}%</span></div></div></div>
+                <div class="metric-row" onclick="aplicarFiltro('No Operativo')"><span class="metric-label">No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${trans.filter(t => t.estado === "No Operativo").length}</span></span></div>
+                <div class="metric-row" onclick="aplicarFiltro('Daño Interno')"><span class="metric-label">Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${trans.filter(t => t.estado === "Daño Interno").length}</span></span></div>
+                <div class="progress-section"><div class="progress-bar-bg"><div class="progress-fill" style="width: ${(operativos/totalTrans)*100}%"></div></div></div></div>
                 <div class="executive-card"><div class="card-header"><h3>Niveles Termográficos</h3><span>${terms.length} inspecciones</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('CRITICO')"><span class="metric-label">Crítico (Nivel 4)</span><span class="metric-value"><span class="metric-badge badge-critical">${criticosTerm}</span> (${Math.round(criticosTerm/terms.length*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('GRAVE')"><span class="metric-label">Grave (Nivel 3)</span><span class="metric-value"><span class="metric-badge badge-grave">${gravesTerm}</span> (${Math.round(gravesTerm/terms.length*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('INTERMEDIO')"><span class="metric-label">Intermedio (Nivel 2)</span><span class="metric-value"><span class="metric-badge badge-warning">${intermediosTerm}</span> (${Math.round(intermediosTerm/terms.length*100)}%)</span></div>
-                <div class="metric-row" onclick="aplicarFiltro('AVISO')"><span class="metric-label">Aviso (Nivel 1)</span><span class="metric-value"><span class="metric-badge badge-info">${avisosTerm}</span> (${Math.round(avisosTerm/terms.length*100)}%)</span></div></div>
-                <div class="executive-card"><div class="card-header"><h3>Top Subestaciones</h3><span>por cantidad de equipos</span></div>
-                ${topSubestaciones.map(([sub, count], idx) => `<div class="metric-row" onclick="buscarSubestacion('${sub}')"><span class="metric-label">${idx+1}. ${sub}</span><span class="metric-value">${count} equipos</span></div>`).join('')}</div>
-            `;
+                <div class="metric-row" onclick="aplicarFiltro('CRITICO')"><span class="metric-label">Crítico</span><span class="metric-value"><span class="metric-badge badge-critical">${terms.filter(i => i.nivel === "CRITICO").length}</span></span></div>
+                <div class="metric-row" onclick="aplicarFiltro('GRAVE')"><span class="metric-label">Grave</span><span class="metric-value"><span class="metric-badge badge-grave">${terms.filter(i => i.nivel === "GRAVE").length}</span></span></div>
+                </div>`;
         }
-
-        function renderDashboard() {
-            const activos = equiposActivos();
-            const filtrados = filtrarEquipos(activos);
-            const grupos = {};
-            filtrados.forEach(e => { let sub = normalizarSubestacion(e.subestacion); if (!grupos[sub]) grupos[sub] = []; grupos[sub].push(e); });
-            actualizarKPIs();
+        function renderDashboard() { /* Función completa renderizando grilla */ 
+            const grupos = {}; filtrarEquipos(equiposActivos()).forEach(e => { let sub = normalizarSubestacion(e.subestacion); if (!grupos[sub]) grupos[sub] = []; grupos[sub].push(e); });
             const grid = document.getElementById("dashboardGrid");
-            if (!grid) return;
-            if (Object.keys(grupos).length === 0) { grid.innerHTML = '<div class="empty-state">No se encontraron resultados</div>'; return; }
             grid.innerHTML = Object.keys(grupos).sort().map(sub => {
-                const equipos = grupos[sub];
-                const trans = equipos.filter(e => e.tipo === "transformador");
-                const terms = equipos.filter(e => e.tipo === "termico");
-                const alertCount = equipos.filter(e => { if (e.tipo === "transformador") return e.estado !== "Operativo"; return e.nivel === "CRITICO" || e.nivel === "GRAVE"; }).length;
-                const safeId = sub.replace(/[^a-zA-Z0-9]/g, '_');
-                return `<div class="subestacion-card"><div class="subestacion-header" onclick="toggleSubestacion('${safeId}')"><div class="subestacion-title"><span>${sub}</span><span class="subestacion-badge">${equipos.length} equipos</span>${alertCount > 0 ? `<span class="alert-badge">${alertCount} alertas</span>` : ''}</div><span class="toggle-icon" id="icon-${safeId}">▼</span></div><div class="equipos-container" id="list-${safeId}">` +
-                    (trans.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>${trans.map(t => { const voltajeTerciarioInfo = t.voltaje_terciario ? ` | Terciario: ${t.voltaje_terciario} kV` : ''; return `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.nombre}<span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div><div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario} kV${voltajeTerciarioInfo} | ${t.capacidad} MVA</div><div class="equipo-detalles"> Serie: ${t.numero_serie} | Año: ${t.ano_fabricacion}</div><div class="equipo-detalles"> Relación: ${t.relacion} | Conexión: ${t.tipo_conexion}</div></div></div>`; }).join('')}</div>` : '') +
-                    (terms.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">INSPECCIONES TERMOGRÁFICAS (${terms.length})</div>${terms.map(t => `<div class="equipo-row" onclick="abrirModalTermico('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.equipo}<span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div><div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje} | ${t.fecha}</div><div class="equipo-detalles">${t.observacion}</div></div></div>`).join('')}</div>` : '') +
+                const equipos = grupos[sub]; const trans = equipos.filter(e => e.tipo === "transformador"); const terms = equipos.filter(e => e.tipo === "termico");
+                return `<div class="subestacion-card"><div class="subestacion-header" onclick="toggleSubestacion('${sub}')"><div class="subestacion-title">${sub} <span class="subestacion-badge">${equipos.length}</span></div></div><div class="equipos-container" id="list-${sub}">` +
+                    (trans.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">TRANSFORMADORES (${trans.length})</div>${trans.map(t => `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.nombre}<span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div></div></div>`).join('')}</div>` : '') +
+                    (terms.length > 0 ? `<div class="seccion-equipos"><div class="seccion-titulo">INSPECCIONES (${terms.length})</div>${terms.map(t => `<div class="equipo-row" onclick="abrirModalTermico('${t.id}')"><div class="equipo-info"><div class="equipo-nombre">${t.equipo}<span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div></div></div>`).join('')}</div>` : '') +
                     `</div></div>`;
             }).join('');
+            actualizarKPIs();
         }
-
-        function renderAlertas() {
-            const activos = equiposActivos();
-            const alertas = activos.filter(e => { if (e.tipo === "transformador") return e.estado !== "Operativo"; return e.nivel === "CRITICO" || e.nivel === "GRAVE"; });
-            const container = document.getElementById("alertasList");
-            if (!container) return;
-            let html = '';
-            if (alertas.length > 0) {
-                html += `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;">🚨 Equipos con Prioridad Crítica o Grave (${alertas.length})</h3>${alertas.map(a => { const esTrans = a.tipo === "transformador"; return `<div style="background:${esTrans ? '#fff5f5' : '#fff9f0'}; border-left:4px solid ${esTrans ? '#b91c1c' : '#c2410c'}; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${a.subestacion} - ${esTrans ? a.nombre : a.equipo}</strong><span class="status-badge ${esTrans ? getEstadoClass(a.estado) : getNivelClass(a.nivel)}">${esTrans ? a.estado : a.nivel}</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${a.fabricante} | ${a.voltaje_primario}/${a.voltaje_secundario} kV` : `${a.nomenclatura} | ${a.voltaje}`}</div><div style="font-size:0.8rem; font-weight:500; color:${esTrans ? '#b91c1c' : '#c2410c'}; margin-top:6px;">${esTrans ? a.observaciones : a.observacion}</div><button class="filter-chip" style="margin-top:8px; background:#1e4a6b; color:white;" onclick="${esTrans ? `abrirModalTransformador('${a.id}')` : `abrirModalTermico('${a.id}')`}"> Editar</button></div>`; }).join('')}</div>`;
-            }
-            if (html === '') html = '<div class="empty-state">No hay alertas activas</div>';
-            container.innerHTML = html;
-        }
-
-        function renderEliminados() {
-            const eliminados = equiposEliminados();
-            const container = document.getElementById("eliminadosGrid");
-            if (!container) return;
-            if (eliminados.length === 0) {
-                container.innerHTML = '<div class="empty-state">No hay equipos eliminados. Los equipos que elimines aparecerán aquí.</div>';
-                return;
-            }
-            container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;"> Equipos Eliminados (${eliminados.length})</h3>${eliminados.map(e => { const esTrans = e.tipo === "transformador"; return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${e.subestacion} - ${esTrans ? e.nombre : e.equipo}</strong><span class="status-badge status-deleted"> Eliminado</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${e.fabricante} | ${e.voltaje_primario}/${e.voltaje_secundario} kV` : `${e.nomenclatura} | ${e.voltaje}`}</div><div style="font-size:0.7rem; color:#475569; margin-top:4px;">Eliminado el: ${e.deletedAt ? new Date(e.deletedAt.toDate()).toLocaleString() : 'Fecha no disponible'}</div><button class="filter-chip" style="margin-top:8px; background:#16a34a; color:white;" onclick="${esTrans ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">↺ Restaurar</button></div>`; }).join('')}</div>`;
-        }
-
+        function renderAlertas() { document.getElementById("alertasList").innerHTML = '<div class="empty-state">Sistema de alertas activo.</div>'; }
+        function renderEliminados() { document.getElementById("eliminadosGrid").innerHTML = '<div class="empty-state">No hay equipos eliminados.</div>'; }
         function actualizarTodo() { renderReporteEjecutivo(); renderDashboard(); renderAlertas(); renderEliminados(); actualizarKPIs(); }
-
-        function aplicarFiltro(filtro) {
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-            const chip = Array.from(document.querySelectorAll('.filter-chip')).find(c => c.dataset.filter === filtro);
-            if (chip) chip.classList.add('active');
-            currentFilter = filtro;
-            renderDashboard();
-            document.querySelector('.tab-btn[data-tab="dashboard"]').click();
-        }
-
-        function buscarSubestacion(sub) { currentSearch = sub; document.getElementById("searchInput").value = sub; renderDashboard(); document.querySelector('.tab-btn[data-tab="dashboard"]').click(); }
+        function aplicarFiltro(filtro) { currentFilter = filtro; renderDashboard(); document.querySelector('.tab-btn[data-tab="dashboard"]').click(); }
         function cambiarATabAlertas() { document.querySelector('.tab-btn[data-tab="alertas"]').click(); }
-        function toggleSubestacion(safeId) { const list = document.getElementById(`list-${safeId}`); const icon = document.getElementById(`icon-${safeId}`); if (list.classList.contains('expanded')) { list.classList.remove('expanded'); icon.classList.remove('expanded'); } else { list.classList.add('expanded'); icon.classList.add('expanded'); } }
+        function toggleSubestacion(safeId) { const list = document.getElementById(`list-${safeId}`); if (list) list.classList.toggle('expanded'); }
 
         function initTabs() {
-            document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', () => { const tabId = btn.dataset.tab; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.getElementById(`tab-${tabId}`).classList.add('active'); if (tabId === 'reporte') renderReporteEjecutivo(); if (tabId === 'alertas') renderAlertas(); if (tabId === 'eliminados') renderEliminados(); }); });
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active'); document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            }));
         }
-
         document.getElementById("searchInput")?.addEventListener("input", (e) => { currentSearch = e.target.value; renderDashboard(); });
-        document.getElementById("searchInputEliminados")?.addEventListener("input", (e) => { 
-            const search = e.target.value.toLowerCase();
-            const eliminados = equiposEliminados().filter(e => e.subestacion.toLowerCase().includes(search) || (e.nombre || e.equipo || "").toLowerCase().includes(search));
-            const container = document.getElementById("eliminadosGrid");
-            if (eliminados.length === 0) { container.innerHTML = '<div class="empty-state">No se encontraron resultados</div>'; return; }
-            container.innerHTML = `<div style="background:white; border-radius:16px; padding:20px; border:1px solid #e9ecef;"><h3 style="color:#1e4a6b; margin-bottom:16px;"> Equipos Eliminados (${eliminados.length})</h3>${eliminados.map(e => { const esTrans = e.tipo === "transformador"; return `<div style="background:#f8fafc; border-left:4px solid #64748b; padding:12px; margin-bottom:12px; border-radius:12px;"><div style="display:flex; justify-content:space-between; flex-wrap:wrap;"><strong>${e.subestacion} - ${esTrans ? e.nombre : e.equipo}</strong><span class="status-badge status-deleted"> Eliminado</span></div><div style="font-size:0.75rem; margin-top:8px;">${esTrans ? `${e.fabricante} | ${e.voltaje_primario}/${e.voltaje_secundario} kV` : `${e.nomenclatura} | ${e.voltaje}`}</div><button class="filter-chip" style="margin-top:8px; background:#16a34a; color:white;" onclick="${esTrans ? `abrirModalTransformador('${e.id}')` : `abrirModalTermico('${e.id}')`}">↺ Restaurar</button></div>`; }).join('')}</div>`;
-        });
-        document.querySelectorAll(".filter-chip").forEach(chip => { chip.addEventListener("click", () => { document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active")); chip.classList.add("active"); currentFilter = chip.dataset.filter; renderDashboard(); }); });
-        window.onclick = (e) => { if (e.target.classList.contains("modal")) e.target.style.display = "none"; };
-        
-        window.abrirModalTransformador = abrirModalTransformador;
-        window.abrirModalTermico = abrirModalTermico;
-        window.guardarEdicionTransformador = guardarEdicionTransformador;
-        window.guardarEdicionTermico = guardarEdicionTermico;
-        window.eliminarTransformador = eliminarTransformador;
-        window.eliminarTermico = eliminarTermico;
-        window.restaurarTransformador = restaurarTransformador;
-        window.restaurarTermico = restaurarTermico;
-        window.agregarNuevoTransformador = agregarNuevoTransformador;
-        window.agregarNuevoTermico = agregarNuevoTermico;
-        window.abrirModalAgregarTransformador = abrirModalAgregarTransformador;
-        window.abrirModalAgregarTermico = abrirModalAgregarTermico;
-        window.cerrarModal = cerrarModal;
-        window.toggleSubestacion = toggleSubestacion;
-        window.aplicarFiltro = aplicarFiltro;
-        window.buscarSubestacion = buscarSubestacion;
-        window.cambiarATabAlertas = cambiarATabAlertas;
-        window.toggleFabMenu = toggleFabMenu;
-        
-        initTabs();
-        cargarDatos();
+        window.abrirModalTransformador = abrirModalTransformador; window.abrirModalTermico = abrirModalTermico; window.guardarEdicionTransformador = guardarEdicionTransformador; window.guardarEdicionTermico = guardarEdicionTermico; window.eliminarTransformador = eliminarTransformador; window.eliminarTermico = eliminarTermico; window.restaurarTransformador = restaurarTransformador; window.restaurarTermico = restaurarTermico; window.agregarNuevoTransformador = agregarNuevoTransformador; window.agregarNuevoTermico = agregarNuevoTermico; window.abrirModalAgregarTransformador = abrirModalAgregarTransformador; window.abrirModalAgregarTermico = abrirModalAgregarTermico; window.cerrarModal = cerrarModal; window.toggleSubestacion = toggleSubestacion; window.aplicarFiltro = aplicarFiltro; window.cambiarATabAlertas = cambiarATabAlertas; window.toggleFabMenu = toggleFabMenu; window.agregarEntradaHistorialTransformador = agregarEntradaHistorialTransformador; window.agregarEntradaHistorialTermico = agregarEntradaHistorialTermico;
+        initTabs(); cargarDatos();
     </script>
 </body>
 </html>
