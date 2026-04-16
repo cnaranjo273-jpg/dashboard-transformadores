@@ -70,7 +70,7 @@
         .edit-form { margin-top: 20px; padding-top: 16px; border-top: 1px solid #eef2f5; }
         .edit-form label { display: block; font-size: 0.75rem; font-weight: 500; color: #475569; margin-bottom: 4px; }
         .edit-form input, .edit-form select, .edit-form textarea { width: 100%; padding: 8px 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 10px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
         .save-btn { background: #1e4a6b; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; margin-bottom: 8px; }
         .delete-btn-modal { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; }
         .empty-state { text-align: center; padding: 40px; color: #6c7a8a; }
@@ -147,9 +147,10 @@
                 <label>Nombre</label><input type="text" id="editNombreTransformador">
                 <label>Subestación</label><input type="text" id="editSubestacionTransformador">
                 <label>Fabricante</label><input type="text" id="editFabricanteTransformador">
-                <div class="form-row">
+                <div class="form-row-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                     <div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div>
                     <div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div>
+                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div>
                 </div>
                 <div class="form-row">
                     <div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"></div>
@@ -746,6 +747,7 @@
             document.getElementById("editFabricanteTransformador").value = e.fabricante || "";
             document.getElementById("editVoltajePrimario").value = e.voltaje_primario || "";
             document.getElementById("editVoltajeSecundario").value = e.voltaje_secundario || "";
+            document.getElementById("editVoltajeTerciario").value = e.voltaje_terciario || "";
             document.getElementById("editCapacidadTransformador").value = e.capacidad || "";
             document.getElementById("editRelacionTransformador").value = e.relacion || "";
             document.getElementById("editEstadoTransformador").value = e.estado || "Operativo";
@@ -848,6 +850,7 @@
             e.fabricante = document.getElementById("editFabricanteTransformador").value;
             e.voltaje_primario = document.getElementById("editVoltajePrimario").value;
             e.voltaje_secundario = document.getElementById("editVoltajeSecundario").value;
+            e.voltaje_terciario = document.getElementById("editVoltajeTerciario").value;
             e.capacidad = document.getElementById("editCapacidadTransformador").value;
             e.relacion = document.getElementById("editRelacionTransformador").value;
             e.estado = document.getElementById("editEstadoTransformador").value;
