@@ -91,7 +91,23 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="loginScreen" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a2b44 0%, #1e4a6b 100%);">
+        <div style="background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
+            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;">🔐 Acceso al Dashboard</h2>
+            <div id="loginError" style="color: #dc2626; font-size: 0.8rem; margin-bottom: 16px; display: none;"></div>
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Email</label>
+                <input type="email" id="loginEmail" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;" placeholder="correo@eeq.com.ec">
+            </div>
+        <div style="margin-bottom: 24px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Contraseña</label>
+            <input type="password" id="loginPassword" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;" placeholder="••••••••">
+        </div>
+            <button onclick="doLogin()" style="width: 100%; padding: 14px; background: #1e4a6b; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">Ingresar</button>
+            <p style="text-align: center; margin-top: 16px; font-size: 0.8rem; color: #64748b;">Solo personal autorizado</p>
+        </div>
+    </div>
+    <div class="container" id="mainApp" style="display: none;">
         <div class="header">
             <div>
                 <h1>Empresa Eléctrica Quito</h1>
@@ -306,8 +322,45 @@
             </div>
         </div>
     </div>
+    <div id="modalUsuarios" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h2>👥 Gestión de Usuarios</h2>
+            <span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span>
+        </div>
+        <div class="edit-form">
+            <!-- Formulario para nuevo usuario -->
+            <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                <h3 style="color: #1e4a6b; margin-bottom: 12px;">➕ Nuevo Usuario</h3>
+                    <div class="form-row">
+                        <div><label>Nombre Completo</label><input type="text" id="newUserName" placeholder="Ej: Juan Pérez"></div>
+                        <div><label>Email</label><input type="email" id="newUserEmail" placeholder="correo@eeq.com.ec"></div>
+                    </div>
+                    <div class="form-row">
+                        <div><label>Contraseña</label><input type="password" id="newUserPassword" placeholder="Mínimo 6 caracteres"></div>
+                        <div><label>Rol</label>
+                            <select id="newUserRole">
+                                <option value="admin">Administrador</option>
+                                <option value="supervisor">Supervisor</option>
+                                <option value="operador">Operador</option>
+                                <option value="invitado">Invitado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="save-btn" onclick="crearNuevoUsuario()" style="width: auto; padding: 10px 20px;">Crear Usuario</button>
+                </div>
+            
+                <!-- Lista de usuarios existentes -->
+                <h3 style="color: #1e4a6b; margin-bottom: 12px;">📋 Usuarios Registrados</h3>
+                <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;">
+                    <p style="color: #64748b; text-align: center;">Cargando usuarios...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script>
         const firebaseConfig = {
@@ -329,6 +382,287 @@
         let currentSearch = "";
         let currentEditingId = null;
         let currentEditingTipo = null;
+        
+        const auth = firebase.auth();
+        const ROLES_PERMITIDOS = ["admin", "supervisor", "operador", "invitado"];
+        let currentUser = null;
+        async function doLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+              errorEl.textContent = 'Completa todos los campos';
+              errorEl.style.display = 'block';
+              return;  
+            }
+
+            errorEl.style.display = 'none';
+            try {
+              const userCred = await auth.signInWithEmailAndPassword(email, password);
+              const user = userCred.user;
+              const userDoc = await db.collection('usuarios').doc(user.uid).get();
+              let userData;
+              if (!userDoc.exists) {
+                userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName || email.split('@')[0],
+                    role: 'invitado',
+                    createdAt: new Date().toISOString()
+                    } ;
+                    await db.collection('usuarios').doc(user.uid).set(userData); 
+                } else {
+                userData = userDoc.data();
+                }
+                if (!ROLES_PERMITIDOS.includes(userData.role)) {
+                    await auth.signOut();
+                    errorEl.textContent = 'No tienes permiso para acceder a este dashboard';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+                currentUser ={uid: user.uid, ...userData};
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                updateUserUI();
+                await cargarDatos();
+
+            }   catch (error){
+                console.error('Error de login:', error);
+                let mensaje = 'Error al iniciar sesión';
+                if (error.code === 'auth/user-not-found') mensaje = 'Usuario no encontrado';
+                if (error.code === 'auth/wrong-password') mensaje = 'Contraseña incorrecta';
+                if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
+                if (error.code === 'auth/too-many-requests') mensaje = 'Demasiados intentos. Intenta más tarde';
+                errorEl.textContent = mensaje;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function updateUserUI(){
+          if (!currentUser) return;
+          const headerDiv = document.querySelector('.header div');
+          if (headerDiv) {
+            const oldUserInfo = document.getElementById('userInfoHeader');
+            if (oldUserInfo) oldUserInfo.remove();
+            const userInfo = document.createElement('div');
+            userInfo.id = 'userInfoHeader';
+            userInfo.style.display = 'flex';
+            userInfo.style.alignItems = 'center';
+            userInfo.style.gap = '16px';
+            userInfo.style.marginLeft = 'auto';
+            let adminButton = '';
+             if (currentUser.role === 'admin') {
+                 adminButton = `<button onclick="cargarListaUsuarios()" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-right: 8px;">👥 Usuarios</button>`;
+             }
+            userInfo.innerHTML = `
+                ${adminButton}
+                <span style="color: white; font-size: 0.85rem;">
+                        👤 ${currentUser.name || currentUser.email}
+                     <span style="background: ${currentUser.role === 'admin' ? '#16a34a' : '#d97706'}; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px;">
+                        ${currentUser.role}
+                     </span>
+               </span>
+               <button onclick="doLogout()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;">
+                    Cerrar Sesión 
+                </button>
+                `;
+               headerDiv.appendChild(userInfo); 
+          }
+          const esAdmin = currentUser.role === 'admin';
+          const esSupervisor = currentUser.role === 'supervisor' || esAdmin;
+          const esOperador = currentUser.role === 'operador' || esSupervisor;
+          if (!esOperador) {document.getElementById('fabOptions').innerHTML = '';}
+          if (!esAdmin) {
+            const tabEliminados = document.querySelector('.tab-btn[data-tab="eliminados"]');
+           if (tabEliminados) tabEliminados.style.display = 'none';
+          } 
+        }
+
+        async function doLogout() {
+          try {
+            await auth.signOut();
+            currentUser = null;
+            dataLoaded = false; 
+            transformadoresData = [];
+            inspeccionesData = [];
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+          } catch (error){
+            console.error('Error al cerrar sesión:', error);
+          }
+        }
+
+        auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            const userDoc = await db.collection('usuarios').doc(user.uid).get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                if (ROLES_PERMITIDOS.includes(userData.role)) {
+                   currentUser = { uid: user.uid, ...userData };
+                   document.getElementById('loginScreen').style.display = 'none';
+                   document.getElementById('mainApp').style.display = 'block';
+                   updateUserUI();
+                   await cargarDatos();
+                } else {
+                    await auth.signOut();
+                    document.getElementById('loginScreen').style.display = 'flex';
+                    document.getElementById('mainApp').style.display = 'none'; 
+                }  
+            } else {
+               // Si el usuario existe en Auth pero no en Firestore
+               await auth.signOut();
+               document.getElementById('loginScreen').style.display = 'flex';
+               document.getElementById('mainApp').style.display = 'none';
+            }            
+        } else {
+           document.getElementById('loginScreen').style.display = 'flex';
+           document.getElementById('mainApp').style.display = 'none'; 
+        }
+    });
+
+        async function crearUsuarioAutorizado(email, password, nombre, rol) {
+            if (currentUser?.role !== 'admin') {
+               alert('Solo administradores pueden crear usuarios');
+               return;
+            }
+            try {
+             const userCred = await auth.createUserWithEmailAndPassword(email, password);
+              await db.collection('usuarios').doc(userCred.user.uid).set({
+              email: email, 
+              name: nombre, 
+              role: rol, 
+              createdAt: new Date().toISOString()
+            });
+              alert('Usuario creado exitosamente');
+            } catch (error){
+               alert('Error: ' + error.message); 
+            }    
+        }
+
+        async function cargarListaUsuarios() {
+           if (currentUser?.role !== 'admin') {
+           alert('Solo administradores pueden gestionar usuarios');
+           return;
+           } try {
+            const snapshot = await db.collection('usuarios').get();
+            const container = document.getElementById('listaUsuarios');
+            if (snapshot.empty) {
+                container.innerHTML = '<p style="color: #64748b; text-align: center;">No hay usuarios registrados</p>';
+                document.getElementById('modalUsuarios').style.display = 'flex';
+                return;
+            }
+            let html = '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<thead><tr style="background: #f8fafc;"><th style="padding: 10px; text-align: left;">Nombre</th><th style="padding: 10px; text-align: left;">Email</th><th style="padding: 10px; text-align: left;">Rol</th><th style="padding: 10px; text-align: left;">Acciones</th></tr></thead><tbody>';    
+            snapshot.forEach(doc => {
+            const u = doc.data();
+            const rolColor = u.role === 'admin' ? '#16a34a' : (u.role === 'supervisor' ? '#2563eb' : (u.role === 'operador' ? '#d97706' : '#64748b'));
+            html += `<tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 10px;"><strong>${u.name || '—'}</strong></td>
+            <td style="padding: 10px;">${u.email}</td>
+            <td style="padding: 10px;">
+            <select onchange="cambiarRolUsuario('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+            <option value="supervisor" ${u.role === 'supervisor' ? 'selected' : ''}>Supervisor</option>
+            <option value="operador" ${u.role === 'operador' ? 'selected' : ''}>Operador</option>
+            <option value="invitado" ${u.role === 'invitado' ? 'selected' : ''}>Invitado</option>
+            </select>
+            </td>  
+            <td style="padding: 10px;">
+            ${doc.id !== currentUser?.uid ? `<button onclick="eliminarUsuario('${doc.id}')" style="background: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;">Eliminar</button>` : '<span style="color: #64748b;">Tú</span>'}            
+            </td>
+            </tr>`;
+             });
+            html += '</tbody></table>'; 
+            container.innerHTML = html;
+            document.getElementById('modalUsuarios').style.display = 'flex';
+           } catch(error) {
+            console.error('Error cargando usuarios:', error);
+            alert('Error al cargar usuarios');
+           }
+        }
+
+        async function crearNuevoUsuario() {
+            if (currentUser?.role !== 'admin') {
+            alert('Solo administradores pueden crear usuarios');
+            return;
+            }
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim();
+            const password = document.getElementById('newUserPassword').value;
+            const role = document.getElementById('newUserRole').value;
+            if (!name || !email || !password) {
+              alert('Complete todos los campos');
+              return;
+            }
+            if (password.length < 6) {
+              alert('La contraseña debe tener al menos 6 caracteres');
+              return;
+            }
+            try{
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                await db.collection('usuarios').doc(userCred.user.uid).set({
+                    uid: userCred.user.uid,
+                    name: name,
+                    email: email,
+                    role: role,
+                    createdAt: new Date().toISOString(),
+                    createdBy: currentUser.uid
+                });
+                alert(`Usuario ${email} creado con rol: ${role}`);
+                document.getElementById('newUserName').value = '';
+                document.getElementById('newUserEmail').value = '';
+                document.getElementById('newUserPassword').value = '';
+                cargarListaUsuarios();
+            }   catch (error) {
+                console.error('Error:', error);
+                let mensaje = 'Error al crear usuario';
+                if (error.code === 'auth/email-already-in-use') mensaje = 'Este email ya está registrado';
+                if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
+                if (error.code === 'auth/weak-password') mensaje = 'La contraseña es muy débil';
+                alert(mensaje);
+            }
+        }
+    
+        async function cambiarRolUsuario(uid, nuevoRol) {
+            if (currentUser?.role !== 'admin') {
+               alert('Solo administradores pueden cambiar roles');
+               return;
+            }
+            if (uid === currentUser.uid) { 
+                alert('No puedes cambiar tu propio rol');
+                return;
+            }
+            try {
+               await db.collection('usuarios').doc(uid).update({ role: nuevoRol });
+               alert('Rol actualizado'); 
+               cargarListaUsuarios();
+            } catch(error){
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function eliminarUsuario(uid) {
+           if (currentUser?.role !== 'admin') {
+             alert('Solo administradores pueden eliminar usuarios');
+             return;
+           }
+           if (uid === currentUser.uid) {
+            alert('No puedes eliminarte a ti mismo');
+            return;
+           }
+           if (!confirm('¿Eliminar este usuario permanentemente? Esta acción no se puede deshacer.')) return;
+           // Eliminar de FIrebase
+           try {
+            await db.collection('usuarios').doc(uid).delete();
+            alert('Usuario eliminado de la base de datos');
+            cargarListaUsuarios();
+           } catch (error) {
+            alert('Error: ' + error.message);
+           }
+        }
 
         const transformadoresRespaldo = [
             { id: 't1', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [], deleted: false },
@@ -1075,10 +1409,15 @@
         window.restaurarTransformador = restaurarTransformador;
         window.restaurarTermico = restaurarTermico;
         window.restaurarEquipo = restaurarEquipo;
+        window.cargarListaUsuarios = cargarListaUsuarios;
+        window.crearNuevoUsuario = crearNuevoUsuario;
+        window.cambiarRolUsuario = cambiarRolUsuario;
+        window.eliminarUsuario = eliminarUsuario; 
         window.recargarDatos = () => cargarDatos(true);
         window.addEventListener('load', () => {
             cargarDatos();
         });
     </script>
+    </div>
 </body>
 </html>
