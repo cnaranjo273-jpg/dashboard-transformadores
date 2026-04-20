@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>EEQ - Sistema de Gestión de Activos Eléctricos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -162,6 +162,10 @@
                     <div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"></div>
                     <div><label>Relación</label><input type="text" id="editRelacionTransformador"></div>
                 </div>
+                <div class="form-row">
+                    <div><label>Tipo de Conexión</label><input type="text" id="editTipo Conexion" placeholder="Ej: DYn1"></div>
+                    <div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion" placeholder="Ej: 2015"></div>
+                </div>                
                 <label>Estado</label>
                 <select id="editEstadoTransformador">
                     <option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option>
@@ -202,8 +206,6 @@
             </div>
         </div>
     </div>
-
-    <!-- MODAL INSPECCIÓN -->
     <div id="modalTermico" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
@@ -267,6 +269,9 @@
                 <div class="form-row">
                     <div><label>Capacidad</label><input type="text" id="newCapacidadTransformador"></div>
                     <div><label>Relación</label><input type="text" id="newRelacionTransformador"></div>
+                <div class="form-row">
+                    <div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1></div>
+                    <div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion" placeholder="Ej:2015"></div>
                 </div>
                 <label>Estado</label>
                 <select id="newEstadoTransformador">
@@ -664,7 +669,7 @@
                         ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
                         ${g.trans.map(t => `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                             <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
-                            <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario} kV | ${t.capacidad} MVA</div>
+                            <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario}/${t.voltaje_terciario} kV | ${t.capacidad} MVA ${t.tipo_conexion ? ` | ${t.tipo_conexion}` : ''}${t.ano_fabricacion ? ` | Año: ${t.ano_fabricacion}` : ''}</div>
                             ${t.proxima_mantencion ? `<div class="equipo-detalles">Próx. Mantención: ${t.proxima_mantencion}</div>` : ''}</div>
                         </div>`).join('')}
                         ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">INSPECCIONES (${g.term.length})</div>` : ''}
@@ -779,6 +784,8 @@
             document.getElementById("editVoltajeTerciario").value = e.voltaje_terciario || "";
             document.getElementById("editCapacidadTransformador").value = e.capacidad || "";
             document.getElementById("editRelacionTransformador").value = e.relacion || "";
+            document.getElementById("editTipoConexion").value = e.subestacion || "";
+            document.getElementById("editAnoFabricacion").value = e.subestacion || "";
             document.getElementById("editEstadoTransformador").value = e.estado || "Operativo";
             document.getElementById("editUltimaInspeccion").value = e.ultima_inspeccion || "";
             document.getElementById("editProximaMantencion").value = e.proxima_mantencion || "";
@@ -883,6 +890,8 @@
             e.voltaje_terciario = document.getElementById("editVoltajeTerciario").value;
             e.capacidad = document.getElementById("editCapacidadTransformador").value;
             e.relacion = document.getElementById("editRelacionTransformador").value;
+            e.tipo_conexion = document.getElementById("editTipoConexion").value;
+            e.ano_fabricacion = document.getElementById("editAnoFabricacion").value;
             e.estado = document.getElementById("editEstadoTransformador").value;
             e.ultima_inspeccion = document.getElementById("editUltimaInspeccion").value;
             e.proxima_mantencion = document.getElementById("editProximaMantencion").value;
@@ -926,6 +935,8 @@
                 voltaje_secundario: document.getElementById("newVoltajeSecundario").value || "N/A",
                 capacidad: document.getElementById("newCapacidadTransformador").value || "N/A",
                 relacion: document.getElementById("newRelacionTransformador").value || "N/A",
+                tipo_conexion: document.getElementById("newTipoConexion").value || "N/A",
+                ano_fabricacion: document.getElementById("newAnoFabricacion").value || "N/A",
                 estado: document.getElementById("newEstadoTransformador").value,
                 proxima_mantencion: document.getElementById("newProximaMantencion").value,
                 ano_fabricacion: document.getElementById("newAnoFabricacion").value,
