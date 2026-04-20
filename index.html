@@ -262,7 +262,7 @@
                 <label>Nombre *</label><input type="text" id="newNombreTransformador">
                 <label>Subestación *</label><input type="text" id="newSubestacionTransformador">
                 <label>Fabricante</label><input type="text" id="newFabricanteTransformador">
-                <div class="form-row">
+                <div class="form-row-3">
                     <div><label>V. Primario</label><input type="text" id="newVoltajePrimario"></div>
                     <div><label>V. Secundario</label><input type="text" id="newVoltajeSecundario"></div>
                     <div><label>V. Terciario</label><input type="text" id="newVoltajeTerciario"></div>
@@ -270,6 +270,7 @@
                 <div class="form-row">
                     <div><label>Capacidad</label><input type="text" id="newCapacidadTransformador"></div>
                     <div><label>Relación</label><input type="text" id="newRelacionTransformador"></div>
+                </div>
                 <div class="form-row">
                     <div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"></div>
                     <div><label>Año Fabricación</label><input type="text" id="newAnoFabricacion" placeholder="Ej: 2015"></div>
@@ -940,7 +941,6 @@
                 ano_fabricacion: document.getElementById("newAnoFabricacion").value || "N/A",
                 estado: document.getElementById("newEstadoTransformador").value,
                 proxima_mantencion: document.getElementById("newProximaMantencion").value,
-                ano_fabricacion: document.getElementById("newAnoFabricacion").value,
                 historial: [],
                 deleted: false,
                 tipo: 'transformador'
