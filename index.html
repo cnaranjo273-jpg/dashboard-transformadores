@@ -45,6 +45,7 @@
         .badge-info { background: #e0f2fe; color: #0c4e6e; }
         .badge-success { background: #e3f7e8; color: #166534; }
         .badge-daño { background: #fecaca; color: #991b1b; }
+        .badge-baja { background: #d1d5db; color: #4b5563; }
         .subestacion-card { background: white; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e9ecef; overflow: hidden; }
         .subestacion-header { background: #f8fafc; padding: 14px 20px; cursor: pointer; display: flex; justify-content: space-between; }
         .subestacion-title { font-weight: 600; color: #1e4a6b; display: flex; gap: 12px; }
@@ -54,7 +55,7 @@
         .seccion-titulo { padding: 10px 20px; font-size: 0.75rem; font-weight: 600; color: #475569; background: white; border-left: 3px solid #1e4a6b; }
         .equipo-row { padding: 12px 20px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
         .equipo-row:hover { background: #fafcfd; }
-        .equipo-nombre { font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+        .equipo-nombre { font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .equipo-detalles { font-size: 0.7rem; color: #6c7a8a; margin-top: 4px; }
         .status-badge { padding: 4px 10px; border-radius: 30px; font-size: 0.65rem; font-weight: 600; }
         .status-critical { background: #fee2e2; color: #b91c1c; }
@@ -77,10 +78,10 @@
         .save-btn { background: #1e4a6b; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; margin-bottom: 8px; }
         .delete-btn-modal { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; }
         .empty-state { text-align: center; padding: 40px; color: #6c7a8a; }
-        .fab { position: fixed; bottom: 30px; right: 30px; background: #1e4a6b; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; font-size: 24px; }
+        .fab { position: fixed; bottom: 30px; right: 30px; background: #1e4a6b; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .fab-options { position: fixed; bottom: 100px; right: 30px; display: none; flex-direction: column; gap: 12px; z-index: 99; }
         .fab-options.show { display: flex; }
-        .fab-option { background: white; color: #1e4a6b; padding: 12px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .fab-option { background: white; color: #1e4a6b; padding: 12px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-weight: 500; }
         .historial-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid #eef2f5; }
         .historial-list { max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; margin-bottom: 12px; background: #f8fafc; }
         .historial-entry { font-size: 0.75rem; padding: 6px; border-bottom: 1px solid #e2e8f0; }
@@ -88,6 +89,11 @@
         .maintenance-alert { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 8px 12px; margin: 8px 0; border-radius: 8px; }
         .maintenance-overdue { background: #fee2e2; border-left: 4px solid #dc2626; }
         .restore-btn { background: #16a34a; color: white; border: none; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
+        .equipo-info { flex: 1; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .mt-2 { margin-top: 8px; }
+        .mb-2 { margin-bottom: 8px; }
+        .text-center { text-align: center; }
     </style>
 </head>
 <body>
@@ -99,21 +105,24 @@
                 <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Email</label>
                 <input type="email" id="loginEmail" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;" placeholder="correo@eeq.com.ec">
             </div>
-        <div style="margin-bottom: 24px;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Contraseña</label>
-            <input type="password" id="loginPassword" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;" placeholder="••••••••">
-        </div>
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Contraseña</label>
+                <input type="password" id="loginPassword" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;" placeholder="••••••••">
+            </div>
             <button onclick="doLogin()" style="width: 100%; padding: 14px; background: #1e4a6b; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">Ingresar</button>
             <p style="text-align: center; margin-top: 16px; font-size: 0.8rem; color: #64748b;">Solo personal autorizado</p>
         </div>
     </div>
+
     <div class="container" id="mainApp" style="display: none;">
         <div class="header">
             <div>
                 <h1>Empresa Eléctrica Quito</h1>
                 <p>Sistema de Gestión de Activos</p>
             </div>
-            <button class="refresh-btn" onclick="recargarDatos()">Refrescar Datos</button>
+            <div class="flex-between" style="gap: 12px;">
+                <button class="refresh-btn" onclick="recargarDatos()">🔄 Refrescar Datos</button>
+            </div>
         </div>
 
         <div class="kpi-grid">
@@ -140,6 +149,7 @@
                     <span class="filter-chip" data-filter="No Operativo">No Operativos</span>
                     <span class="filter-chip" data-filter="Daño Interno">Daño Interno</span>
                     <span class="filter-chip" data-filter="Reserva">Reserva</span>
+                    <span class="filter-chip" data-filter="Dado de baja">Dado de baja</span>
                     <span class="filter-chip" data-filter="CRITICO">Crítico</span>
                     <span class="filter-chip" data-filter="GRAVE">Grave</span>
                     <span class="filter-chip" data-filter="INTERMEDIO">Intermedio</span>
@@ -162,207 +172,138 @@
         <div class="fab-option" onclick="abrirModalAgregarTransformador()">Nuevo Transformador</div>
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Nueva Inspección</div>
     </div>
-    <div id="modalTransformador" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
-            <div class="edit-form">
-                <label>Nombre</label><input type="text" id="editNombreTransformador">
-                <label>Subestación</label><input type="text" id="editSubestacionTransformador">
-                <label>Fabricante</label><input type="text" id="editFabricanteTransformador">
-                <div class="form-row-3">
-                    <div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div>
-                    <div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div>
-                    <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div>
-                </div>
-                <div class="form-row">
-                    <div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"></div>
-                    <div><label>Relación</label><input type="text" id="editRelacionTransformador"></div>
-                </div>
-                <div class="form-row">
-                    <div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion" placeholder="Ej: DYn1"></div>
-                    <div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion" placeholder="Ej: 2015"></div>
-                </div>                
-                <label>Estado</label>
-                <select id="editEstadoTransformador">
-                    <option value="Operativo">Operativo</option><option value="No Operativo">No Operativo</option>
-                    <option value="Daño Interno">Daño Interno</option><option value="Reserva">Reserva</option>
-                    <option value="Averiado">Averiado</option>
-                </select>
-                
-                <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
-                    <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Mantenimiento</h3>
-                    <div class="form-row">
-                        <div><label>Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
-                        <div><label>Próxima Mantención</label><input type="date" id="editProximaMantencion"></div>
-                    </div>
-                    <div id="mantenimientoStatus" style="margin-top: 8px;"></div>
-                </div>
-                
-                <div class="historial-section">
-                    <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Mantenimientos</h3>
-                    <div id="historialTransformadorList" class="historial-list">Cargando...</div>
-                    <div class="form-row">
-                        <div><label>Fecha</label><input type="date" id="newHistorialFechaT"></div>
-                        <div><label>OT</label><input type="text" id="newHistorialOTT" placeholder="Ej: 20269"></div>
-                    </div>
-                    <div><label>Tipo de Trabajo</label>
-                        <select id="newHistorialTipoT">
-                            <option value="Mantenimiento Preventivo">Mantenimiento Preventivo</option>
-                            <option value="Mantenimiento Correctivo">Mantenimiento Correctivo</option>
-                            <option value="Mantenimiento Predictivo">Mantenimiento Predictivo</option>
-                        </select>
-                    </div>
-                    <div><label>Descripción</label><textarea id="newHistorialDescT" rows="2"></textarea></div>
-                    <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTransformador()">Registrar Mantenimiento</button>
-                </div>
-                
-                <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
-                <button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button>
-                <button id="btnRestaurarTransformador" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTransformador()">Restaurar</button>
-            </div>
-        </div>
-    </div>
-    <div id="modalTermico" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
-            <div class="edit-form">
-                <label>Subestación</label><input type="text" id="editSubestacionTermico">
-                <label>Equipo</label><input type="text" id="editEquipoTermico">
-                <label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico">
-                <label>Voltaje</label><input type="text" id="editVoltajeTermico">
-                
-                <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
-                    <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Inspección</h3>
-                    <div class="form-row">
-                        <div><label>Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div>
-                        <div><label>Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div>
-                    </div>
-                </div>
-                
-                <label>Nivel de Criticidad</label>
-                <select id="editNivelMantenimientoTermico">
-                    <option value="AVISO">AVISO (Nivel 1) 5 °C A 15 °C</option>
-                    <option value="INTERMEDIO">INTERMEDIO (Nivel 2) 16 °C A 35 °C</option>
-                    <option value="GRAVE">GRAVE (Nivel 3) 36 °C A 75 °C</option>
-                    <option value="CRITICO">CRÍTICO (Nivel 4) SUPERIOR A 75 °C</option>
-                </select>
-                
-                <div class="historial-section">
-                    <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Inspecciones</h3>
-                    <div id="historialTermicoList" class="historial-list">Cargando...</div>
-                    <div class="form-row">
-                        <div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div>
-                        <div><label>OT</label><input type="text" id="newHistorialOTTg"></div>
-                    </div>
-                    <div><label>Tipo</label>
-                        <select id="newHistorialTipoTg">
-                            <option value="Inspección Termográfica">Inspección Termográfica</option>
-                            <option value="Corrección">Corrección</option>
-                            <option value="Mantenimiento">Mantenimiento</option>
-                        </select>
-                    </div>
-                    <div><label>Descripción</label><textarea id="newHistorialDescTg" rows="2"></textarea></div>
-                    <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">Registrar Inspección</button>
-                </div>
-                
-                <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
-                <button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button>
-                <button id="btnRestaurarTermico" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTermico()">↺ Restaurar</button>
-            </div>
-        </div>
-    </div>
-    <div id="modalAgregarTransformador" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
-            <div class="edit-form">
-                <label>Nombre *</label><input type="text" id="newNombreTransformador">
-                <label>Subestación *</label><input type="text" id="newSubestacionTransformador">
-                <label>Fabricante</label><input type="text" id="newFabricanteTransformador">
-                <div class="form-row-3">
-                    <div><label>V. Primario</label><input type="text" id="newVoltajePrimario"></div>
-                    <div><label>V. Secundario</label><input type="text" id="newVoltajeSecundario"></div>
-                    <div><label>V. Terciario</label><input type="text" id="newVoltajeTerciario"></div>
-                </div>
-                <div class="form-row">
-                    <div><label>Capacidad</label><input type="text" id="newCapacidadTransformador"></div>
-                    <div><label>Relación</label><input type="text" id="newRelacionTransformador"></div>
-                </div>
-                <div class="form-row">
-                    <div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"></div>
-                    <div><label>Año Fabricación</label><input type="text" id="newAnoFabricacion" placeholder="Ej: 2015"></div>
-                </div>
-                <label>Estado</label>
-                <select id="newEstadoTransformador">
-                    <option>Operativo</option><option>No Operativo</option><option>Daño Interno</option><option>Reserva</option>
-                </select>
-                <div class="form-row">
-                    <div><label>📆Año Fab.</label><input type="number" id="newAnoFabricacion"></div>
-                </div>
-                <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
-            </div>
-        </div>
-    </div>
-    <div id="modalAgregarTermico" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Nueva Inspección</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
-            <div class="edit-form">
-                <label>Subestación *</label><input type="text" id="newSubestacionTermico">
-                <label>Equipo *</label><input type="text" id="newEquipoTermico">
-                <label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico">
-                <label>Voltaje</label><input type="text" id="newVoltajeTermico">
-                <div class="form-row">
-                    <div><label>Fecha</label><input type="date" id="newFechaInspeccionTermico"></div>
-                    <div><label>Próxima</label><input type="date" id="newProximaInspeccionTermico"></div>
-                </div>
-                <label>Nivel</label>
-                <select id="newNivelMantenimientoTermico">
-                    <option>AVISO</option><option>INTERMEDIO</option><option>GRAVE</option><option>CRITICO</option>
-                </select>
-                <button class="save-btn" onclick="agregarNuevoTermico()">Crear Inspección</button>
-            </div>
-        </div>
-    </div>
-    <div id="modalUsuarios" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-        <div class="modal-header">
-            <h2>👥 Gestión de Usuarios</h2>
-            <span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span>
-        </div>
+    <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
-            <!-- Formulario para nuevo usuario -->
+            <label>Nombre</label><input type="text" id="editNombreTransformador">
+            <label>Subestación</label><input type="text" id="editSubestacionTransformador">
+            <label>Fabricante</label><input type="text" id="editFabricanteTransformador">
+            <div class="form-row-3">
+                <div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div>
+                <div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div>
+                <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div>
+            </div>
+            <div class="form-row">
+                <div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"></div>
+                <div><label>Relación</label><input type="text" id="editRelacionTransformador"></div>
+            </div>
+            <div class="form-row">
+                <div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion" placeholder="Ej: DYn1"></div>
+                <div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion" placeholder="Ej: 2015"></div>
+            </div>                
+            <label>Estado</label>
+            <select id="editEstadoTransformador">
+                <option value="Operativo">Operativo</option>
+                <option value="No Operativo">No Operativo</option>
+                <option value="Daño Interno">Daño Interno</option>
+                <option value="Reserva">Reserva</option>
+                <option value="Averiado">Averiado</option>
+                <option value="Dado de baja">Dado de baja</option>
+            </select>
+            <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
+                <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Mantenimiento</h3>
+                <div class="form-row">
+                    <div><label>Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
+                    <div><label>Próxima Mantención</label><input type="date" id="editProximaMantencion"></div>
+                </div>
+                <div id="mantenimientoStatus" style="margin-top: 8px;"></div>
+            </div>
+            <div class="historial-section">
+                <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Mantenimientos</h3>
+                <div id="historialTransformadorList" class="historial-list">Cargando...</div>
+                <div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaT"></div><div><label>OT</label><input type="text" id="newHistorialOTT" placeholder="Ej: 20269"></div></div>
+                <div><label>Tipo de Trabajo</label><select id="newHistorialTipoT"><option value="Mantenimiento Preventivo">Mantenimiento Preventivo</option><option value="Mantenimiento Correctivo">Mantenimiento Correctivo</option><option value="Mantenimiento Predictivo">Mantenimiento Predictivo</option></select></div>
+                <div><label>Descripción</label><textarea id="newHistorialDescT" rows="2"></textarea></div>
+                <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTransformador()">Registrar Mantenimiento</button>
+            </div>
+            <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
+            <button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button>
+            <button id="btnRestaurarTransformador" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTransformador()">Restaurar</button>
+        </div>
+    </div></div>
+
+    <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
+        <div class="edit-form">
+            <label>Subestación</label><input type="text" id="editSubestacionTermico">
+            <label>Equipo</label><input type="text" id="editEquipoTermico">
+            <label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico">
+            <label>Voltaje</label><input type="text" id="editVoltajeTermico">
+            <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
+                <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Inspección</h3>
+                <div class="form-row"><div><label>Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div><div><label>Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div></div>
+            </div>
+            <label>Nivel de Criticidad</label>
+            <select id="editNivelMantenimientoTermico">
+                <option value="AVISO">AVISO (Nivel 1) 5 °C A 15 °C</option>
+                <option value="INTERMEDIO">INTERMEDIO (Nivel 2) 16 °C A 35 °C</option>
+                <option value="GRAVE">GRAVE (Nivel 3) 36 °C A 75 °C</option>
+                <option value="CRITICO">CRÍTICO (Nivel 4) SUPERIOR A 75 °C</option>
+            </select>
+            <div class="historial-section">
+                <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Inspecciones</h3>
+                <div id="historialTermicoList" class="historial-list">Cargando...</div>
+                <div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div><div><label>OT</label><input type="text" id="newHistorialOTTg"></div></div>
+                <div><label>Tipo</label><select id="newHistorialTipoTg"><option value="Inspección Termográfica">Inspección Termográfica</option><option value="Corrección">Corrección</option><option value="Mantenimiento">Mantenimiento</option></select></div>
+                <div><label>Descripción</label><textarea id="newHistorialDescTg" rows="2"></textarea></div>
+                <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">Registrar Inspección</button>
+            </div>
+            <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
+            <button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button>
+            <button id="btnRestaurarTermico" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTermico()">↺ Restaurar</button>
+        </div>
+    </div></div>
+
+    <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
+        <div class="edit-form">
+            <label>Nombre *</label><input type="text" id="newNombreTransformador">
+            <label>Subestación *</label><input type="text" id="newSubestacionTransformador">
+            <label>Fabricante</label><input type="text" id="newFabricanteTransformador">
+            <div class="form-row-3"><div><label>V. Primario</label><input type="text" id="newVoltajePrimario"></div><div><label>V. Secundario</label><input type="text" id="newVoltajeSecundario"></div><div><label>V. Terciario</label><input type="text" id="newVoltajeTerciario"></div></div>
+            <div class="form-row"><div><label>Capacidad</label><input type="text" id="newCapacidadTransformador"></div><div><label>Relación</label><input type="text" id="newRelacionTransformador"></div></div>
+            <div class="form-row"><div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"></div><div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion" placeholder="Ej: 2015"></div></div>
+            <label>Estado</label>
+            <select id="newEstadoTransformador">
+                <option>Operativo</option>
+                <option>No Operativo</option>
+                <option>Daño Interno</option>
+                <option>Reserva</option>
+                <option>Dado de baja</option>
+            </select>
+            <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
+        </div>
+    </div></div>
+
+    <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nueva Inspección</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
+        <div class="edit-form">
+            <label>Subestación *</label><input type="text" id="newSubestacionTermico">
+            <label>Equipo *</label><input type="text" id="newEquipoTermico">
+            <label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico">
+            <label>Voltaje</label><input type="text" id="newVoltajeTermico">
+            <div class="form-row"><div><label>Fecha</label><input type="date" id="newFechaInspeccionTermico"></div><div><label>Próxima</label><input type="date" id="newProximaInspeccionTermico"></div></div>
+            <label>Nivel</label><select id="newNivelMantenimientoTermico"><option>AVISO</option><option>INTERMEDIO</option><option>GRAVE</option><option>CRITICO</option></select>
+            <button class="save-btn" onclick="agregarNuevoTermico()">Crear Inspección</button>
+        </div>
+    </div></div>
+
+    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2>👥 Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
+        <div class="edit-form">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                 <h3 style="color: #1e4a6b; margin-bottom: 12px;">➕ Nuevo Usuario</h3>
-                    <div class="form-row">
-                        <div><label>Nombre Completo</label><input type="text" id="newUserName" placeholder="Ej: Juan Pérez"></div>
-                        <div><label>Email</label><input type="email" id="newUserEmail" placeholder="correo@eeq.com.ec"></div>
-                    </div>
-                    <div class="form-row">
-                        <div><label>Contraseña</label><input type="password" id="newUserPassword" placeholder="Mínimo 6 caracteres"></div>
-                        <div><label>Rol</label>
-                            <select id="newUserRole">
-                                <option value="admin">Administrador</option>
-                                <option value="supervisor">Supervisor</option>
-                                <option value="operador">Operador</option>
-                                <option value="invitado">Invitado</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="crearNuevoUsuario()" style="width: auto; padding: 10px 20px;">Crear Usuario</button>
-                </div>
-            
-                <!-- Lista de usuarios existentes -->
-                <h3 style="color: #1e4a6b; margin-bottom: 12px;">📋 Usuarios Registrados</h3>
-                <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;">
-                    <p style="color: #64748b; text-align: center;">Cargando usuarios...</p>
-                </div>
+                <div class="form-row"><div><label>Nombre Completo</label><input type="text" id="newUserName" placeholder="Ej: Juan Pérez"></div><div><label>Email</label><input type="email" id="newUserEmail" placeholder="correo@eeq.com.ec"></div></div>
+                <div class="form-row"><div><label>Contraseña</label><input type="password" id="newUserPassword" placeholder="Mínimo 6 caracteres"></div><div><label>Rol</label><select id="newUserRole"><option value="admin">Administrador</option><option value="supervisor">Supervisor</option><option value="operador">Operador</option><option value="invitado">Invitado</option></select></div></div>
+                <button class="save-btn" onclick="crearNuevoUsuario()" style="width: auto; padding: 10px 20px;">Crear Usuario</button>
             </div>
+            <h3 style="color: #1e4a6b; margin-bottom: 12px;">📋 Usuarios Registrados</h3>
+            <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;"><p style="color: #64748b; text-align: center;">Cargando usuarios...</p></div>
         </div>
-    </div>
+    </div></div>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script>
+        // ============================================================
+        // CONFIGURACIÓN DE FIREBASE
+        // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBtFG3nluvDLdRC5pYbWhe8cyUkpULVjEU",
             authDomain: "dashboard-transformadores.firebaseapp.com",
@@ -374,6 +315,7 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const auth = firebase.auth();
 
         let transformadoresData = [];
         let inspeccionesData = [];
@@ -382,418 +324,40 @@
         let currentSearch = "";
         let currentEditingId = null;
         let currentEditingTipo = null;
-        
-        const auth = firebase.auth();
-        const ROLES_PERMITIDOS = ["admin", "supervisor", "operador", "invitado"];
         let currentUser = null;
-        async function doLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const errorEl = document.getElementById('loginError');
+        
+        const ROLES_PERMITIDOS = ["admin", "supervisor", "operador", "invitado"];
 
-            if (!email || !password) {
-              errorEl.textContent = 'Completa todos los campos';
-              errorEl.style.display = 'block';
-              return;  
-            }
-
-            errorEl.style.display = 'none';
-            try {
-              const userCred = await auth.signInWithEmailAndPassword(email, password);
-              const user = userCred.user;
-              const userDoc = await db.collection('usuarios').doc(user.uid).get();
-              let userData;
-              if (!userDoc.exists) {
-                userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    name: user.displayName || email.split('@')[0],
-                    role: 'invitado',
-                    createdAt: new Date().toISOString()
-                    } ;
-                    await db.collection('usuarios').doc(user.uid).set(userData); 
-                } else {
-                userData = userDoc.data();
-                }
-                if (!ROLES_PERMITIDOS.includes(userData.role)) {
-                    await auth.signOut();
-                    errorEl.textContent = 'No tienes permiso para acceder a este dashboard';
-                    errorEl.style.display = 'block';
-                    return;
-                }
-                currentUser ={uid: user.uid, ...userData};
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'block';
-                updateUserUI();
-                await cargarDatos();
-
-            }   catch (error){
-                console.error('Error de login:', error);
-                let mensaje = 'Error al iniciar sesión';
-                if (error.code === 'auth/user-not-found') mensaje = 'Usuario no encontrado';
-                if (error.code === 'auth/wrong-password') mensaje = 'Contraseña incorrecta';
-                if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
-                if (error.code === 'auth/too-many-requests') mensaje = 'Demasiados intentos. Intenta más tarde';
-                errorEl.textContent = mensaje;
-                errorEl.style.display = 'block';
-            }
+        function normalizar(s) { return s ? s.toUpperCase().trim() : "SIN SUBESTACIÓN"; }
+        function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
+        function toggleFabMenu() { document.getElementById('fabOptions').classList.toggle('show'); }
+        
+        function getEstadoClass(e) { 
+            const c = { 
+                "Operativo": "status-success", 
+                "No Operativo": "status-grave", 
+                "Daño Interno": "status-daño", 
+                "Reserva": "status-warning", 
+                "Averiado": "status-critical", 
+                "Dado de baja": "status-baja",
+                "incendiado": "status-critical"
+            }; 
+            return c[e] || "status-info"; 
         }
-
-        function updateUserUI(){
-          if (!currentUser) return;
-          const headerDiv = document.querySelector('.header div');
-          if (headerDiv) {
-            const oldUserInfo = document.getElementById('userInfoHeader');
-            if (oldUserInfo) oldUserInfo.remove();
-            const userInfo = document.createElement('div');
-            userInfo.id = 'userInfoHeader';
-            userInfo.style.display = 'flex';
-            userInfo.style.alignItems = 'center';
-            userInfo.style.gap = '16px';
-            userInfo.style.marginLeft = 'auto';
-            let adminButton = '';
-             if (currentUser.role === 'admin') {
-                 adminButton = `<button onclick="cargarListaUsuarios()" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; margin-right: 8px;">👥 Usuarios</button>`;
-             }
-            userInfo.innerHTML = `
-                ${adminButton}
-                <span style="color: white; font-size: 0.85rem;">
-                        👤 ${currentUser.name || currentUser.email}
-                     <span style="background: ${currentUser.role === 'admin' ? '#16a34a' : '#d97706'}; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px;">
-                        ${currentUser.role}
-                     </span>
-               </span>
-               <button onclick="doLogout()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;">
-                    Cerrar Sesión 
-                </button>
-                `;
-               headerDiv.appendChild(userInfo); 
-          }
-          const esAdmin = currentUser.role === 'admin';
-          const esSupervisor = currentUser.role === 'supervisor' || esAdmin;
-          const esOperador = currentUser.role === 'operador' || esSupervisor;
-          if (!esOperador) {document.getElementById('fabOptions').innerHTML = '';}
-          if (!esAdmin) {
-            const tabEliminados = document.querySelector('.tab-btn[data-tab="eliminados"]');
-           if (tabEliminados) tabEliminados.style.display = 'none';
-          } 
+        
+        function getNivelClass(n) { 
+            if (n === "CRITICO") return "status-critical"; 
+            if (n === "GRAVE") return "status-grave"; 
+            if (n === "INTERMEDIO") return "status-warning"; 
+            return "status-info"; 
         }
-
-        async function doLogout() {
-          try {
-            await auth.signOut();
-            currentUser = null;
-            dataLoaded = false; 
-            transformadoresData = [];
-            inspeccionesData = [];
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-          } catch (error){
-            console.error('Error al cerrar sesión:', error);
-          }
+        
+        function equiposActivos() { 
+            return [...transformadoresData.filter(t => !t.deleted), ...inspeccionesData.filter(i => !i.deleted)]; 
         }
-
-        auth.onAuthStateChanged(async (user) => {
-          if (user) {
-            const userDoc = await db.collection('usuarios').doc(user.uid).get();
-            if (userDoc.exists) {
-                const userData = userDoc.data();
-                if (ROLES_PERMITIDOS.includes(userData.role)) {
-                   currentUser = { uid: user.uid, ...userData };
-                   document.getElementById('loginScreen').style.display = 'none';
-                   document.getElementById('mainApp').style.display = 'block';
-                   updateUserUI();
-                   await cargarDatos();
-                } else {
-                    await auth.signOut();
-                    document.getElementById('loginScreen').style.display = 'flex';
-                    document.getElementById('mainApp').style.display = 'none'; 
-                }  
-            } else {
-               // Si el usuario existe en Auth pero no en Firestore
-               await auth.signOut();
-               document.getElementById('loginScreen').style.display = 'flex';
-               document.getElementById('mainApp').style.display = 'none';
-            }            
-        } else {
-           document.getElementById('loginScreen').style.display = 'flex';
-           document.getElementById('mainApp').style.display = 'none'; 
-        }
-    });
-
-        async function crearUsuarioAutorizado(email, password, nombre, rol) {
-            if (currentUser?.role !== 'admin') {
-               alert('Solo administradores pueden crear usuarios');
-               return;
-            }
-            try {
-             const userCred = await auth.createUserWithEmailAndPassword(email, password);
-              await db.collection('usuarios').doc(userCred.user.uid).set({
-              email: email, 
-              name: nombre, 
-              role: rol, 
-              createdAt: new Date().toISOString()
-            });
-              alert('Usuario creado exitosamente');
-            } catch (error){
-               alert('Error: ' + error.message); 
-            }    
-        }
-
-        async function cargarListaUsuarios() {
-           if (currentUser?.role !== 'admin') {
-           alert('Solo administradores pueden gestionar usuarios');
-           return;
-           } try {
-            const snapshot = await db.collection('usuarios').get();
-            const container = document.getElementById('listaUsuarios');
-            if (snapshot.empty) {
-                container.innerHTML = '<p style="color: #64748b; text-align: center;">No hay usuarios registrados</p>';
-                document.getElementById('modalUsuarios').style.display = 'flex';
-                return;
-            }
-            let html = '<table style="width: 100%; border-collapse: collapse;">';
-            html += '<thead><tr style="background: #f8fafc;"><th style="padding: 10px; text-align: left;">Nombre</th><th style="padding: 10px; text-align: left;">Email</th><th style="padding: 10px; text-align: left;">Rol</th><th style="padding: 10px; text-align: left;">Acciones</th></tr></thead><tbody>';    
-            snapshot.forEach(doc => {
-            const u = doc.data();
-            const rolColor = u.role === 'admin' ? '#16a34a' : (u.role === 'supervisor' ? '#2563eb' : (u.role === 'operador' ? '#d97706' : '#64748b'));
-            html += `<tr style="border-bottom: 1px solid #e2e8f0;">
-            <td style="padding: 10px;"><strong>${u.name || '—'}</strong></td>
-            <td style="padding: 10px;">${u.email}</td>
-            <td style="padding: 10px;">
-            <select onchange="cambiarRolUsuario('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
-            <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
-            <option value="supervisor" ${u.role === 'supervisor' ? 'selected' : ''}>Supervisor</option>
-            <option value="operador" ${u.role === 'operador' ? 'selected' : ''}>Operador</option>
-            <option value="invitado" ${u.role === 'invitado' ? 'selected' : ''}>Invitado</option>
-            </select>
-            </td>  
-            <td style="padding: 10px;">
-            ${doc.id !== currentUser?.uid ? `<button onclick="eliminarUsuario('${doc.id}')" style="background: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;">Eliminar</button>` : '<span style="color: #64748b;">Tú</span>'}            
-            </td>
-            </tr>`;
-             });
-            html += '</tbody></table>'; 
-            container.innerHTML = html;
-            document.getElementById('modalUsuarios').style.display = 'flex';
-           } catch(error) {
-            console.error('Error cargando usuarios:', error);
-            alert('Error al cargar usuarios');
-           }
-        }
-
-        async function crearNuevoUsuario() {
-            if (currentUser?.role !== 'admin') {
-            alert('Solo administradores pueden crear usuarios');
-            return;
-            }
-            const name = document.getElementById('newUserName').value.trim();
-            const email = document.getElementById('newUserEmail').value.trim();
-            const password = document.getElementById('newUserPassword').value;
-            const role = document.getElementById('newUserRole').value;
-            if (!name || !email || !password) {
-              alert('Complete todos los campos');
-              return;
-            }
-            if (password.length < 6) {
-              alert('La contraseña debe tener al menos 6 caracteres');
-              return;
-            }
-            try{
-                const userCred = await auth.createUserWithEmailAndPassword(email, password);
-                await db.collection('usuarios').doc(userCred.user.uid).set({
-                    uid: userCred.user.uid,
-                    name: name,
-                    email: email,
-                    role: role,
-                    createdAt: new Date().toISOString(),
-                    createdBy: currentUser.uid
-                });
-                alert(`Usuario ${email} creado con rol: ${role}`);
-                document.getElementById('newUserName').value = '';
-                document.getElementById('newUserEmail').value = '';
-                document.getElementById('newUserPassword').value = '';
-                cargarListaUsuarios();
-            }   catch (error) {
-                console.error('Error:', error);
-                let mensaje = 'Error al crear usuario';
-                if (error.code === 'auth/email-already-in-use') mensaje = 'Este email ya está registrado';
-                if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
-                if (error.code === 'auth/weak-password') mensaje = 'La contraseña es muy débil';
-                alert(mensaje);
-            }
-        }
-    
-        async function cambiarRolUsuario(uid, nuevoRol) {
-            if (currentUser?.role !== 'admin') {
-               alert('Solo administradores pueden cambiar roles');
-               return;
-            }
-            if (uid === currentUser.uid) { 
-                alert('No puedes cambiar tu propio rol');
-                return;
-            }
-            try {
-               await db.collection('usuarios').doc(uid).update({ role: nuevoRol });
-               alert('Rol actualizado'); 
-               cargarListaUsuarios();
-            } catch(error){
-                alert('Error: ' + error.message);
-            }
-        }
-
-        async function eliminarUsuario(uid) {
-           if (currentUser?.role !== 'admin') {
-             alert('Solo administradores pueden eliminar usuarios');
-             return;
-           }
-           if (uid === currentUser.uid) {
-            alert('No puedes eliminarte a ti mismo');
-            return;
-           }
-           if (!confirm('¿Eliminar este usuario permanentemente? Esta acción no se puede deshacer.')) return;
-           // Eliminar de FIrebase
-           try {
-            await db.collection('usuarios').doc(uid).delete();
-            alert('Usuario eliminado de la base de datos');
-            cargarListaUsuarios();
-           } catch (error) {
-            alert('Error: ' + error.message);
-           }
-        }
-
-        const transformadoresRespaldo = [
-            { id: 't1', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [], deleted: false },
-            { id: 't2', nombre: "Transformador de Potencia T2", subestacion: "Santa Rosa", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't3', nombre: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't4', nombre: "Transformador de Potencia T1", subestacion: "Luluncoto", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200790", ano_fabricacion: 2010, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [], deleted: false },
-            { id: 't5', nombre: "Transformador de Potencia T2", subestacion: "Bario Nuevo", fabricante: "Pauwells", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4069", ano_fabricacion: 1995, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't6', nombre: "Transformador de Potencia T1", subestacion: "Chimbacalle", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "61161", ano_fabricacion: 1987, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't7', nombre: "Transformador de Potencia T1", subestacion: "Chilibulo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [], deleted: false },
-            { id: 't8', nombre: "Transformador de Potencia T2", subestacion: "Chilibulo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK221217-4", ano_fabricacion: 2023, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't9', nombre: "Transformador de Potencia T1", subestacion: "Escuela Sucre", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "46/6.3", estado: "Operativo", numero_serie: "98674", ano_fabricacion: 1960, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't10', nombre: "Transformador de Potencia T1", subestacion: "San Roque", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't11', nombre: "Transformador de Potencia T1", subestacion: "La Marin", fabricante: "Yawei", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2021, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't12', nombre: "Transformador de Potencia T2", subestacion: "Miraflores", fabricante: "Raycham", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't13', nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "8./10.", relacion: "43.8/6.3", estado: "Operativo", numero_serie: "558406", ano_fabricacion: 1972, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't14', nombre: "Transformador de Potencia T1", subestacion: "Belisario Quevedo", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "201189", ano_fabricacion: 2013, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't15', nombre: "Transformador de Potencia T1", subestacion: "La Floresta", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200788", ano_fabricacion: 2010, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't16', nombre: "Transformador de Potencia T1", subestacion: "Gualo", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201413", ano_fabricacion: 2015, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't17', nombre: "Transformador de Potencia T2", subestacion: "Gualo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "CK180674-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't18', nombre: "Transformador de Potencia T1", subestacion: "El Bosque", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2019, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't19', nombre: "Transformador de Potencia T1", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T1", ano_fabricacion: 1980, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't20', nombre: "Transformador de Potencia T2", subestacion: "Rio Coca", fabricante: "Meidensha", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8307T2", ano_fabricacion: 1980, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't21', nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "185236-1388", ano_fabricacion: 1998, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't22', nombre: "Transformador de Potencia T1", subestacion: "Cristiania", fabricante: "Trafo", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "2003", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't23', nombre: "Transformador de Potencia T2", subestacion: "Cristiania", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't24', nombre: "Transformador de Potencia T2", subestacion: "Cotocollao", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "", estado: "Operativo", numero_serie: "200626", ano_fabricacion: 2008, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't25', nombre: "Transformador de Potencia T3", subestacion: "Cotocollao", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: 1997, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't26', nombre: "Transformador de Potencia T4", subestacion: "Cotocollao", fabricante: "Yorkshire", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "9740751", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't27', nombre: "Transformador de Potencia T1", subestacion: "Cotocollao", fabricante: "Meidensha", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 23, capacidad: "60/80/100", relacion: "138/46/23", estado: "Operativo", numero_serie: "8N8017T1", ano_fabricacion: 1987, tipo_conexion: "YNyn0d1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't28', nombre: "Transformador de Potencia T1", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "295842", ano_fabricacion: 2009, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't29', nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "201190", ano_fabricacion: 2013, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't30', nombre: "Transformador de Potencia T1", subestacion: "San Antonio", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201187", ano_fabricacion: 2013, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't31', nombre: "Transformador de Potencia T1", subestacion: "Conocoto", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't32', nombre: "Transformador de Potencia T2", subestacion: "Conocoto", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't33', nombre: "Transformador de Potencia T1", subestacion: "Carolina", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "1K8309T1", ano_fabricacion: 1984, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't34', nombre: "Transformador de Potencia T2", subestacion: "Carolina", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-1", ano_fabricacion: 2018, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't35', nombre: "Transformador de Potencia T3", subestacion: "San Pablo", fabricante: "CG Transf", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't36', nombre: "Transformador de Potencia T1", subestacion: "Alangasi", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "200628", ano_fabricacion: 2008, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't37', nombre: "Transformador de Potencia T1", subestacion: "San Rafael", fabricante: "Meiden", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/26.7/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: 1988, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't38', nombre: "Transformador de Potencia T1", subestacion: "Iñaquito", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "94.2.4068", ano_fabricacion: 1995, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't39', nombre: "Transformador de Potencia T2", subestacion: "Iñaquito", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200787", ano_fabricacion: 2010, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't40', nombre: "Transformador de Potencia T1", subestacion: "Nueva Cumbaya", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't41', nombre: "Transformador de Potencia T1", subestacion: "Plataforma Financiera", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK170227-1", ano_fabricacion: 2017, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't42', nombre: "Transformador de Potencia T1", subestacion: "Tababela", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-1", ano_fabricacion: 2023, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't43', nombre: "Transformador de Potencia T1", subestacion: "Diez Nueva", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "22178", ano_fabricacion: 1978, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't44', nombre: "Transformador de Potencia T1", subestacion: "Nuevo Aeropuerto", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't45', nombre: "Transformador de Potencia T1", subestacion: "Tumbaco", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't46', nombre: "Transformador de Potencia T2", subestacion: "Tumbaco", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "185329", ano_fabricacion: 2000, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't47', nombre: "Transformador de Potencia T1", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "CK130960-1", ano_fabricacion: 2013, tipo_conexion: "YNyn0d1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't48', nombre: "Transformador de Potencia T2", subestacion: "Vicentina", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "18410", ano_fabricacion: 2002, tipo_conexion: "YNyn0d1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't49', nombre: "Transformador de Potencia T1", subestacion: "Selva Alegre", fabricante: "BBC", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "46/2.3", estado: "Operativo", numero_serie: "GM 100797", ano_fabricacion: 1986, tipo_conexion: "YNyn0d1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't50', nombre: "Transformador de Potencia T2", subestacion: "Selva Alegre", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 46, voltaje_terciario: 6.3, capacidad: "60/80/100", relacion: "46/2.3", estado: "Operativo", numero_serie: "185641", ano_fabricacion: 2006, tipo_conexion: "YNyn0d1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't51', nombre: "Transformador de Potencia TR", subestacion: "Papallacta", fabricante: "MOVIL_Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't52', nombre: "Transformador de Potencia", subestacion: "La Calera", fabricante: "Ecuatran", voltaje_primario: 6.3, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't53', nombre: "Transformador de Potencia T1", subestacion: "El Inga Bajo", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't54', nombre: "Transformador de Potencia T2", subestacion: "Mirador Alto", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: 2017, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't55', nombre: "Transformador de Potencia T1", subestacion: "Los Bancos", fabricante: "Mitsubishi", voltaje_primario: 43.8, voltaje_secundario: 13.2, voltaje_terciario: null, capacidad: "8./10.", relacion: "43.8/13.2", estado: "Operativo", numero_serie: "558410", ano_fabricacion: 1972, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't56', nombre: "Transformador de Potencia T2", subestacion: "Los Bancos", fabricante: "ABB", voltaje_primario: 69, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "200867", ano_fabricacion: 2010, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't57', nombre: "Transformador de Potencia T1", subestacion: "Parque Bicentenario", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't58', nombre: "Transformador de Potencia T1", subestacion: "Perez Guerrero", fabricante: "Pauwels", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "20", relacion: "46/23", estado: "Operativo", numero_serie: "94.2.406", ano_fabricacion: 1995, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't59', nombre: "Transformador de Potencia T2", subestacion: "Perez Guerrero", fabricante: "Shenda", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/25", relacion: "46/23", estado: "Operativo", numero_serie: "CK180673-2", ano_fabricacion: 2018, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't60', nombre: "Transformador de Potencia T1", subestacion: "Sangolqui", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "15/20", relacion: "46/23", estado: "Operativo", numero_serie: "71/22064", ano_fabricacion: 1977, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't61', nombre: "Transformador de Potencia T2", subestacion: "Sangolqui", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "120/27/33", relacion: "46/23", estado: "Operativo", numero_serie: "200784", ano_fabricacion: 2010, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't62', nombre: "Transformador de Potencia T1", subestacion: "Pomasqui", fabricante: "Siemens", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "185643", ano_fabricacion: 2006, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't63', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "Pauwels", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: 1895, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't64', nombre: "Transformador de Potencia T1", subestacion: "El Quinche", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "201186", ano_fabricacion: 2013, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't65', nombre: "Transformador de Potencia T2", subestacion: "Eugenio Espejo", fabricante: "Shenda", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "138/23", estado: "Operativo", numero_serie: "CK221217-3", ano_fabricacion: 2023, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't66', nombre: "Transformador de Potencia T1", subestacion: "Eugenio Espejo", fabricante: "Pauwells", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Operativo", numero_serie: "95.4.7519", ano_fabricacion: 1996, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't67', nombre: "Transformador de Potencia T1", subestacion: "Batán Alto", fabricante: "Chint", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1998", ano_fabricacion: 2017, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't68', nombre: "Transformador de Potencia T2", subestacion: "El Obraje", fabricante: "Chint", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "1ZDB300000P-1884", ano_fabricacion: 2017, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't69', nombre: "Transformador de Potencia T1", subestacion: "Gualberto Hernandez", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 13.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't70', nombre: "Transformador de Potencia T1", subestacion: "Pasochoa", fabricante: "Transformers y Rectifiers (INDIA) LDT.", voltaje_primario: 46, voltaje_secundario: 4.16, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't71', nombre: "Transformador de Potencia TR-G35", subestacion: "CH Loreto", fabricante: "Z Standard", voltaje_primario: 4.16, voltaje_secundario: 24, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YNd11", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't72', nombre: "Transformador de Potencia T1", subestacion: "CH Victoria", fabricante: "Incoesa", voltaje_primario: 6.6, voltaje_secundario: 22.8, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "", ano_fabricacion: null, tipo_conexion: "YnD1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't73', nombre: "Transformador de Potencia T1", subestacion: "Bario Nuevo", fabricante: "Yorkshire", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: 22.8, capacidad: "15/20", relacion: "46/23/6.3", estado: "Operativo", numero_serie: "81/22181", ano_fabricacion: 1978, tipo_conexion: "YNyn0d1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't74', nombre: "Transformador de Potencia T1", subestacion: "Miraflores", fabricante: "Mitsubishi", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "43.8/6.3", estado: "No Operativo", numero_serie: "558409", ano_fabricacion: 1972, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't75', nombre: "Transformador de Potencia T2", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Averiado", numero_serie: "T98676", ano_fabricacion: 1960, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't76', nombre: "Transformador de Potencia T1", subestacion: "Diez Vieja", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8-21.9/6.3", estado: "Reserva", numero_serie: "98675", ano_fabricacion: 1960, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't77', nombre: "Transformador de Potencia T1", subestacion: "Andalucia", fabricante: "Asea", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "5/6.25", relacion: "43.8/6.3", estado: "Dado de baja", numero_serie: "5897-844", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't78', nombre: "Transformador de Potencia T2", subestacion: "Epiclachima", fabricante: "Siemens", voltaje_primario: 46, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "46/23", estado: "incendiado", numero_serie: "185411", ano_fabricacion: 2002, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't79', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "ABB", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "", relacion: "", estado: "Operativo", numero_serie: "94.4.3338", ano_fabricacion: null, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't80', nombre: "Transformador de Potencia T2", subestacion: "Pomasqui", fabricante: "TRAFO", voltaje_primario: 138, voltaje_secundario: 23, voltaje_terciario: null, capacidad: "20/27/33", relacion: "138/23", estado: "Daño Interno", numero_serie: "XA1604A001", ano_fabricacion: 2004, tipo_conexion: "DYn1", ultima_inspeccion: null, proxima_mantencion: null, historial: [], deleted: false },
-            { id: 't81', nombre: "Transformador de Potencia T1", subestacion: "Olimpico", fabricante: "ABB", voltaje_primario: 46, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "15/20", relacion: "46/6.3", estado: "Operativo", numero_serie: "200789", ano_fabricacion: 2016, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false },
-            { id: 't82', nombre: "Transformador de Potencia T1", subestacion: "Escuela Sucre", fabricante: "Siemens", voltaje_primario: 43.8, voltaje_secundario: 6.3, voltaje_terciario: null, capacidad: "5/6.25", relacion: "46/6.3", estado: "Operativo", numero_serie: "98674", ano_fabricacion: 1960, tipo_conexion: "DYn1", ultima_inspeccion: "2025-05-10", proxima_mantencion: "2026-05-10", historial: [], deleted: false }
-        ];
-
-        const inspeccionesRespaldo = [
-            { id: 'i1', subestacion: "NORTE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2024-01-09", proxima_inspeccion: "2025-01-09", nivel: "CRITICO", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i2', subestacion: "TUMBACO", equipo: "L/T", nomenclatura: "LINEA TUMBACO CUMBAYA", voltaje: "46 KV", fecha_inspeccion: "2024-01-21", proxima_inspeccion: "2025-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i3', subestacion: "TUMBACO", equipo: "MOVIL SHENDA", nomenclatura: "MALLA A TIERRA", voltaje: "46 KV", fecha_inspeccion: "2024-01-21", proxima_inspeccion: "2025-01-21", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i4', subestacion: "SELVA ALEGRE", equipo: "L/T", nomenclatura: "LINEA SELVA ALEGRE HACIA MIRAFLORES", voltaje: "46 KV", fecha_inspeccion: "2024-01-15", proxima_inspeccion: "2025-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i5', subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-68", voltaje: "138 KV", fecha_inspeccion: "2024-01-15", proxima_inspeccion: "2025-01-15", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i6', subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-34", voltaje: "138 KV", fecha_inspeccion: "2024-01-23", proxima_inspeccion: "2025-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i7', subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-21", voltaje: "138 KV", fecha_inspeccion: "2024-02-19", proxima_inspeccion: "2025-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i8', subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-55", voltaje: "138 KV", fecha_inspeccion: "2024-02-19", proxima_inspeccion: "2025-02-19", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i9', subestacion: "POMASQUI", equipo: "VENTILADOR T-2", nomenclatura: "PRIMERA ETAPA (M1)", voltaje: "220 V", fecha_inspeccion: "2024-01-05", proxima_inspeccion: "2025-01-05", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i10', subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-100", voltaje: "46 KV", fecha_inspeccion: "2024-01-23", proxima_inspeccion: "2025-01-23", nivel: "GRAVE", observacion: "ES NECESARIO SU INTERVENCIÓN.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i11', subestacion: "MIRAFLORES", equipo: "PRIMARIO", nomenclatura: "152-B", voltaje: "6,3 KV", fecha_inspeccion: "2024-01-27", proxima_inspeccion: "2025-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i12', subestacion: "MIRAFLORES", equipo: "DISYUNTOR", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha_inspeccion: "2024-01-27", proxima_inspeccion: "2025-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i13', subestacion: "LA FLORESTA", equipo: "BREAKER 3F", nomenclatura: "RECTIFICADOR", voltaje: "220 V", fecha_inspeccion: "2024-01-20", proxima_inspeccion: "2025-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i14', subestacion: "EL BOSQUE", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha_inspeccion: "2024-01-12", proxima_inspeccion: "2025-01-12", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i15', subestacion: "ANDALUCIA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6,3 KV", fecha_inspeccion: "2024-01-27", proxima_inspeccion: "2025-01-27", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i16', subestacion: "CAROLINA", equipo: "BANCO DE CAPACITORES", nomenclatura: "152-BC1", voltaje: "6.3 KV", fecha_inspeccion: "2024-01-20", proxima_inspeccion: "2025-01-20", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i17', subestacion: "IÑAQUITO", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2024-02-19", proxima_inspeccion: "2025-02-19", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i18', subestacion: "SELVA ALEGRE", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "138 KV", fecha_inspeccion: "2024-01-15", proxima_inspeccion: "2025-01-15", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i19', subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-2", voltaje: "69 KV", fecha_inspeccion: "2024-01-29", proxima_inspeccion: "2025-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i20', subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-D", voltaje: "13,8 KV", fecha_inspeccion: "2024-01-29", proxima_inspeccion: "2025-01-29", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i21', subestacion: "POMASQUI", equipo: "DISYUNTOR", nomenclatura: "52-3", voltaje: "138 KV", fecha_inspeccion: "2024-01-05", proxima_inspeccion: "2025-01-05", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i22', subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha_inspeccion: "2024-01-23", proxima_inspeccion: "2025-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i23', subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-80", voltaje: "46 KV", fecha_inspeccion: "2024-01-23", proxima_inspeccion: "2025-01-23", nivel: "INTERMEDIO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i24', subestacion: "OLIMPICO", equipo: "TRANSFORMADOR DE POTENCIA", nomenclatura: "T-1", voltaje: "46 KV", fecha_inspeccion: "2024-02-26", proxima_inspeccion: "2025-02-26", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i25', subestacion: "LA FLORESTA", equipo: "SECCIONADOR", nomenclatura: "89-01", voltaje: "46 KV", fecha_inspeccion: "2024-01-15", proxima_inspeccion: "2025-01-15", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i26', subestacion: "LOS BANCOS", equipo: "SECCIONADOR", nomenclatura: "89-BT2", voltaje: "69 KV", fecha_inspeccion: "2024-01-29", proxima_inspeccion: "2025-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i27', subestacion: "LOS BANCOS", equipo: "TRANSFORMADOR DE DISTRIBUCIÓN", nomenclatura: "N/A", voltaje: "13,8 KV", fecha_inspeccion: "2024-01-29", proxima_inspeccion: "2025-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i28', subestacion: "LOS BANCOS", equipo: "DISYUNTOR", nomenclatura: "152-B", voltaje: "13,8 KV", fecha_inspeccion: "2024-01-29", proxima_inspeccion: "2025-01-29", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i29', subestacion: "MOVIL EL BANTAN", equipo: "BUSHING", nomenclatura: "H1", voltaje: "46 KV", fecha_inspeccion: "2024-02-03", proxima_inspeccion: "2025-02-03", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' },
-            { id: 'i30', subestacion: "CUMBAYA", equipo: "DISYUNTOR GEC GRAN VOLUMEN DE ACEITE", nomenclatura: "S-20", voltaje: "46 KV", fecha_inspeccion: "2024-01-23", proxima_inspeccion: "2025-01-23", nivel: "AVISO", observacion: "MONITOREO CONSTANTE.", historial: [], deleted: false, tipo: 'termico' }
-        ];
-
-        async function insertarDatosRespaldo() {
-            try {
-                for (let t of transformadoresRespaldo) {
-                    await db.collection("transformadores").doc(t.id).set(t);
-                }
-                for (let i of inspeccionesRespaldo) {
-                    await db.collection("inspecciones_termograficas").doc(i.id).set(i);
-                }
-                console.log("Datos de respaldo insertados en Firestore.");
-            } catch (e) {
-                console.error("Error insertando respaldo:", e);
-            }
+        
+        function todosLosEquipos() { 
+            return [...transformadoresData, ...inspeccionesData]; 
         }
 
         async function cargarDatos(forceReload = false) {
@@ -804,20 +368,14 @@
             }
 
             try {
-                console.log("Cargando datos desde Firestore (una sola vez)...");
+                console.log("Cargando datos desde Firestore...");
                 
-                const tSnapshot = await db.collection("transformadores").get();
+                const [tSnapshot, iSnapshot] = await Promise.all([
+                    db.collection("transformadores").get(),
+                    db.collection("inspecciones_termograficas").get()
+                ]);
                 
-                if (tSnapshot.empty) {
-                    console.log("Firestore vacío, insertando datos de respaldo...");
-                    await insertarDatosRespaldo();
-                    const newTSnapshot = await db.collection("transformadores").get();
-                    transformadoresData = newTSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), deleted: doc.data().deleted || false }));
-                } else {
-                    transformadoresData = tSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), deleted: doc.data().deleted || false }));
-                }
-
-                const iSnapshot = await db.collection("inspecciones_termograficas").get();
+                transformadoresData = tSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), deleted: doc.data().deleted || false }));
                 inspeccionesData = iSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), tipo: 'termico', deleted: doc.data().deleted || false }));
 
                 dataLoaded = true;
@@ -829,13 +387,14 @@
             }
         }
 
+        function recargarDatos() { cargarDatos(true); }
+
         async function cargarHistorial(tipo, id) {
             const collectionPath = tipo === 'trafo' ? 'transformadores' : 'inspecciones_termograficas';
             try {
                 const snapshot = await db.collection(`${collectionPath}/${id}/historial`).orderBy('fecha', 'desc').get();
                 return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             } catch (e) {
-                console.error("Error cargando historial:", e);
                 return [];
             }
         }
@@ -849,6 +408,11 @@
                 console.error("Error guardando historial:", e);
                 return false;
             }
+        }
+
+        function renderHistorial(h, cid) {
+            document.getElementById(cid).innerHTML = h.length === 0 ? '<div class="historial-entry" style="color:#6c7a8a;">Sin historial</div>' : 
+                h.sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).map(e => `<div class="historial-entry"><strong>${e.fecha}</strong> - ${e.tipo} (OT: ${e.ot})<br>${e.descripcion}</div>`).join('');
         }
 
         async function guardarTransformadorEnFirestore(t) {
@@ -895,28 +459,10 @@
             } catch (e) { console.error(e); }
         }
 
-        function getEstadoClass(e) { 
-            const c = { "Operativo": "status-success", "No Operativo": "status-grave", "Daño Interno": "status-daño", "Reserva": "status-warning", "Averiado": "status-critical", "incendiado": "status-critical", "Dado de baja": "status-info" }; 
-            return c[e] || "status-info"; 
-        }
-        
-        function getNivelClass(n) { 
-            if (n === "CRITICO") return "status-critical"; 
-            if (n === "GRAVE") return "status-grave"; 
-            if (n === "INTERMEDIO") return "status-warning"; 
-            return "status-info"; 
-        }
-        
-        function normalizar(s) { return s ? s.toUpperCase().trim() : "SIN SUBESTACIÓN"; }
-        function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
-        function toggleFabMenu() { document.getElementById('fabOptions').classList.toggle('show'); }
-        
-        function equiposActivos() { 
-            return [...transformadoresData.filter(t => !t.deleted), ...inspeccionesData.filter(i => !i.deleted)]; 
-        }
-        
-        function todosLosEquipos() { 
-            return [...transformadoresData, ...inspeccionesData]; 
+        async function restaurarEquipo(id, tipo) {
+            if (tipo === 'trafo') await restaurarTransformador(id);
+            else await restaurarTermico(id);
+            actualizarTodo();
         }
 
         function actualizarKPIs() {
@@ -939,6 +485,10 @@
             const trans = equiposActivos().filter(e => e.tipo !== 'termico');
             const terms = equiposActivos().filter(e => e.tipo === 'termico');
             const operativos = trans.filter(t => t.estado === "Operativo").length;
+            const noOperativos = trans.filter(t => t.estado === "No Operativo").length;
+            const dañoInterno = trans.filter(t => t.estado === "Daño Interno").length;
+            const reserva = trans.filter(t => t.estado === "Reserva").length;
+            const dadoDeBaja = trans.filter(t => t.estado === "Dado de baja").length;
             const criticos = terms.filter(t => t.nivel === "CRITICO").length;
             const graves = terms.filter(t => t.nivel === "GRAVE").length;
             const intermedios = terms.filter(t => t.nivel === "INTERMEDIO").length;
@@ -952,9 +502,10 @@
                 <div class="executive-card">
                     <div class="card-header"><h3>Transformadores (${trans.length})</h3></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('Operativo')"><span class="metric-label">Operativos</span><span class="metric-value"><span class="metric-badge badge-success">${operativos}</span> ${trans.length ? Math.round(operativos/trans.length*100) : 0}%</span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('No Operativo')"><span class="metric-label">No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${trans.filter(t=>t.estado==='No Operativo').length}</span></span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Daño Interno')"><span class="metric-label">Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${trans.filter(t=>t.estado==='Daño Interno').length}</span></span></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Reserva')"><span class="metric-label">Reserva</span><span class="metric-value"><span class="metric-badge badge-warning">${trans.filter(t=>t.estado==='Reserva').length}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('No Operativo')"><span class="metric-label">No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${noOperativos}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Daño Interno')"><span class="metric-label">Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${dañoInterno}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Reserva')"><span class="metric-label">Reserva</span><span class="metric-value"><span class="metric-badge badge-warning">${reserva}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Dado de baja')"><span class="metric-label">Dado de baja</span><span class="metric-value"><span class="metric-badge badge-baja">${dadoDeBaja}</span></span></div>
                 </div>
                 <div class="executive-card">
                     <div class="card-header"><h3>Inspecciones (${terms.length})</h3></div>
@@ -1005,7 +556,7 @@
                         ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
                         ${g.trans.map(t => `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                             <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
-                            <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario}/${t.voltaje_terciario} kV | ${t.capacidad} MVA ${t.tipo_conexion ? ` | ${t.tipo_conexion}` : ''}${t.ano_fabricacion ? ` | Año: ${t.ano_fabricacion}` : ''}</div>
+                            <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario}/${t.voltaje_terciario || ''} kV | ${t.capacidad} MVA ${t.tipo_conexion ? ` | ${t.tipo_conexion}` : ''}${t.ano_fabricacion ? ` | Año: ${t.ano_fabricacion}` : ''}</div>
                             ${t.proxima_mantencion ? `<div class="equipo-detalles">Próx. Mantención: ${t.proxima_mantencion}</div>` : ''}</div>
                         </div>`).join('')}
                         ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">INSPECCIONES (${g.term.length})</div>` : ''}
@@ -1070,8 +621,8 @@
             container.innerHTML = eliminados.map(e => {
                 const esTransformador = e.tipo !== 'termico';
                 return `<div class="subestacion-card" style="margin-bottom:8px;">
-                    <div class="equipo-row" style="background:#fef2f2;">
-                        <div class="equipo-info">
+                    <div class="flex-between" style="padding: 12px 20px; background:#fef2f2;">
+                        <div>
                             <div class="equipo-nombre">
                                 ${e.subestacion} - ${esTransformador ? e.nombre : e.equipo}
                                 <span class="status-badge status-baja">ELIMINADO</span>
@@ -1088,25 +639,12 @@
             }).join('');
         }
 
-        async function restaurarEquipo(id, tipo) {
-            if (tipo === 'trafo') {
-                await restaurarTransformador(id);
-            } else {
-                await restaurarTermico(id);
-            }
-            actualizarTodo();
-        }
-
-        async function eliminarTransformador() {
-            if (!currentEditingId || !confirm("¿Eliminar este transformador?")) return;
-            await softDeleteTransformador(currentEditingId);
-            cerrarModal("modalTransformador");
-        }
-
-        async function eliminarTermico() {
-            if (!currentEditingId || !confirm("¿Eliminar esta inspección?")) return;
-            await softDeleteTermico(currentEditingId);
-            cerrarModal("modalTermico");
+        function actualizarTodo() { 
+            renderReporteEjecutivo(); 
+            renderDashboard(); 
+            renderAlertas(); 
+            renderEliminados(); 
+            actualizarKPIs(); 
         }
 
         async function abrirModalTransformador(id) {
@@ -1181,41 +719,6 @@
             document.getElementById("modalTermico").style.display = "flex";
         }
 
-        function renderHistorial(h, cid) {
-            document.getElementById(cid).innerHTML = h.length === 0 ? '<div class="historial-entry" style="color:#6c7a8a;">Sin historial</div>' : 
-                h.sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).map(e => `<div class="historial-entry"><strong>${e.fecha}</strong> - ${e.tipo} (OT: ${e.ot})<br>${e.descripcion}</div>`).join('');
-        }
-
-        async function agregarEntradaHistorialTransformador() {
-            const f = document.getElementById("newHistorialFechaT").value;
-            const ot = document.getElementById("newHistorialOTT").value;
-            const tipo = document.getElementById("newHistorialTipoT").value;
-            const d = document.getElementById("newHistorialDescT").value;
-            if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
-            
-            await guardarEntradaHistorial('trafo', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
-            const historial = await cargarHistorial('trafo', currentEditingId);
-            renderHistorial(historial, "historialTransformadorList");
-            document.getElementById("newHistorialFechaT").value = '';
-            document.getElementById("newHistorialOTT").value = '';
-            document.getElementById("newHistorialDescT").value = '';
-        }
-
-        async function agregarEntradaHistorialInspeccion() {
-            const f = document.getElementById("newHistorialFechaTg").value;
-            const ot = document.getElementById("newHistorialOTTg").value;
-            const tipo = document.getElementById("newHistorialTipoTg").value;
-            const d = document.getElementById("newHistorialDescTg").value;
-            if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
-            
-            await guardarEntradaHistorial('term', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
-            const historial = await cargarHistorial('term', currentEditingId);
-            renderHistorial(historial, "historialTermicoList");
-            document.getElementById("newHistorialFechaTg").value = '';
-            document.getElementById("newHistorialOTTg").value = '';
-            document.getElementById("newHistorialDescTg").value = '';
-        }
-
         async function guardarEdicionTransformador() {
             const e = transformadoresData.find(t => t.id === currentEditingId); if (!e) return;
             e.nombre = document.getElementById("editNombreTransformador").value;
@@ -1250,14 +753,16 @@
             cerrarModal("modalTermico");
         }
 
-        function abrirModalAgregarTransformador() { 
-            document.getElementById("modalAgregarTransformador").style.display = "flex"; 
-            toggleFabMenu(); 
+        async function eliminarTransformador() {
+            if (!currentEditingId || !confirm("¿Eliminar este transformador?")) return;
+            await softDeleteTransformador(currentEditingId);
+            cerrarModal("modalTransformador");
         }
-        
-        function abrirModalAgregarInspeccion() { 
-            document.getElementById("modalAgregarTermico").style.display = "flex"; 
-            toggleFabMenu(); 
+
+        async function eliminarTermico() {
+            if (!currentEditingId || !confirm("¿Eliminar esta inspección?")) return;
+            await softDeleteTermico(currentEditingId);
+            cerrarModal("modalTermico");
         }
 
         async function agregarNuevoTransformador() {
@@ -1269,12 +774,14 @@
                 fabricante: document.getElementById("newFabricanteTransformador").value || "N/A",
                 voltaje_primario: document.getElementById("newVoltajePrimario").value || "N/A",
                 voltaje_secundario: document.getElementById("newVoltajeSecundario").value || "N/A",
+                voltaje_terciario: document.getElementById("newVoltajeTerciario").value || "",
                 capacidad: document.getElementById("newCapacidadTransformador").value || "N/A",
                 relacion: document.getElementById("newRelacionTransformador").value || "N/A",
                 tipo_conexion: document.getElementById("newTipoConexion").value || "N/A",
                 ano_fabricacion: document.getElementById("newAnoFabricacion").value || "N/A",
                 estado: document.getElementById("newEstadoTransformador").value,
-                proxima_mantencion: document.getElementById("newProximaMantencion").value,
+                ultima_inspeccion: "",
+                proxima_mantencion: "",
                 historial: [],
                 deleted: false,
                 tipo: 'transformador'
@@ -1293,9 +800,10 @@
                 id: 'i_' + Date.now(), subestacion: s, equipo: e,
                 nomenclatura: document.getElementById("newNomenclaturaTermico").value || "N/A",
                 voltaje: document.getElementById("newVoltajeTermico").value || "N/A",
-                fecha_inspeccion: document.getElementById("newFechaInspeccionTermico").value,
-                proxima_inspeccion: document.getElementById("newProximaInspeccionTermico").value,
+                fecha_inspeccion: document.getElementById("newFechaInspeccionTermico").value || "",
+                proxima_inspeccion: document.getElementById("newProximaInspeccionTermico").value || "",
                 nivel: document.getElementById("newNivelMantenimientoTermico").value,
+                observacion: "",
                 historial: [],
                 deleted: false,
                 tipo: 'termico'
@@ -1306,12 +814,34 @@
             actualizarTodo();
         }
 
-        function actualizarTodo() { 
-            renderReporteEjecutivo(); 
-            renderDashboard(); 
-            renderAlertas(); 
-            renderEliminados(); 
-            actualizarKPIs(); 
+        async function agregarEntradaHistorialTransformador() {
+            const f = document.getElementById("newHistorialFechaT").value;
+            const ot = document.getElementById("newHistorialOTT").value;
+            const tipo = document.getElementById("newHistorialTipoT").value;
+            const d = document.getElementById("newHistorialDescT").value;
+            if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
+            
+            await guardarEntradaHistorial('trafo', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
+            const historial = await cargarHistorial('trafo', currentEditingId);
+            renderHistorial(historial, "historialTransformadorList");
+            document.getElementById("newHistorialFechaT").value = '';
+            document.getElementById("newHistorialOTT").value = '';
+            document.getElementById("newHistorialDescT").value = '';
+        }
+
+        async function agregarEntradaHistorialInspeccion() {
+            const f = document.getElementById("newHistorialFechaTg").value;
+            const ot = document.getElementById("newHistorialOTTg").value;
+            const tipo = document.getElementById("newHistorialTipoTg").value;
+            const d = document.getElementById("newHistorialDescTg").value;
+            if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
+            
+            await guardarEntradaHistorial('term', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
+            const historial = await cargarHistorial('term', currentEditingId);
+            renderHistorial(historial, "historialTermicoList");
+            document.getElementById("newHistorialFechaTg").value = '';
+            document.getElementById("newHistorialOTTg").value = '';
+            document.getElementById("newHistorialDescTg").value = '';
         }
 
         function filtrarYMostrarDashboard(f) {
@@ -1338,6 +868,251 @@
             document.getElementById(`list-${id}`)?.classList.toggle('expanded'); 
         }
 
+        function abrirModalAgregarTransformador() { 
+            document.getElementById("modalAgregarTransformador").style.display = "flex"; 
+            toggleFabMenu(); 
+        }
+        
+        function abrirModalAgregarInspeccion() { 
+            document.getElementById("modalAgregarTermico").style.display = "flex"; 
+            toggleFabMenu(); 
+        }
+
+        async function doLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+                errorEl.textContent = 'Completa todos los campos';
+                errorEl.style.display = 'block';
+                return;  
+            }
+
+            errorEl.style.display = 'none';
+            try {
+                const userCred = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCred.user;
+                const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                let userData;
+                if (!userDoc.exists) {
+                    userData = {
+                        uid: user.uid,
+                        email: user.email,
+                        name: user.displayName || email.split('@')[0],
+                        role: 'invitado',
+                        createdAt: new Date().toISOString()
+                    };
+                    await db.collection('usuarios').doc(user.uid).set(userData); 
+                } else {
+                    userData = userDoc.data();
+                }
+                if (!ROLES_PERMITIDOS.includes(userData.role)) {
+                    await auth.signOut();
+                    errorEl.textContent = 'No tienes permiso para acceder a este dashboard';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+                currentUser = {uid: user.uid, ...userData};
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                updateUserUI();
+                await cargarDatos();
+
+            } catch (error) {
+                console.error('Error de login:', error);
+                let mensaje = 'Error al iniciar sesión';
+                if (error.code === 'auth/user-not-found') mensaje = 'Usuario no encontrado';
+                if (error.code === 'auth/wrong-password') mensaje = 'Contraseña incorrecta';
+                if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
+                if (error.code === 'auth/too-many-requests') mensaje = 'Demasiados intentos. Intenta más tarde';
+                errorEl.textContent = mensaje;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function updateUserUI() {
+            if (!currentUser) return;
+            const headerDiv = document.querySelector('.header');
+            if (headerDiv) {
+                const existingUserDiv = document.getElementById('userInfoHeader');
+                if (existingUserDiv) existingUserDiv.remove();
+                
+                const userDiv = document.createElement('div');
+                userDiv.id = 'userInfoHeader';
+                userDiv.style.display = 'flex';
+                userDiv.style.alignItems = 'center';
+                userDiv.style.gap = '16px';
+                
+                let adminButton = '';
+                if (currentUser.role === 'admin') {
+                    adminButton = `<button onclick="cargarListaUsuarios()" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;">👥 Usuarios</button>`;
+                }
+                
+                userDiv.innerHTML = `
+                    ${adminButton}
+                    <span style="color: white; font-size: 0.85rem;">
+                        👤 ${currentUser.name || currentUser.email}
+                        <span style="background: ${currentUser.role === 'admin' ? '#16a34a' : '#d97706'}; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px;">
+                            ${currentUser.role}
+                        </span>
+                    </span>
+                    <button onclick="doLogout()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;">
+                        Cerrar Sesión
+                    </button>
+                `;
+                headerDiv.appendChild(userDiv);
+            }
+            
+            const esAdmin = currentUser.role === 'admin';
+            const esOperador = currentUser.role === 'operador' || currentUser.role === 'supervisor' || esAdmin;
+            const fabOptions = document.getElementById('fabOptions');
+            if (fabOptions && !esOperador) {
+                fabOptions.innerHTML = '';
+            }
+            if (!esAdmin) {
+                const tabEliminados = document.querySelector('.tab-btn[data-tab="eliminados"]');
+                if (tabEliminados) tabEliminados.style.display = 'none';
+            }
+        }
+
+        async function doLogout() {
+            try {
+                await auth.signOut();
+                currentUser = null;
+                dataLoaded = false;
+                transformadoresData = [];
+                inspeccionesData = [];
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } catch (error){
+                console.error('Error al cerrar sesión:', error);
+            }
+        }
+
+        async function cargarListaUsuarios() {
+            if (currentUser?.role !== 'admin') {
+                alert('Solo administradores pueden gestionar usuarios');
+                return;
+            }
+            try {
+                const snapshot = await db.collection('usuarios').get();
+                const container = document.getElementById('listaUsuarios');
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="color: #64748b; text-align: center;">No hay usuarios registrados</p>';
+                    document.getElementById('modalUsuarios').style.display = 'flex';
+                    return;
+                }
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                html += '<thead><tr style="background: #f8fafc;"><th style="padding: 10px; text-align: left;">Nombre</th><th style="padding: 10px; text-align: left;">Email</th><th style="padding: 10px; text-align: left;">Rol</th><th style="padding: 10px; text-align: left;">Acciones</th></tr></thead><tbody>';
+                snapshot.forEach(doc => {
+                    const u = doc.data();
+                    html += `<tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 10px;"><strong>${u.name || '—'}</strong></td>
+                        <td style="padding: 10px;">${u.email}</td>
+                        <td style="padding: 10px;">
+                            <select onchange="cambiarRolUsuario('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                <option value="supervisor" ${u.role === 'supervisor' ? 'selected' : ''}>Supervisor</option>
+                                <option value="operador" ${u.role === 'operador' ? 'selected' : ''}>Operador</option>
+                                <option value="invitado" ${u.role === 'invitado' ? 'selected' : ''}>Invitado</option>
+                            </select>
+                        </td>
+                        <td style="padding: 10px;">
+                            ${doc.id !== currentUser?.uid ? `<button onclick="eliminarUsuario('${doc.id}')" style="background: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer;">Eliminar</button>` : '<span style="color: #64748b;">Tú</span>'}
+                        </td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+                document.getElementById('modalUsuarios').style.display = 'flex';
+            } catch(error) {
+                console.error('Error cargando usuarios:', error);
+                alert('Error al cargar usuarios');
+            }
+        }
+
+        async function crearNuevoUsuario() {
+            if (currentUser?.role !== 'admin') {
+                alert('Solo administradores pueden crear usuarios');
+                return;
+            }
+            const name = document.getElementById('newUserName').value.trim();
+            const email = document.getElementById('newUserEmail').value.trim();
+            const password = document.getElementById('newUserPassword').value;
+            const role = document.getElementById('newUserRole').value;
+            if (!name || !email || !password) {
+                alert('Complete todos los campos');
+                return;
+            }
+            if (password.length < 6) {
+                alert('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            try{
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                await db.collection('usuarios').doc(userCred.user.uid).set({
+                    uid: userCred.user.uid,
+                    name: name,
+                    email: email,
+                    role: role,
+                    createdAt: new Date().toISOString(),
+                    createdBy: currentUser.uid
+                });
+                alert(`Usuario ${email} creado con rol: ${role}`);
+                document.getElementById('newUserName').value = '';
+                document.getElementById('newUserEmail').value = '';
+                document.getElementById('newUserPassword').value = '';
+                cargarListaUsuarios();
+            } catch (error) {
+                console.error('Error:', error);
+                let mensaje = 'Error al crear usuario';
+                if (error.code === 'auth/email-already-in-use') mensaje = 'Este email ya está registrado';
+                if (error.code === 'auth/invalid-email') mensaje = 'Email inválido';
+                if (error.code === 'auth/weak-password') mensaje = 'La contraseña es muy débil';
+                alert(mensaje);
+            }
+        }
+
+        async function cambiarRolUsuario(uid, nuevoRol) {
+            if (currentUser?.role !== 'admin') {
+                alert('Solo administradores pueden cambiar roles');
+                return;
+            }
+            if (uid === currentUser.uid) { 
+                alert('No puedes cambiar tu propio rol');
+                return;
+            }
+            try {
+                await db.collection('usuarios').doc(uid).update({ role: nuevoRol });
+                alert('Rol actualizado'); 
+                cargarListaUsuarios();
+            } catch(error){
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function eliminarUsuario(uid) {
+            if (currentUser?.role !== 'admin') {
+                alert('Solo administradores pueden eliminar usuarios');
+                return;
+            }
+            if (uid === currentUser.uid) {
+                alert('No puedes eliminarte a ti mismo');
+                return;
+            }
+            if (!confirm('¿Eliminar este usuario permanentemente? Esta acción no se puede deshacer.')) return;
+            try {
+                await db.collection('usuarios').doc(uid).delete();
+                alert('Usuario eliminado de la base de datos');
+                cargarListaUsuarios();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
         document.getElementById("searchInput")?.addEventListener("input", e => { 
             currentSearch = e.target.value; 
             renderDashboard(); 
@@ -1345,25 +1120,25 @@
         
         document.getElementById("searchInputEliminados")?.addEventListener("input", e => {
             const search = e.target.value.toLowerCase();
-            const eliminados = todosLosEquipos().filter(e => e.deleted === true && 
-                ((e.subestacion||"").toLowerCase().includes(search) || (e.nombre||e.equipo||"").toLowerCase().includes(search)));
+            const eliminados = todosLosEquipos().filter(eq => eq.deleted === true && 
+                ((eq.subestacion||"").toLowerCase().includes(search) || (eq.nombre||eq.equipo||"").toLowerCase().includes(search)));
             const container = document.getElementById("eliminadosGrid");
             if (!container) return;
             if (eliminados.length === 0) {
                 container.innerHTML = '<div class="empty-state">No se encontraron resultados</div>';
                 return;
             }
-            container.innerHTML = eliminados.map(e => {
-                const esTransformador = e.tipo !== 'termico';
+            container.innerHTML = eliminados.map(eq => {
+                const esTransformador = eq.tipo !== 'termico';
                 return `<div class="subestacion-card" style="margin-bottom:8px;">
-                    <div class="equipo-row" style="background:#fef2f2;">
-                        <div class="equipo-info">
+                    <div class="flex-between" style="padding: 12px 20px; background:#fef2f2;">
+                        <div>
                             <div class="equipo-nombre">
-                                ${e.subestacion} - ${esTransformador ? e.nombre : e.equipo}
+                                ${eq.subestacion} - ${esTransformador ? eq.nombre : eq.equipo}
                                 <span class="status-badge status-baja">ELIMINADO</span>
                             </div>
                         </div>
-                        <button class="restore-btn" onclick="restaurarEquipo('${e.id}', '${esTransformador ? 'trafo' : 'term'}')">
+                        <button class="restore-btn" onclick="restaurarEquipo('${eq.id}', '${esTransformador ? 'trafo' : 'term'}')">
                             ↺ Restaurar
                         </button>
                     </div>
@@ -1388,6 +1163,7 @@
             if (this.dataset.tab === 'dashboard') renderDashboard();
             if (this.dataset.tab === 'eliminados') renderEliminados();
         }));
+
         window.abrirModalTransformador = abrirModalTransformador;
         window.abrirModalTermico = abrirModalTermico;
         window.guardarEdicionTransformador = guardarEdicionTransformador;
@@ -1412,12 +1188,36 @@
         window.cargarListaUsuarios = cargarListaUsuarios;
         window.crearNuevoUsuario = crearNuevoUsuario;
         window.cambiarRolUsuario = cambiarRolUsuario;
-        window.eliminarUsuario = eliminarUsuario; 
-        window.recargarDatos = () => cargarDatos(true);
-        window.addEventListener('load', () => {
-            cargarDatos();
+        window.eliminarUsuario = eliminarUsuario;
+        window.recargarDatos = recargarDatos;
+        window.doLogin = doLogin;
+        window.doLogout = doLogout;
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    if (ROLES_PERMITIDOS.includes(userData.role)) {
+                        currentUser = { uid: user.uid, ...userData };
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('mainApp').style.display = 'block';
+                        updateUserUI();
+                        await cargarDatos();
+                    } else {
+                        await auth.signOut();
+                        document.getElementById('loginScreen').style.display = 'flex';
+                        document.getElementById('mainApp').style.display = 'none';
+                    }
+                } else {
+                    await auth.signOut();
+                    document.getElementById('loginScreen').style.display = 'flex';
+                    document.getElementById('mainApp').style.display = 'none';
+                }
+            } else {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+            }
         });
     </script>
-    </div>
 </body>
 </html>
