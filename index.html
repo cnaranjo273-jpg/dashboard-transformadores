@@ -175,7 +175,8 @@
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
-            <label>Subestación</label><input type="text" id="editSubestacionTransformador">
+            <label>Subestación</label><input type="text" id="editSubestacionTransformador" list="subestacionesList">
+            <datalist id="subestacionesList"></datalist>
             <label>Fabricante</label><input type="text" id="editFabricanteTransformador">
             <div class="form-row-3">
                 <div><label>Voltaje Primario (kV)</label><input type="text" id="editVoltajePrimario"></div>
@@ -223,7 +224,7 @@
 
     <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
         <div class="edit-form">
-            <label>Subestación</label><input type="text" id="editSubestacionTermico">
+            <label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesList">
             <label>Equipo</label><input type="text" id="editEquipoTermico">
             <label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico">
             <label>Voltaje</label><input type="text" id="editVoltajeTermico">
@@ -255,7 +256,10 @@
     <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre *</label><input type="text" id="newNombreTransformador">
-            <label>Subestación *</label><input type="text" id="newSubestacionTransformador">
+            <label>Subestación *</label>
+            <select id="newSubestacionTransformador">
+                <option value="">Seleccione una subestación...</option>
+            </select>
             <label>Fabricante</label><input type="text" id="newFabricanteTransformador">
             <div class="form-row-3"><div><label>V. Primario</label><input type="text" id="newVoltajePrimario"></div><div><label>V. Secundario</label><input type="text" id="newVoltajeSecundario"></div><div><label>V. Terciario</label><input type="text" id="newVoltajeTerciario"></div></div>
             <div class="form-row"><div><label>Capacidad</label><input type="text" id="newCapacidadTransformador"></div><div><label>Relación</label><input type="text" id="newRelacionTransformador"></div></div>
@@ -274,7 +278,10 @@
 
     <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nueva Inspección</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
         <div class="edit-form">
-            <label>Subestación *</label><input type="text" id="newSubestacionTermico">
+            <label>Subestación *</label>
+            <select id="newSubestacionTermico">
+                <option value="">Seleccione una subestación...</option>
+            </select>
             <label>Equipo *</label><input type="text" id="newEquipoTermico">
             <label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico">
             <label>Voltaje</label><input type="text" id="newVoltajeTermico">
@@ -301,9 +308,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script>
-        // ============================================================
-        // CONFIGURACIÓN DE FIREBASE
-        // ============================================================
+
         const firebaseConfig = {
             apiKey: "AIzaSyBtFG3nluvDLdRC5pYbWhe8cyUkpULVjEU",
             authDomain: "dashboard-transformadores.firebaseapp.com",
@@ -316,6 +321,48 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
+        const SUBESTACIONES = [
+            "OLIMPICO", "LULUNCOTO", "BARRIO NUEVO", "CHIMBACALLE",
+            "CHILIBULO", "ESCUELA SUCRE", "SAN ROQUE", "LA MARIN",
+            "MIRAFLORES", "DIEZ VIEJA", "BELISARIO QUEVEDO", "LA FLORESTA",
+            "GRANDA CENTENO", "GUALO", "EL BOSQUE", "RIO COCA",
+            "ANDALUCIA", "CRISTIANIA", "COTOCOLLAO", "SUR",
+            "EPLICACHIMA", "SAN ANTONIO", "CONOCOTO", "CAROLINA",
+            "SAN PABLO", "ALANGASI", "SAN RAFAEL", "IÑAQUITO",
+            "NUEVA CUMBAYA", "PLATAFORMA FINANCIERA", "TABABELA", "DIEZ NUEVA",
+            "NUEVO AEROPUERTO", "TUMBACO", "SANTA ROSA", "NORTE",
+            "VICENTINA", "SELVA ALEGRE", "MOVIL PAPALLACTA", "EL INGA BAJO",
+            "MIRADOR ALTO", "LOS BANCOS", "PARQUE BICENTENARIO", "PEREZ GUERRERO",
+            "SANGOLQUI", "POMASQUI", "EL QUINCHE", "EUGENIO ESPEJO",
+            "BATÁN ALTO", "LABRADOR", "SHELTER T-GOOD", "EL OBRAJE",
+            "CUMBAYA", "ESTACIÓN TERRENA", "GUALBERTO HERNANDEZ",
+            "GUANGOPOLO HIDRÁULICA", "NAYÓN", "PASOCHOA", "CH LORETO",
+            "CH VICTORIA", "LA CALERA", "MOVIL EL BANTAN", "PAPALLACTA",
+        ];
+
+
+        function inicializarListasSubestaciones() {
+            const selectNewTrafo = document.getElementById("newSubestacionTransformador");
+            const selectNewTermico = document.getElementById("newSubestacionTermico");
+            const datalistEdicion = document.getElementById("subestacionesList");
+            const selects = [selectNewTrafo, selectNewTermico];
+            selects.forEach(select => {
+                if (select) {
+
+                    select.innerHTML = '<option value="">Seleccione una subestación...</option>';
+                    SUBESTACIONES.forEach(sub => {
+                        const opt = document.createElement("option");
+                        opt.value = sub;
+                        opt.textContent = sub;
+                        select.appendChild(opt);
+                    });
+                }
+            });
+
+            if (datalistEdicion) {
+                datalistEdicion.innerHTML = SUBESTACIONES.map(sub => `<option value="${sub}">`).join('');
+            }
+        }
 
         let transformadoresData = [];
         let inspeccionesData = [];
@@ -766,7 +813,7 @@
         }
 
         async function agregarNuevoTransformador() {
-            const n = document.getElementById("newNombreTransformador").value;
+            const n = document.getElementById("newNombreTransformador").value.trim();
             const s = document.getElementById("newSubestacionTransformador").value;
             if (!n || !s) { alert("Complete nombre y subestación"); return; }
             const nuevo = {
@@ -788,13 +835,31 @@
             };
             await guardarTransformadorEnFirestore(nuevo);
             transformadoresData.push(nuevo);
+            
+            // LIMPIAR FORMULARIO
+            limpiarFormularioNuevoTransformador();
+            
             cerrarModal("modalAgregarTransformador");
             actualizarTodo();
         }
 
+        function limpiarFormularioNuevoTransformador() {
+            document.getElementById("newNombreTransformador").value = "";
+            document.getElementById("newSubestacionTransformador").value = "";
+            document.getElementById("newFabricanteTransformador").value = "";
+            document.getElementById("newVoltajePrimario").value = "";
+            document.getElementById("newVoltajeSecundario").value = "";
+            document.getElementById("newVoltajeTerciario").value = "";
+            document.getElementById("newCapacidadTransformador").value = "";
+            document.getElementById("newRelacionTransformador").value = "";
+            document.getElementById("newTipoConexion").value = "";
+            document.getElementById("newAnoFabricacion").value = "";
+            document.getElementById("newEstadoTransformador").value = "Operativo";
+        }
+
         async function agregarNuevoTermico() {
             const s = document.getElementById("newSubestacionTermico").value;
-            const e = document.getElementById("newEquipoTermico").value;
+            const e = document.getElementById("newEquipoTermico").value.trim();
             if (!s || !e) { alert("Complete subestación y equipo"); return; }
             const nuevo = {
                 id: 'i_' + Date.now(), subestacion: s, equipo: e,
@@ -810,8 +875,22 @@
             };
             await guardarInspeccionEnFirestore(nuevo);
             inspeccionesData.push(nuevo);
+            
+            // LIMPIAR FORMULARIO
+            limpiarFormularioNuevaInspeccion();
+            
             cerrarModal("modalAgregarTermico");
             actualizarTodo();
+        }
+
+        function limpiarFormularioNuevaInspeccion() {
+            document.getElementById("newSubestacionTermico").value = "";
+            document.getElementById("newEquipoTermico").value = "";
+            document.getElementById("newNomenclaturaTermico").value = "";
+            document.getElementById("newVoltajeTermico").value = "";
+            document.getElementById("newFechaInspeccionTermico").value = "";
+            document.getElementById("newProximaInspeccionTermico").value = "";
+            document.getElementById("newNivelMantenimientoTermico").value = "AVISO";
         }
 
         async function agregarEntradaHistorialTransformador() {
@@ -869,11 +948,15 @@
         }
 
         function abrirModalAgregarTransformador() { 
+            // Asegurarse de que el formulario esté limpio al abrir
+            limpiarFormularioNuevoTransformador();
             document.getElementById("modalAgregarTransformador").style.display = "flex"; 
             toggleFabMenu(); 
         }
         
         function abrirModalAgregarInspeccion() { 
+            // Asegurarse de que el formulario esté limpio al abrir
+            limpiarFormularioNuevaInspeccion();
             document.getElementById("modalAgregarTermico").style.display = "flex"; 
             toggleFabMenu(); 
         }
@@ -917,6 +1000,10 @@
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
                 updateUserUI();
+                
+                // Inicializar las listas de subestaciones
+                inicializarListasSubestaciones();
+                
                 await cargarDatos();
 
             } catch (error) {
@@ -1202,6 +1289,7 @@
                         document.getElementById('loginScreen').style.display = 'none';
                         document.getElementById('mainApp').style.display = 'block';
                         updateUserUI();
+                        inicializarListasSubestaciones();
                         await cargarDatos();
                     } else {
                         await auth.signOut();
