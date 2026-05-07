@@ -90,7 +90,7 @@
 <body>
     <div id="loginScreen" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a2b44 0%, #1e4a6b 100%);">
         <div style="background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
-            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;">🔐 Acceso al Dashboard</h2>
+            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;"> Acceso al Dashboard</h2>
             <div id="loginError" style="color: #dc2626; font-size: 0.8rem; margin-bottom: 16px; display: none;"></div>
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Email</label>
@@ -124,9 +124,9 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="reporte">📊 Reporte Ejecutivo</button>
-            <button class="tab-btn" data-tab="dashboard">🔍 Dashboard de Activos</button>
-            <button class="tab-btn" data-tab="eliminados">🗑️ Eliminados</button>
+            <button class="tab-btn active" data-tab="reporte"> Reporte Ejecutivo</button>
+            <button class="tab-btn" data-tab="dashboard"> Dashboard de Activos</button>
+            <button class="tab-btn" data-tab="eliminados"> Eliminados</button>
         </div>
 
         <div id="tab-reporte" class="tab-content active"><div class="executive-grid" id="executiveReport"></div></div>
@@ -150,19 +150,17 @@
         </div>
         <div id="tab-eliminados" class="tab-content">
             <div class="filters-bar">
-                <div class="search-box"><input type="text" id="searchInputEliminados" placeholder="🔍 Buscar equipos eliminados..."></div>
+                <div class="search-box"><input type="text" id="searchInputEliminados" placeholder=" Buscar equipos eliminados..."></div>
             </div>
             <div id="eliminadosGrid"></div>
         </div>
     </div>
 
-    <div class="fab" onclick="toggleFabMenu()">➕</div>
+    <div class="fab" onclick="toggleFabMenu()">+</div>
     <div class="fab-options" id="fabOptions">
         <div class="fab-option" onclick="abrirModalAgregarTransformador()">Transformador</div>
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
-
-    <!-- MODAL EDITAR TRANSFORMADOR (sin plan de mantenimiento) -->
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -202,8 +200,6 @@
             <button id="btnRestaurarTransformador" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTransformador()">↺ Restaurar</button>
         </div>
     </div></div>
-
-    <!-- MODAL EDITAR INSPECCIÓN (sin historial ni próxima) -->
     <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesList">
@@ -231,8 +227,6 @@
             <button id="btnRestaurarTermico" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTermico()">↺ Restaurar</button>
         </div>
     </div></div>
-
-    <!-- MODAL NUEVO TRANSFORMADOR (sin campos de plan) -->
     <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre *</label><input type="text" id="newNombreTransformador">
@@ -256,8 +250,6 @@
             <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
         </div>
     </div></div>
-
-    <!-- MODAL NUEVA INSPECCIÓN (sin próxima inspección) -->
     <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Equipo con Novedad</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación *</label>
@@ -273,17 +265,15 @@
             <button class="save-btn" onclick="agregarNuevoTermico()">Crear Equipo con novedad</button>
         </div>
     </div></div>
-
-    <!-- MODAL USUARIOS (sin cambios) -->
-    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2>👥 Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
+    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2> Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
         <div class="edit-form">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                <h3 style="color: #1e4a6b; margin-bottom: 12px;">➕ Nuevo Usuario</h3>
+                <h3 style="color: #1e4a6b; margin-bottom: 12px;"> Nuevo Usuario</h3>
                 <div class="form-row"><div><label>Nombre Completo</label><input type="text" id="newUserName" placeholder="Ej: Juan Pérez"></div><div><label>Email</label><input type="email" id="newUserEmail" placeholder="correo@eeq.com.ec"></div></div>
                 <div class="form-row"><div><label>Contraseña</label><input type="password" id="newUserPassword" placeholder="Mínimo 6 caracteres"></div><div><label>Rol</label><select id="newUserRole"><option value="admin">Administrador</option><option value="supervisor">Supervisor</option><option value="operador">Operador</option><option value="invitado">Invitado</option></select></div></div>
                 <button class="save-btn" onclick="crearNuevoUsuario()" style="width: auto; padding: 10px 20px;">Crear Usuario</button>
             </div>
-            <h3 style="color: #1e4a6b; margin-bottom: 12px;">👤 Usuarios Registrados</h3>
+            <h3 style="color: #1e4a6b; margin-bottom: 12px;"> Usuarios Registrados</h3>
             <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;"><p style="color: #64748b; text-align: center;">Cargando usuarios...</p></div>
         </div>
     </div></div>
@@ -885,7 +875,7 @@
                 userDiv.innerHTML = `
                     ${adminButton}
                     <span style="color: white; font-size: 0.85rem;">
-                        👤 ${currentUser.name || currentUser.email}
+                         ${currentUser.name || currentUser.email}
                         <span style="background: ${currentUser.role === 'admin' ? '#16a34a' : '#d97706'}; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px;">
                             ${currentUser.role}
                         </span>
