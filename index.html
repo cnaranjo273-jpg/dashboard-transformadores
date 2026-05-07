@@ -56,7 +56,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .subestacion-card summary {
-            list-style: none;                /* oculta el triángulo estándar */
+            list-style: none;
             background: #f8fafc;
             padding: 14px 20px;
             cursor: pointer;
@@ -81,10 +81,7 @@
             font-size: 0.7rem;
             font-weight: 500;
         }
-        /* Ícono de flecha que gira */
-        details[open] .toggle-icon {
-            transform: rotate(180deg);
-        }
+        details[open] .toggle-icon { transform: rotate(180deg); }
         .toggle-icon {
             display: inline-block;
             transition: transform 0.2s ease;
@@ -144,12 +141,18 @@
         .fab-option { background: white; color: #1e4a6b; padding: 12px 20px; border-radius: 30px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-weight: 500; }
         .restore-btn { background: #16a34a; color: white; border: none; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+        /* Historial */
+        .historial-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid #eef2f5; }
+        .historial-list { max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px; margin-bottom: 12px; background: #f8fafc; }
+        .historial-entry { font-size: 0.75rem; padding: 6px; border-bottom: 1px solid #e2e8f0; }
+        .add-historial-btn { background: #475569; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="loginScreen" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a2b44 0%, #1e4a6b 100%);">
         <div style="background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
-            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;">🔐 Acceso al Dashboard</h2>
+            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;"> Acceso al Dashboard</h2>
             <div id="loginError" style="color: #dc2626; font-size: 0.8rem; margin-bottom: 16px; display: none;"></div>
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Email</label>
@@ -171,7 +174,7 @@
                 <p>Sistema de Gestión de Activos</p>
             </div>
             <div class="flex-between" style="gap: 12px;">
-                <button class="refresh-btn" onclick="recargarDatos()">🔄 Refrescar Datos</button>
+                <button class="refresh-btn" onclick="recargarDatos()"> Refrescar Datos</button>
             </div>
         </div>
 
@@ -183,9 +186,9 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="reporte">📊 Reporte Ejecutivo</button>
-            <button class="tab-btn" data-tab="dashboard">🔍 Dashboard de Activos</button>
-            <button class="tab-btn" data-tab="eliminados">🗑️ Eliminados</button>
+            <button class="tab-btn active" data-tab="reporte"> Reporte Ejecutivo</button>
+            <button class="tab-btn" data-tab="dashboard"> Dashboard de Activos</button>
+            <button class="tab-btn" data-tab="eliminados"> Eliminados</button>
         </div>
 
         <div id="tab-reporte" class="tab-content active"><div class="executive-grid" id="executiveReport"></div></div>
@@ -215,13 +218,11 @@
         </div>
     </div>
 
-    <div class="fab" onclick="toggleFabMenu()">➕</div>
+    <div class="fab" onclick="toggleFabMenu()">+</div>
     <div class="fab-options" id="fabOptions">
         <div class="fab-option" onclick="abrirModalAgregarTransformador()">Transformador</div>
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
-
-    <!-- MODALES SIN MANTENIMIENTO NI HISTORIAL -->
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -256,12 +257,20 @@
                 <option value="Averiado">Averiado</option>
                 <option value="Dado de baja">Dado de baja</option>
             </select>
+            <div class="historial-section">
+                <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Mantenimientos</h3>
+                <div id="historialTransformadorList" class="historial-list">Cargando...</div>
+                <div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaT"></div><div><label>OT</label><input type="text" id="newHistorialOTT" placeholder="Ej: 20269"></div></div>
+                <div><label>Tipo de Trabajo</label><select id="newHistorialTipoT"><option value="Mantenimiento Preventivo">Mantenimiento Preventivo</option><option value="Mantenimiento Correctivo">Mantenimiento Correctivo</option><option value="Mantenimiento Predictivo">Mantenimiento Predictivo</option></select></div>
+                <div><label>Descripción</label><textarea id="newHistorialDescT" rows="2"></textarea></div>
+                <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialTransformador()">Registrar Mantenimiento</button>
+            </div>
+
             <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
             <button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button>
             <button id="btnRestaurarTransformador" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTransformador()">↺ Restaurar</button>
         </div>
     </div></div>
-
     <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesList">
@@ -289,7 +298,6 @@
             <button id="btnRestaurarTermico" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTermico()">↺ Restaurar</button>
         </div>
     </div></div>
-
     <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre *</label><input type="text" id="newNombreTransformador">
@@ -313,7 +321,6 @@
             <button class="save-btn" onclick="agregarNuevoTransformador()">Crear Transformador</button>
         </div>
     </div></div>
-
     <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Equipo con Novedad</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación *</label>
@@ -330,15 +337,15 @@
         </div>
     </div></div>
 
-    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2>👥 Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
+    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2> Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
         <div class="edit-form">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                <h3 style="color: #1e4a6b; margin-bottom: 12px;">➕ Nuevo Usuario</h3>
+                <h3 style="color: #1e4a6b; margin-bottom: 12px;"> Nuevo Usuario</h3>
                 <div class="form-row"><div><label>Nombre Completo</label><input type="text" id="newUserName" placeholder="Ej: Juan Pérez"></div><div><label>Email</label><input type="email" id="newUserEmail" placeholder="correo@eeq.com.ec"></div></div>
                 <div class="form-row"><div><label>Contraseña</label><input type="password" id="newUserPassword" placeholder="Mínimo 6 caracteres"></div><div><label>Rol</label><select id="newUserRole"><option value="admin">Administrador</option><option value="supervisor">Supervisor</option><option value="operador">Operador</option><option value="invitado">Invitado</option></select></div></div>
                 <button class="save-btn" onclick="crearNuevoUsuario()" style="width: auto; padding: 10px 20px;">Crear Usuario</button>
             </div>
-            <h3 style="color: #1e4a6b; margin-bottom: 12px;">📋 Usuarios Registrados</h3>
+            <h3 style="color: #1e4a6b; margin-bottom: 12px;"> Usuarios Registrados</h3>
             <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;"><p style="color: #64748b; text-align: center;">Cargando usuarios...</p></div>
         </div>
     </div></div>
@@ -441,6 +448,30 @@
         }
         async function restaurarEquipo(id, tipo) { if (tipo==='trafo') await restaurarTransformador(id); else await restaurarTermico(id); }
 
+        async function cargarHistorial(tipo, id) {
+            const collectionPath = tipo === 'trafo' ? 'transformadores' : 'inspecciones_termograficas';
+            try {
+                const snapshot = await db.collection(`${collectionPath}/${id}/historial`).orderBy('fecha', 'desc').get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (e) { return []; }
+        }
+
+        async function guardarEntradaHistorial(tipo, id, entrada) {
+            const collectionPath = tipo === 'trafo' ? 'transformadores' : 'inspecciones_termograficas';
+            try {
+                await db.collection(`${collectionPath}/${id}/historial`).add(entrada);
+                return true;
+            } catch (e) { console.error(e); return false; }
+        }
+
+        function renderHistorial(h, cid) {
+            const el = document.getElementById(cid);
+            if (!el) return;
+            el.innerHTML = h.length === 0 
+                ? '<div class="historial-entry" style="color:#6c7a8a;">Sin historial</div>'
+                : h.map(e => `<div class="historial-entry"><strong>${e.fecha}</strong> - ${e.tipo} (OT: ${e.ot})<br>${e.descripcion}</div>`).join('');
+        }
+
         function actualizarKPIs() {
             const activos = equiposActivos();
             const trans = activos.filter(e=>e.tipo!=='termico');
@@ -495,7 +526,7 @@
             `;
         }
 
-        // DASHBOARD CON <details> NATIVO (SIN onclick EN EL summary)
+        // DASHBOARD CON <details> NATIVO
         function renderDashboard() {
             const grupos = {};
             equiposActivos().filter(e => {
@@ -545,8 +576,6 @@
             actualizarKPIs();
         }
 
-        // NO HAY FUNCIÓN toggleSubestacion (el <details> funciona nativamente)
-
         function renderEliminados() {
             const eliminados = todosLosEquipos().filter(e=>e.deleted===true);
             const container = document.getElementById("eliminadosGrid");
@@ -578,12 +607,17 @@
             document.getElementById("editTipoConexion").value=e.tipo_conexion||"";
             document.getElementById("editAnoFabricacion").value=e.ano_fabricacion||"";
             document.getElementById("editEstadoTransformador").value=e.estado||"Operativo";
+            
+            const historial = await cargarHistorial('trafo', id);
+            renderHistorial(historial, "historialTransformadorList");
+            
             const btnRest = document.getElementById("btnRestaurarTransformador");
             const btnDel = document.querySelector("#modalTransformador .delete-btn-modal");
             if (e.deleted) { btnRest.style.display="block"; btnDel.style.display="none"; }
             else { btnRest.style.display="none"; btnDel.style.display="block"; }
             document.getElementById("modalTransformador").style.display="flex";
         }
+
         async function abrirModalTermico(id) {
             const e = inspeccionesData.find(t=>t.id===id); if (!e) return;
             currentEditingId=id; currentEditingTipo='term';
@@ -622,6 +656,7 @@
             actualizarTodo();
             cerrarModal("modalTransformador");
         }
+
         async function guardarEdicionTermico() {
             const e = inspeccionesData.find(t=>t.id===currentEditingId); if (!e) return;
             e.subestacion = document.getElementById("editSubestacionTermico").value;
@@ -693,6 +728,20 @@
             ['newSubestacionTermico','newEquipoTermico','newNomenclaturaTermico','newVoltajeTermico','newFechaInspeccionTermico'].forEach(id=>document.getElementById(id).value='');
             document.getElementById("newNivelMantenimientoTermico").value='AVISO';
             document.getElementById("newEstadoOperativo").value='OPERATIVO';
+        }
+
+        async function agregarEntradaHistorialTransformador() {
+            const f = document.getElementById("newHistorialFechaT").value;
+            const ot = document.getElementById("newHistorialOTT").value;
+            const tipo = document.getElementById("newHistorialTipoT").value;
+            const d = document.getElementById("newHistorialDescT").value;
+            if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
+            await guardarEntradaHistorial('trafo', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
+            const historial = await cargarHistorial('trafo', currentEditingId);
+            renderHistorial(historial, "historialTransformadorList");
+            document.getElementById("newHistorialFechaT").value = '';
+            document.getElementById("newHistorialOTT").value = '';
+            document.getElementById("newHistorialDescT").value = '';
         }
 
         function filtrarYMostrarDashboard(f) {
@@ -823,6 +872,7 @@
         window.filtrarYMostrarDashboard = filtrarYMostrarDashboard;
         window.buscarSubestacion = buscarSubestacion;
         window.toggleFabMenu = toggleFabMenu;
+        window.agregarEntradaHistorialTransformador = agregarEntradaHistorialTransformador;
         window.eliminarTransformador = eliminarTransformador;
         window.eliminarTermico = eliminarTermico;
         window.restaurarTransformador = restaurarTransformador;
