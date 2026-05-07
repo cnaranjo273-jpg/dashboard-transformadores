@@ -221,7 +221,7 @@
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
 
-    <!-- MODALES SIN MANTENIMIENTO -->
+    <!-- MODALES SIN MANTENIMIENTO NI HISTORIAL -->
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -495,7 +495,7 @@
             `;
         }
 
-        // DASHBOARD CON <details> NATIVO
+        // DASHBOARD CON <details> NATIVO (SIN onclick EN EL summary)
         function renderDashboard() {
             const grupos = {};
             equiposActivos().filter(e => {
@@ -524,7 +524,7 @@
                 const g = grupos[s];
                 const nombreMostrar = s.replace(/_/g, ' ');
                 return `<details class="subestacion-card" id="card-${s}">
-                    <summary onclick="toggleSubestacion('${s}')">
+                    <summary>
                         <div class="subestacion-title">${nombreMostrar}
                             <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span>
                         </div>
@@ -545,13 +545,7 @@
             actualizarKPIs();
         }
 
-        // Función para alternar el <details> nativo
-        function toggleSubestacion(id) {
-            const details = document.getElementById(`card-${id}`);
-            if (details) {
-                details.open = !details.open;
-            }
-        }
+        // NO HAY FUNCIÓN toggleSubestacion (el <details> funciona nativamente)
 
         function renderEliminados() {
             const eliminados = todosLosEquipos().filter(e=>e.deleted===true);
@@ -826,7 +820,6 @@
         window.abrirModalAgregarTransformador = abrirModalAgregarTransformador;
         window.abrirModalAgregarInspeccion = abrirModalAgregarInspeccion;
         window.cerrarModal = cerrarModal;
-        window.toggleSubestacion = toggleSubestacion;
         window.filtrarYMostrarDashboard = filtrarYMostrarDashboard;
         window.buscarSubestacion = buscarSubestacion;
         window.toggleFabMenu = toggleFabMenu;
