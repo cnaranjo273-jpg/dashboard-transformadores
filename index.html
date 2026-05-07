@@ -47,13 +47,13 @@
         .badge-daño { background: #fecaca; color: #991b1b; }
         .badge-baja { background: #d1d5db; color: #4b5563; }
 
-        /* Tarjetas de subestación */
+        /* Tarjetas de subestación (acordeón) */
         .subestacion-card {
             background: white;
             border-radius: 12px;
             margin-bottom: 16px;
             border: 1px solid #e9ecef;
-            overflow: visible;                 /* evita recortes */
+            overflow: visible;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .subestacion-header {
@@ -80,7 +80,7 @@
             font-size: 0.7rem;
         }
 
-        /* Contenedor de equipos: visible solo cuando la tarjeta tenga .expanded */
+        /* Contenedor de equipos: oculto por defecto, se muestra al expandir */
         .equipos-container {
             display: none;
             border-top: 1px solid #eef2f5;
@@ -219,7 +219,7 @@
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
 
-    <!-- Modales (sin mantenimiento, idénticos a antes) -->
+    <!-- MODALES (sin mantenimiento) -->
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -328,7 +328,6 @@
         </div>
     </div></div>
 
-    <!-- Modal Usuarios (sin cambios) -->
     <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2>👥 Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
         <div class="edit-form">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
@@ -345,86 +344,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script>
-        // ... (todo el JavaScript idéntico a la última versión fusionada, pero cambiando toggleSubestacion) ...
-        // Por brevedad, pego únicamente el cambio crítico. Asegúrate de reemplazar la función toggleSubestacion y el contenido de renderDashboard donde se genera el HTML para que la clase expanded esté en la card.
-        // Debajo dejo el fragmento exacto que debes insertar en el lugar correspondiente del script anterior.
-
-        // ------------------------------------------------------------
-        // REEMPLAZAR la función toggleSubestacion por esta:
-        // ------------------------------------------------------------
-        function toggleSubestacion(id) { 
-            const card = document.getElementById(`card-${id}`);
-            if (card) card.classList.toggle('expanded');
-        }
-
-        // ------------------------------------------------------------
-        // REEMPLAZAR el interior de renderDashboard donde se genera el HTML de las cards, para que cada subestacion-card tenga id="card-..." y onclick="toggleSubestacion('...')"
-        // Es decir, dentro de renderDashboard, cambia:
-        //    <div class="subestacion-card">
-        //    <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
-        // por:
-        //    <div class="subestacion-card" id="card-${s}">
-        //    <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
-        // Y elimina cualquier id="list-..." en el contenedor de equipos (no es necesario, pero lo dejamos sin id o con un id diferente si quieres, pero no se usa). Yo lo dejaré sin id para simplificar.
-        // También asegúrate de mantener event.stopPropagation() en los equipos.
-
-        // A continuación incluyo el código completo de renderDashboard con esos cambios, para que copies y pegues:
-        function renderDashboard() {
-            const grupos = {};
-            equiposActivos().filter(e => {
-                if (currentFilter === 'transformadores') return e.tipo !== 'termico';
-                if (currentFilter === 'termicos') return e.tipo === 'termico';
-                if (currentFilter !== "all") {
-                    if (e.tipo !== 'termico' && e.estado !== currentFilter) return false;
-                    if (e.tipo === 'termico' && e.nivel !== currentFilter && e.estado !== currentFilter) return false;
-                }
-                if (currentSearch) {
-                    const s = currentSearch.toLowerCase();
-                    return (e.subestacion||"").toLowerCase().includes(s) || (e.nombre||e.equipo||"").toLowerCase().includes(s);
-                }
-                return true;
-            }).forEach(e => {
-                const s = normalizar(e.subestacion);
-                if (!grupos[s]) grupos[s] = { trans: [], term: [] };
-                if (e.tipo === 'termico') grupos[s].term.push(e);
-                else grupos[s].trans.push(e);
-            });
-            
-            const grid = document.getElementById("dashboardGrid");
-            if (Object.keys(grupos).length === 0) { grid.innerHTML = '<div class="empty-state">No se encontraron resultados</div>'; return; }
-            
-            grid.innerHTML = Object.keys(grupos).sort().map(s => {
-                const g = grupos[s];
-                const nombreMostrar = s.replace(/_/g, ' ');
-                return `<div class="subestacion-card" id="card-${s}">
-                    <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
-                        <div class="subestacion-title">${nombreMostrar} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
-                        <span>▼</span>
-                    </div>
-                    <div class="equipos-container">
-                        ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
-                        ${g.trans.map(t => `<div class="equipo-row" onclick="event.stopPropagation(); abrirModalTransformador('${t.id}')">
-                            <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
-                            <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario}/${t.voltaje_terciario || ''} kV | ${t.capacidad} MVA ${t.tipo_conexion ? ` | ${t.tipo_conexion}` : ''}${t.ano_fabricacion ? ` | Año: ${t.ano_fabricacion}` : ''}</div>
-                        </div>`).join('')}
-                        ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">INSPECCIONES (${g.term.length})</div>` : ''}
-                        ${g.term.map(t => `<div class="equipo-row" onclick="event.stopPropagation(); abrirModalTermico('${t.id}')">
-                            <div><div class="equipo-nombre">${t.equipo} <span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div>
-                            <div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje}</div>
-                        </div>`).join('')}
-                    </div>
-                </div>`;
-            }).join('');
-            actualizarKPIs();
-        }
-
-        // ------------------------------------------------------------
-        // Asegúrate de eliminar cualquier otra referencia a toggleSubestacion que use el viejo método. La exposición global de la función sigue siendo la misma.
-        // Copia y pega el resto del código JavaScript completo de la versión anterior (sin mantenimiento, con filtros, login, etc.) y luego reemplaza la función toggleSubestacion y el contenido de renderDashboard como se indica.
-        // Por simplicidad, voy a pegar el script completo con estos cambios integrados.
-    </script>
-    <!-- SCRIPT COMPLETO CON LOS CAMBIOS -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBtFG3nluvDLdRC5pYbWhe8cyUkpULVjEU",
