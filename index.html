@@ -100,7 +100,7 @@
 <body>
     <div id="loginScreen" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a2b44 0%, #1e4a6b 100%);">
         <div style="background: white; border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
-            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;">🔐 Acceso al Dashboard</h2>
+            <h2 style="color: #1e4a6b; margin-bottom: 24px; text-align: center;"> Acceso al Dashboard</h2>
             <div id="loginError" style="color: #dc2626; font-size: 0.8rem; margin-bottom: 16px; display: none;"></div>
             <div style="margin-bottom: 16px;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px;">Email</label>
@@ -165,7 +165,7 @@
         </div>
     </div>
 
-    <div class="fab" onclick="toggleFabMenu()">NUEVO</div>
+    <div class="fab" onclick="toggleFabMenu()">+</div>
     <div class="fab-options" id="fabOptions">
         <div class="fab-option" onclick="abrirModalAgregarTransformador()">Transformador</div>
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
@@ -196,11 +196,6 @@
                 <div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion" placeholder="Ej: DYn1"></div>
                 <div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion" placeholder="Ej: 2015"></div>
             </div>
-            <div class="form-row">
-                <div><label>Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
-                <div><label>Próximo Mantenimiento</label><input type="date" id="editProximaMantencion"></div>
-            </div>
-            <div id="mantenimientoStatus" style="margin: 8px 0;"></div>
             <label>Estado</label>
             <select id="editEstadoTransformador">
                 <option value="Operativo">Operativo</option>
@@ -234,7 +229,6 @@
                 <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Fecha Inspección</h3>
                 <div class="form-row">
                     <div><label>Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div>
-                    <div><label>Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div>
                 </div>
             </div>
             <label>Nivel de Criticidad Térmico</label>
@@ -249,22 +243,14 @@
                 <option value="OPERATIVO">OPERATIVO</option>
                 <option value="NO OPERATIVO">NO OPERATIVO</option>
                 <option value="REQUIERE ATENCIÓN">REQUIERE ATENCIÓN</option>
-            </select>   
-            <div class="historial-section">
-                <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Inspecciones</h3>
-                <div id="historialTermicoList" class="historial-list">Cargando...</div>
-                <div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div><div><label>OT</label><input type="text" id="newHistorialOTTg" placeholder="Ej: 20269"></div></div>
-                <div><label>Tipo</label><select id="newHistorialTipoTg"><option value="Inspección">Inspección</option><option value="Mantenimiento">Mantenimiento</option></select></div>
-                <div><label>Descripción</label><textarea id="newHistorialDescTg" rows="2"></textarea></div>
-                <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">Registrar Entrada</button>
-            </div>         
+            </select>           
             <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
             <button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button>
             <button id="btnRestaurarTermico" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTermico()">↺ Restaurar</button>
         </div>
     </div></div>
 
-    <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
+    <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre *</label><input type="text" id="newNombreTransformador">
             <label>Subestación *</label>
@@ -288,7 +274,7 @@
         </div>
     </div></div>
 
-    <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nueva Inspección</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
+    <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Equipo con Novedad</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación *</label>
             <select id="newSubestacionTermico">
@@ -537,7 +523,6 @@
             const graves = terms.filter(t => t.nivel === "GRAVE").length;
             const intermedios = terms.filter(t => t.nivel === "INTERMEDIO").length;
             const avisos = terms.filter(t => t.nivel === "AVISO").length;
-            // Variables antes no definidas: operativo, noOpearativo, requiereAtencion (para inspecciones)
             const operativo = terms.filter(t => t.estado === "OPERATIVO").length;
             const noOpearativo = terms.filter(t => t.estado === "NO OPERATIVO").length;
             const requiereAtencion = terms.filter(t => t.estado === "REQUIERE ATENCIÓN").length;
@@ -748,7 +733,6 @@
             e.ano_fabricacion = document.getElementById("editAnoFabricacion").value;
             e.estado = document.getElementById("editEstadoTransformador").value;
             e.ultima_inspeccion = document.getElementById("editUltimaInspeccion").value;
-            e.proxima_mantencion = document.getElementById("editProximaMantencion").value;
             await guardarTransformadorEnFirestore(e);
             actualizarTodo();
             cerrarModal("modalTransformador");
