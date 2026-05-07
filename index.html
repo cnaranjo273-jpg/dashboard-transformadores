@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #f0f4f8; min-height: 100vh; padding: 20px; }
         .container { max-width: 1600px; margin: 0 auto; }
-        .header { background: #0a2b44; border-radius: 16px; padding: 20px 28px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header { background: #0a2b44; border-radius: 16px; padding: 20px 28px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .header h1 { font-size: 1.5rem; font-weight: 600; color: white; }
         .header p { font-size: 0.8rem; color: #9bb7d4; margin-top: 4px; }
         .refresh-btn { background: #1e4a6b; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
@@ -47,16 +47,16 @@
         .badge-daño { background: #fecaca; color: #991b1b; }
         .badge-baja { background: #d1d5db; color: #4b5563; }
 
-        /* Tarjetas de subestación (acordeón) */
+        /* ACORDEÓN NATIVO <details> */
         .subestacion-card {
             background: white;
             border-radius: 12px;
             margin-bottom: 16px;
             border: 1px solid #e9ecef;
-            overflow: visible;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .subestacion-header {
+        .subestacion-card summary {
+            list-style: none;                /* oculta el triángulo estándar */
             background: #f8fafc;
             padding: 14px 20px;
             cursor: pointer;
@@ -65,7 +65,8 @@
             align-items: center;
             user-select: none;
         }
-        .subestacion-header:hover { background: #edf2f7; }
+        .subestacion-card summary::-webkit-details-marker { display: none; }
+        .subestacion-card summary:hover { background: #edf2f7; }
         .subestacion-title {
             font-weight: 600;
             color: #1e4a6b;
@@ -75,18 +76,19 @@
         }
         .subestacion-badge {
             background: #e9ecef;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border-radius: 20px;
             font-size: 0.7rem;
+            font-weight: 500;
         }
-
-        /* Contenedor de equipos: oculto por defecto, se muestra al expandir */
-        .equipos-container {
-            display: none;
-            border-top: 1px solid #eef2f5;
+        /* Ícono de flecha que gira */
+        details[open] .toggle-icon {
+            transform: rotate(180deg);
         }
-        .subestacion-card.expanded .equipos-container {
-            display: block;
+        .toggle-icon {
+            display: inline-block;
+            transition: transform 0.2s ease;
+            font-size: 0.8rem;
         }
 
         .seccion-titulo {
@@ -219,7 +221,7 @@
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
 
-    <!-- MODALES (sin mantenimiento) -->
+    <!-- MODALES SIN MANTENIMIENTO -->
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -493,6 +495,7 @@
             `;
         }
 
+        // DASHBOARD CON <details> NATIVO
         function renderDashboard() {
             const grupos = {};
             equiposActivos().filter(e => {
@@ -520,31 +523,34 @@
             grid.innerHTML = Object.keys(grupos).sort().map(s => {
                 const g = grupos[s];
                 const nombreMostrar = s.replace(/_/g, ' ');
-                return `<div class="subestacion-card" id="card-${s}">
-                    <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
-                        <div class="subestacion-title">${nombreMostrar} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
-                        <span>▼</span>
-                    </div>
-                    <div class="equipos-container">
-                        ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
-                        ${g.trans.map(t => `<div class="equipo-row" onclick="event.stopPropagation(); abrirModalTransformador('${t.id}')">
-                            <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
-                            <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario}/${t.voltaje_terciario || ''} kV | ${t.capacidad} MVA ${t.tipo_conexion ? ` | ${t.tipo_conexion}` : ''}${t.ano_fabricacion ? ` | Año: ${t.ano_fabricacion}` : ''}</div>
-                        </div>`).join('')}
-                        ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">INSPECCIONES (${g.term.length})</div>` : ''}
-                        ${g.term.map(t => `<div class="equipo-row" onclick="event.stopPropagation(); abrirModalTermico('${t.id}')">
-                            <div><div class="equipo-nombre">${t.equipo} <span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div>
-                            <div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje}</div>
-                        </div>`).join('')}
-                    </div>
-                </div>`;
+                return `<details class="subestacion-card" id="card-${s}">
+                    <summary onclick="toggleSubestacion('${s}')">
+                        <div class="subestacion-title">${nombreMostrar}
+                            <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span>
+                        </div>
+                        <span class="toggle-icon">▼</span>
+                    </summary>
+                    ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
+                    ${g.trans.map(t => `<div class="equipo-row" onclick="event.stopPropagation(); abrirModalTransformador('${t.id}')">
+                        <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
+                        <div class="equipo-detalles">${t.fabricante} | ${t.voltaje_primario}/${t.voltaje_secundario}/${t.voltaje_terciario || ''} kV | ${t.capacidad} MVA ${t.tipo_conexion ? ` | ${t.tipo_conexion}` : ''}${t.ano_fabricacion ? ` | Año: ${t.ano_fabricacion}` : ''}</div>
+                    </div>`).join('')}
+                    ${g.term.length > 0 ? `<div class="seccion-titulo" style="margin-top:8px;">INSPECCIONES (${g.term.length})</div>` : ''}
+                    ${g.term.map(t => `<div class="equipo-row" onclick="event.stopPropagation(); abrirModalTermico('${t.id}')">
+                        <div><div class="equipo-nombre">${t.equipo} <span class="status-badge ${getNivelClass(t.nivel)}">${t.nivel}</span></div>
+                        <div class="equipo-detalles">${t.nomenclatura} | ${t.voltaje}</div>
+                    </div>`).join('')}
+                </details>`;
             }).join('');
             actualizarKPIs();
         }
 
-        function toggleSubestacion(id) { 
-            const card = document.getElementById(`card-${id}`);
-            if (card) card.classList.toggle('expanded');
+        // Función para alternar el <details> nativo
+        function toggleSubestacion(id) {
+            const details = document.getElementById(`card-${id}`);
+            if (details) {
+                details.open = !details.open;
+            }
         }
 
         function renderEliminados() {
