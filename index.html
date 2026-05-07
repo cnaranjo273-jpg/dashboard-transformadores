@@ -47,19 +47,18 @@
         .badge-daño { background: #fecaca; color: #991b1b; }
         .badge-baja { background: #d1d5db; color: #4b5563; }
         
-        /* Tarjetas de subestación (acordeón) */
+        /* Tarjetas de subestación (siempre expandidas) */
         .subestacion-card {
             background: white;
             border-radius: 12px;
             margin-bottom: 16px;
             border: 1px solid #e9ecef;
-            overflow: visible;                  /* Para que no recorte el contenido */
+            overflow: visible;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .subestacion-header {
             background: #f8fafc;
             padding: 14px 20px;
-            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -80,13 +79,9 @@
             font-weight: 500;
         }
         
-        /* Contenedor de equipos: display none/block para acordeón */
+        /* Contenedor de equipos siempre visible */
         .equipos-container {
-            display: none;
             border-top: 1px solid #eef2f5;
-        }
-        .equipos-container.expanded {
-            display: block;
         }
         
         .seccion-titulo {
@@ -219,7 +214,7 @@
         <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
 
-    <!-- Modal Editar Transformador (sin mantenimiento) -->
+    <!-- Modales (sin cambios respecto a la versión anterior) -->
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -260,7 +255,6 @@
         </div>
     </div></div>
 
-    <!-- Modal Editar Inspección (sin historial, sin próxima) -->
     <div id="modalTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Inspección Termográfica</h2><span class="close-modal" onclick="cerrarModal('modalTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación</label><input type="text" id="editSubestacionTermico" list="subestacionesList">
@@ -289,7 +283,6 @@
         </div>
     </div></div>
 
-    <!-- Modal Nuevo Transformador (sin campos de mantenimiento) -->
     <div id="modalAgregarTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Nuevo Transformador</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre *</label><input type="text" id="newNombreTransformador">
@@ -314,7 +307,6 @@
         </div>
     </div></div>
 
-    <!-- Modal Nueva Inspección (sin próxima inspección) -->
     <div id="modalAgregarTermico" class="modal"><div class="modal-content"><div class="modal-header"><h2>Equipo con Novedad</h2><span class="close-modal" onclick="cerrarModal('modalAgregarTermico')">&times;</span></div>
         <div class="edit-form">
             <label>Subestación *</label>
@@ -331,7 +323,6 @@
         </div>
     </div></div>
 
-    <!-- Modal Usuarios (sin cambios) -->
     <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2>👥 Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
         <div class="edit-form">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
@@ -349,7 +340,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script>
-        // Configuración Firebase
+        // Configuración Firebase (sin cambios)
         const firebaseConfig = {
             apiKey: "AIzaSyBtFG3nluvDLdRC5pYbWhe8cyUkpULVjEU",
             authDomain: "dashboard-transformadores.firebaseapp.com",
@@ -362,7 +353,6 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // Lista de subestaciones
         const SUBESTACIONES = [
             "OLIMPICO", "LULUNCOTO", "BARRIO NUEVO", "CHIMBACALLE",
             "CHILIBULO", "ESCUELA SUCRE", "SAN ROQUE", "LA MARIN",
@@ -382,7 +372,6 @@
             "CH VICTORIA", "LA CALERA", "MOVIL EL BANTAN", "PAPALLACTA"
         ];
 
-        // Inicializar listas de subestaciones en los modales
         function inicializarListasSubestaciones() {
             const selectNewTrafo = document.getElementById("newSubestacionTransformador");
             const selectNewTermico = document.getElementById("newSubestacionTermico");
@@ -403,7 +392,6 @@
             }
         }
 
-        // Datos y estado global
         let transformadoresData = [];
         let inspeccionesData = [];
         let dataLoaded = false;
@@ -414,7 +402,6 @@
         let currentUser = null;
         const ROLES_PERMITIDOS = ["admin", "supervisor", "operador", "invitado"];
 
-        // Utilidades
         function normalizar(s) { return s ? s.toUpperCase().replace(/\s+/g, '_').trim() : "SIN_SUBESTACIÓN"; }
         function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
         function toggleFabMenu() { document.getElementById('fabOptions').classList.toggle('show'); }
@@ -447,7 +434,6 @@
             return [...transformadoresData, ...inspeccionesData]; 
         }
 
-        // Carga de datos
         async function cargarDatos(forceReload = false) {
             if (dataLoaded && !forceReload) { actualizarTodo(); return; }
             try {
@@ -465,11 +451,9 @@
         }
         function recargarDatos() { cargarDatos(true); }
 
-        // Persistencia
         async function guardarTransformadorEnFirestore(t) { try { await db.collection("transformadores").doc(t.id).set(t); } catch (e) { console.error(e); } }
         async function guardarInspeccionEnFirestore(i) { try { await db.collection("inspecciones_termograficas").doc(i.id).set(i); } catch (e) { console.error(e); } }
 
-        // Soft delete y restaurar
         async function softDeleteTransformador(id) {
             await db.collection("transformadores").doc(id).update({ deleted: true });
             const idx = transformadoresData.findIndex(t => t.id === id);
@@ -499,7 +483,6 @@
             else await restaurarTermico(id);
         }
 
-        // KPIs
         function actualizarKPIs() {
             const activos = equiposActivos();
             const trans = activos.filter(e => e.tipo !== 'termico');
@@ -509,7 +492,6 @@
             document.getElementById("totalTermicos").textContent = activos.filter(e => e.tipo === 'termico').length;
         }
 
-        // Reporte Ejecutivo
         function renderReporteEjecutivo() {
             const trans = equiposActivos().filter(e => e.tipo !== 'termico');
             const terms = equiposActivos().filter(e => e.tipo === 'termico');
@@ -559,7 +541,7 @@
             `;
         }
 
-        // Dashboard (acordeones)
+        // Dashboard con todas las subestaciones expandidas
         function renderDashboard() {
             const grupos = {};
             equiposActivos().filter(e => {
@@ -588,11 +570,10 @@
                 const g = grupos[s];
                 const nombreMostrar = s.replace(/_/g, ' ');
                 return `<div class="subestacion-card">
-                    <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
+                    <div class="subestacion-header">
                         <div class="subestacion-title">${nombreMostrar} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
-                        <span>▼</span>
                     </div>
-                    <div class="equipos-container" id="list-${s}">
+                    <div class="equipos-container">
                         ${g.trans.length > 0 ? `<div class="seccion-titulo">TRANSFORMADORES (${g.trans.length})</div>` : ''}
                         ${g.trans.map(t => `<div class="equipo-row" onclick="abrirModalTransformador('${t.id}')">
                             <div><div class="equipo-nombre">${t.nombre} <span class="status-badge ${getEstadoClass(t.estado)}">${t.estado}</span></div>
@@ -609,7 +590,6 @@
             actualizarKPIs();
         }
 
-        // Eliminados
         function renderEliminados() {
             const eliminados = todosLosEquipos().filter(e => e.deleted === true);
             const container = document.getElementById("eliminadosGrid");
@@ -644,7 +624,7 @@
             actualizarKPIs(); 
         }
 
-        // Modales de edición (sin historial)
+        // Las funciones de abrir modal, guardar, etc., se mantienen exactamente igual que en la versión anterior (sin historial)
         async function abrirModalTransformador(id) {
             const e = transformadoresData.find(t => t.id === id); if (!e) return;
             currentEditingId = id; currentEditingTipo = 'trafo';
@@ -699,7 +679,6 @@
             document.getElementById("modalTermico").style.display = "flex";
         }
 
-        // Guardar ediciones
         async function guardarEdicionTransformador() {
             const e = transformadoresData.find(t => t.id === currentEditingId); if (!e) return;
             e.nombre = document.getElementById("editNombreTransformador").value;
@@ -736,7 +715,6 @@
             cerrarModal("modalTermico");
         }
 
-        // Eliminar
         async function eliminarTransformador() {
             if (!currentEditingId || !confirm("¿Eliminar este transformador?")) return;
             await softDeleteTransformador(currentEditingId);
@@ -748,7 +726,6 @@
             cerrarModal("modalTermico");
         }
 
-        // Agregar nuevos
         async function agregarNuevoTransformador() {
             const n = document.getElementById("newNombreTransformador").value.trim();
             const s = document.getElementById("newSubestacionTransformador").value;
@@ -825,7 +802,6 @@
             document.getElementById("newEstadoOperativo").value = "OPERATIVO";
         }
 
-        // Filtros y búsqueda
         function filtrarYMostrarDashboard(f) {
             currentFilter = f;
             document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
@@ -841,14 +817,7 @@
             renderDashboard(); 
         }
 
-        // Acordeón (corregido)
-        function toggleSubestacion(id) { 
-            const container = document.getElementById(`list-${id}`);
-            if (container) {
-                container.classList.toggle('expanded');
-            }
-        }
-
+        // No se necesita toggleSubestacion
         function abrirModalAgregarTransformador() { 
             limpiarFormularioNuevoTransformador();
             document.getElementById("modalAgregarTransformador").style.display = "flex"; 
@@ -860,7 +829,7 @@
             toggleFabMenu(); 
         }
 
-        // Login / Logout
+        // Login / Logout (idéntico a la versión anterior)
         async function doLogin() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
@@ -944,7 +913,7 @@
             document.getElementById('mainApp').style.display = 'none';
         }
 
-        // Gestión de usuarios (admin)
+        // Gestión de usuarios (admin) – idéntica a la anterior
         async function cargarListaUsuarios() {
             if (currentUser?.role !== 'admin') { alert('Solo admins'); return; }
             const snapshot = await db.collection('usuarios').get();
@@ -1047,7 +1016,7 @@
             if (this.dataset.tab === 'eliminados') renderEliminados();
         }));
 
-        // Exponer globalmente
+        // Exponer globalmente (quitamos toggleSubestacion)
         window.abrirModalTransformador = abrirModalTransformador;
         window.abrirModalTermico = abrirModalTermico;
         window.guardarEdicionTransformador = guardarEdicionTransformador;
@@ -1057,7 +1026,6 @@
         window.abrirModalAgregarTransformador = abrirModalAgregarTransformador;
         window.abrirModalAgregarInspeccion = abrirModalAgregarInspeccion;
         window.cerrarModal = cerrarModal;
-        window.toggleSubestacion = toggleSubestacion;
         window.filtrarYMostrarDashboard = filtrarYMostrarDashboard;
         window.buscarSubestacion = buscarSubestacion;
         window.toggleFabMenu = toggleFabMenu;
@@ -1074,7 +1042,6 @@
         window.doLogin = doLogin;
         window.doLogout = doLogout;
 
-        // Autenticación en tiempo real
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 const userDoc = await db.collection('usuarios').doc(user.uid).get();
