@@ -75,6 +75,7 @@
         .edit-form input, .edit-form select, .edit-form textarea { width: 100%; padding: 8px 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 10px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
         .save-btn { background: #1e4a6b; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; margin-bottom: 8px; }
         .delete-btn-modal { background: #dc2626; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; }
         .empty-state { text-align: center; padding: 40px; color: #6c7a8a; }
@@ -121,7 +122,7 @@
                 <p>Sistema de Gestión de Activos</p>
             </div>
             <div class="flex-between" style="gap: 12px;">
-                <button class="refresh-btn" onclick="recargarDatos()">🔄 Refrescar Datos</button>
+                <button class="refresh-btn" onclick="recargarDatos()">↻ Refrescar Datos</button>
             </div>
         </div>
 
@@ -129,14 +130,12 @@
             <div class="kpi-card" onclick="filtrarYMostrarDashboard('all')"><div class="kpi-label">Subestaciones</div><div class="kpi-value" id="totalSubestaciones">0</div></div>
             <div class="kpi-card" onclick="filtrarYMostrarDashboard('transformadores')"><div class="kpi-label">Transformadores</div><div class="kpi-value" id="totalTransformadores">0</div></div>
             <div class="kpi-card" onclick="filtrarYMostrarDashboard('termicos')"><div class="kpi-label">Inspecciones</div><div class="kpi-value" id="totalTermicos">0</div></div>
-            <div class="kpi-card" onclick="cambiarATabAlertas()"><div class="kpi-label">Mant. Próximos</div><div class="kpi-value" id="totalAlertas" style="color: #dc2626;">0</div></div>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="reporte">Reporte Ejecutivo</button>
-            <button class="tab-btn" data-tab="dashboard">Dashboard de Activos</button>
-            <button class="tab-btn" data-tab="alertas">Plan de Mantenimiento</button>
-            <button class="tab-btn" data-tab="eliminados">Eliminados</button>
+            <button class="tab-btn active" data-tab="reporte"> Reporte Ejecutivo</button>
+            <button class="tab-btn" data-tab="dashboard"> Dashboard de Activos</button>
+            <button class="tab-btn" data-tab="eliminados"> Eliminados</button>
         </div>
 
         <div id="tab-reporte" class="tab-content active"><div class="executive-grid" id="executiveReport"></div></div>
@@ -158,20 +157,20 @@
             </div>
             <div id="dashboardGrid"></div>
         </div>
-        <div id="tab-alertas" class="tab-content"><div id="alertasList"></div></div>
         <div id="tab-eliminados" class="tab-content">
             <div class="filters-bar">
-                <div class="search-box"><input type="text" id="searchInputEliminados" placeholder="🔍 Buscar equipos eliminados..."></div>
+                <div class="search-box"><input type="text" id="searchInputEliminados" placeholder=" Buscar equipos eliminados..."></div>
             </div>
             <div id="eliminadosGrid"></div>
         </div>
     </div>
 
-    <div class="fab" onclick="toggleFabMenu()">➕</div>
+    <div class="fab" onclick="toggleFabMenu()">NUEVO</div>
     <div class="fab-options" id="fabOptions">
-        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Nuevo Transformador</div>
-        <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Nueva Inspección</div>
+        <div class="fab-option" onclick="abrirModalAgregarTransformador()">Transformador</div>
+        <div class="fab-option" onclick="abrirModalAgregarInspeccion()">Equipo con novedad</div>
     </div>
+
     <div id="modalTransformador" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transformador</h2><span class="close-modal" onclick="cerrarModal('modalTransformador')">&times;</span></div>
         <div class="edit-form">
             <label>Nombre</label><input type="text" id="editNombreTransformador">
@@ -183,6 +182,12 @@
                 <div><label>Voltaje Secundario (kV)</label><input type="text" id="editVoltajeSecundario"></div>
                 <div><label>Voltaje Terciario (kV)</label><input type="text" id="editVoltajeTerciario" placeholder="Opcional"></div>
             </div>
+            <div class="form-row-4">
+                <div><label>Peso Total (kg)</label><input type="text" id="editPesoTotal"></div>
+                <div><label>Peso aceite (kg)</label><input type="text" id="editPesoAceite"></div>
+                <div><label>Peso núcleo y devanado (kg)</label><input type="text" id="editPesoNucleoDevanado"></div>
+                <div><label>Peso accesorios (kg)</label><input type="text" id="editPesoAccesorios"></div>
+            </div>           
             <div class="form-row">
                 <div><label>Capacidad (MVA)</label><input type="text" id="editCapacidadTransformador"></div>
                 <div><label>Relación</label><input type="text" id="editRelacionTransformador"></div>
@@ -190,7 +195,12 @@
             <div class="form-row">
                 <div><label>Tipo de Conexión</label><input type="text" id="editTipoConexion" placeholder="Ej: DYn1"></div>
                 <div><label>Año Fabricación</label><input type="number" id="editAnoFabricacion" placeholder="Ej: 2015"></div>
-            </div>                
+            </div>
+            <div class="form-row">
+                <div><label>Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
+                <div><label>Próximo Mantenimiento</label><input type="date" id="editProximaMantencion"></div>
+            </div>
+            <div id="mantenimientoStatus" style="margin: 8px 0;"></div>
             <label>Estado</label>
             <select id="editEstadoTransformador">
                 <option value="Operativo">Operativo</option>
@@ -200,14 +210,6 @@
                 <option value="Averiado">Averiado</option>
                 <option value="Dado de baja">Dado de baja</option>
             </select>
-            <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
-                <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Mantenimiento</h3>
-                <div class="form-row">
-                    <div><label>Última Inspección</label><input type="date" id="editUltimaInspeccion"></div>
-                    <div><label>Próxima Mantención</label><input type="date" id="editProximaMantencion"></div>
-                </div>
-                <div id="mantenimientoStatus" style="margin-top: 8px;"></div>
-            </div>
             <div class="historial-section">
                 <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Mantenimientos</h3>
                 <div id="historialTransformadorList" class="historial-list">Cargando...</div>
@@ -218,7 +220,7 @@
             </div>
             <button class="save-btn" onclick="guardarEdicionTransformador()">Guardar Cambios</button>
             <button class="delete-btn-modal" onclick="eliminarTransformador()">Eliminar</button>
-            <button id="btnRestaurarTransformador" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTransformador()">Restaurar</button>
+            <button id="btnRestaurarTransformador" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTransformador()">↺ Restaurar</button>
         </div>
     </div></div>
 
@@ -229,24 +231,33 @@
             <label>Nomenclatura</label><input type="text" id="editNomenclaturaTermico">
             <label>Voltaje</label><input type="text" id="editVoltajeTermico">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin: 16px 0;">
-                <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Plan de Inspección</h3>
-                <div class="form-row"><div><label>Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div><div><label>Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div></div>
+                <h3 style="color: #1e4a6b; margin-bottom: 12px; font-size: 0.9rem;">Fecha Inspección</h3>
+                <div class="form-row">
+                    <div><label>Fecha Inspección</label><input type="date" id="editFechaInspeccionTermico"></div>
+                    <div><label>Próxima Inspección</label><input type="date" id="editProximaInspeccionTermico"></div>
+                </div>
             </div>
-            <label>Nivel de Criticidad</label>
+            <label>Nivel de Criticidad Térmico</label>
             <select id="editNivelMantenimientoTermico">
                 <option value="AVISO">AVISO (Nivel 1) 5 °C A 15 °C</option>
                 <option value="INTERMEDIO">INTERMEDIO (Nivel 2) 16 °C A 35 °C</option>
                 <option value="GRAVE">GRAVE (Nivel 3) 36 °C A 75 °C</option>
                 <option value="CRITICO">CRÍTICO (Nivel 4) SUPERIOR A 75 °C</option>
             </select>
+            <label>Estado Operativo</label>
+            <select id="editEstadoOperativo">
+                <option value="OPERATIVO">OPERATIVO</option>
+                <option value="NO OPERATIVO">NO OPERATIVO</option>
+                <option value="REQUIERE ATENCIÓN">REQUIERE ATENCIÓN</option>
+            </select>   
             <div class="historial-section">
                 <h3 style="color: #1e4a6b; margin-bottom: 8px; font-size: 0.9rem;">Historial de Inspecciones</h3>
                 <div id="historialTermicoList" class="historial-list">Cargando...</div>
-                <div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div><div><label>OT</label><input type="text" id="newHistorialOTTg"></div></div>
-                <div><label>Tipo</label><select id="newHistorialTipoTg"><option value="Inspección Termográfica">Inspección Termográfica</option><option value="Corrección">Corrección</option><option value="Mantenimiento">Mantenimiento</option></select></div>
+                <div class="form-row"><div><label>Fecha</label><input type="date" id="newHistorialFechaTg"></div><div><label>OT</label><input type="text" id="newHistorialOTTg" placeholder="Ej: 20269"></div></div>
+                <div><label>Tipo</label><select id="newHistorialTipoTg"><option value="Inspección">Inspección</option><option value="Mantenimiento">Mantenimiento</option></select></div>
                 <div><label>Descripción</label><textarea id="newHistorialDescTg" rows="2"></textarea></div>
-                <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">Registrar Inspección</button>
-            </div>
+                <button type="button" class="add-historial-btn" onclick="agregarEntradaHistorialInspeccion()">Registrar Entrada</button>
+            </div>         
             <button class="save-btn" onclick="guardarEdicionTermico()">Guardar Cambios</button>
             <button class="delete-btn-modal" onclick="eliminarTermico()">Eliminar</button>
             <button id="btnRestaurarTermico" class="restore-btn" style="display:none; width:100%; margin-top:8px;" onclick="restaurarTermico()">↺ Restaurar</button>
@@ -262,6 +273,7 @@
             </select>
             <label>Fabricante</label><input type="text" id="newFabricanteTransformador">
             <div class="form-row-3"><div><label>V. Primario</label><input type="text" id="newVoltajePrimario"></div><div><label>V. Secundario</label><input type="text" id="newVoltajeSecundario"></div><div><label>V. Terciario</label><input type="text" id="newVoltajeTerciario"></div></div>
+            <div class="form-row-4"><div><label>Peso Total</label><input type="text" id="newPesoTotal"></div><div><label>Peso Aceite</label><input type="text" id="newPesoAceite"></div><div><label>Peso Nucleo y Devanado</label><input type="text" id="newPesoNucleoDevanado"></div><div><label>Peso Accesorios</label><input type="text" id="newPesoAccesorios"></div></div>
             <div class="form-row"><div><label>Capacidad</label><input type="text" id="newCapacidadTransformador"></div><div><label>Relación</label><input type="text" id="newRelacionTransformador"></div></div>
             <div class="form-row"><div><label>Tipo de Conexión</label><input type="text" id="newTipoConexion" placeholder="Ej: DYn1"></div><div><label>Año Fabricación</label><input type="number" id="newAnoFabricacion" placeholder="Ej: 2015"></div></div>
             <label>Estado</label>
@@ -285,21 +297,22 @@
             <label>Equipo *</label><input type="text" id="newEquipoTermico">
             <label>Nomenclatura</label><input type="text" id="newNomenclaturaTermico">
             <label>Voltaje</label><input type="text" id="newVoltajeTermico">
-            <div class="form-row"><div><label>Fecha</label><input type="date" id="newFechaInspeccionTermico"></div><div><label>Próxima</label><input type="date" id="newProximaInspeccionTermico"></div></div>
+            <div class="form-row"><div><label>Fecha Inspección</label><input type="date" id="newFechaInspeccionTermico"></div><div><label>Próxima Inspección</label><input type="date" id="newProximaInspeccionTermico"></div></div>
             <label>Nivel</label><select id="newNivelMantenimientoTermico"><option>AVISO</option><option>INTERMEDIO</option><option>GRAVE</option><option>CRITICO</option></select>
-            <button class="save-btn" onclick="agregarNuevoTermico()">Crear Inspección</button>
+            <label>Estado Operativo</label><select id="newEstadoOperativo"><option>OPERATIVO</option><option>NO OPERATIVO</option><option>REQUIERE ATENCIÓN</option></select>
+            <button class="save-btn" onclick="agregarNuevoEq()">Crear Equipo con novedad</button>
         </div>
     </div></div>
 
-    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2>👥 Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
+    <div id="modalUsuarios" class="modal"><div class="modal-content" style="max-width: 800px;"><div class="modal-header"><h2> Gestión de Usuarios</h2><span class="close-modal" onclick="cerrarModal('modalUsuarios')">&times;</span></div>
         <div class="edit-form">
             <div style="background: #f0f9ff; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                <h3 style="color: #1e4a6b; margin-bottom: 12px;">➕ Nuevo Usuario</h3>
+                <h3 style="color: #1e4a6b; margin-bottom: 12px;"> Nuevo Usuario</h3>
                 <div class="form-row"><div><label>Nombre Completo</label><input type="text" id="newUserName" placeholder="Ej: Juan Pérez"></div><div><label>Email</label><input type="email" id="newUserEmail" placeholder="correo@eeq.com.ec"></div></div>
                 <div class="form-row"><div><label>Contraseña</label><input type="password" id="newUserPassword" placeholder="Mínimo 6 caracteres"></div><div><label>Rol</label><select id="newUserRole"><option value="admin">Administrador</option><option value="supervisor">Supervisor</option><option value="operador">Operador</option><option value="invitado">Invitado</option></select></div></div>
                 <button class="save-btn" onclick="crearNuevoUsuario()" style="width: auto; padding: 10px 20px;">Crear Usuario</button>
             </div>
-            <h3 style="color: #1e4a6b; margin-bottom: 12px;">📋 Usuarios Registrados</h3>
+            <h3 style="color: #1e4a6b; margin-bottom: 12px;"> Usuarios Registrados</h3>
             <div id="listaUsuarios" style="max-height: 300px; overflow-y: auto;"><p style="color: #64748b; text-align: center;">Cargando usuarios...</p></div>
         </div>
     </div></div>
@@ -308,7 +321,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script>
-
         const firebaseConfig = {
             apiKey: "AIzaSyBtFG3nluvDLdRC5pYbWhe8cyUkpULVjEU",
             authDomain: "dashboard-transformadores.firebaseapp.com",
@@ -340,7 +352,6 @@
             "CH VICTORIA", "LA CALERA", "MOVIL EL BANTAN", "PAPALLACTA",
         ];
 
-
         function inicializarListasSubestaciones() {
             const selectNewTrafo = document.getElementById("newSubestacionTransformador");
             const selectNewTermico = document.getElementById("newSubestacionTermico");
@@ -348,7 +359,6 @@
             const selects = [selectNewTrafo, selectNewTermico];
             selects.forEach(select => {
                 if (select) {
-
                     select.innerHTML = '<option value="">Seleccione una subestación...</option>';
                     SUBESTACIONES.forEach(sub => {
                         const opt = document.createElement("option");
@@ -358,7 +368,6 @@
                     });
                 }
             });
-
             if (datalistEdicion) {
                 datalistEdicion.innerHTML = SUBESTACIONES.map(sub => `<option value="${sub}">`).join('');
             }
@@ -375,7 +384,7 @@
         
         const ROLES_PERMITIDOS = ["admin", "supervisor", "operador", "invitado"];
 
-        function normalizar(s) { return s ? s.toUpperCase().trim() : "SIN SUBESTACIÓN"; }
+        function normalizar(s) { return s ? s.toUpperCase().replace(/\s+/g, '_').trim() : "SIN_SUBESTACIÓN"; }
         function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
         function toggleFabMenu() { document.getElementById('fabOptions').classList.toggle('show'); }
         
@@ -413,22 +422,17 @@
                 actualizarTodo();
                 return;
             }
-
             try {
                 console.log("Cargando datos desde Firestore...");
-                
                 const [tSnapshot, iSnapshot] = await Promise.all([
                     db.collection("transformadores").get(),
                     db.collection("inspecciones_termograficas").get()
                 ]);
-                
                 transformadoresData = tSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), deleted: doc.data().deleted || false }));
                 inspeccionesData = iSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), tipo: 'termico', deleted: doc.data().deleted || false }));
-
                 dataLoaded = true;
                 console.log(`Cargados: ${transformadoresData.length} transformadores, ${inspeccionesData.length} inspecciones.`);
                 actualizarTodo();
-                
             } catch (error) {
                 console.error("Error cargando Firestore:", error);
             }
@@ -458,7 +462,9 @@
         }
 
         function renderHistorial(h, cid) {
-            document.getElementById(cid).innerHTML = h.length === 0 ? '<div class="historial-entry" style="color:#6c7a8a;">Sin historial</div>' : 
+            const el = document.getElementById(cid);
+            if (!el) return;
+            el.innerHTML = h.length === 0 ? '<div class="historial-entry" style="color:#6c7a8a;">Sin historial</div>' : 
                 h.sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).map(e => `<div class="historial-entry"><strong>${e.fecha}</strong> - ${e.tipo} (OT: ${e.ot})<br>${e.descripcion}</div>`).join('');
         }
 
@@ -517,21 +523,12 @@
             document.getElementById("totalSubestaciones").textContent = new Set(activos.map(e => normalizar(e.subestacion))).size;
             document.getElementById("totalTransformadores").textContent = activos.filter(e => e.tipo !== 'termico').length;
             document.getElementById("totalTermicos").textContent = activos.filter(e => e.tipo === 'termico').length;
-            
-            const hoy = new Date(); hoy.setHours(0,0,0,0);
-            const futuro = new Date(hoy); futuro.setDate(hoy.getDate() + 30);
-            document.getElementById("totalAlertas").textContent = activos.filter(e => {
-                const f = e.proxima_mantencion || e.proxima_inspeccion;
-                if (!f) return false;
-                const d = new Date(f); d.setHours(0,0,0,0);
-                return d >= hoy && d <= futuro;
-            }).length;
         }
 
         function renderReporteEjecutivo() {
             const trans = equiposActivos().filter(e => e.tipo !== 'termico');
             const terms = equiposActivos().filter(e => e.tipo === 'termico');
-            const operativos = trans.filter(t => t.estado === "Operativo").length;
+            const operativosTrans = trans.filter(t => t.estado === "Operativo").length;
             const noOperativos = trans.filter(t => t.estado === "No Operativo").length;
             const dañoInterno = trans.filter(t => t.estado === "Daño Interno").length;
             const reserva = trans.filter(t => t.estado === "Reserva").length;
@@ -540,6 +537,10 @@
             const graves = terms.filter(t => t.nivel === "GRAVE").length;
             const intermedios = terms.filter(t => t.nivel === "INTERMEDIO").length;
             const avisos = terms.filter(t => t.nivel === "AVISO").length;
+            // Variables antes no definidas: operativo, noOpearativo, requiereAtencion (para inspecciones)
+            const operativo = terms.filter(t => t.estado === "OPERATIVO").length;
+            const noOpearativo = terms.filter(t => t.estado === "NO OPERATIVO").length;
+            const requiereAtencion = terms.filter(t => t.estado === "REQUIERE ATENCIÓN").length;
             
             const subestaciones = {};
             equiposActivos().forEach(e => { const s = normalizar(e.subestacion); subestaciones[s] = (subestaciones[s] || 0) + 1; });
@@ -548,22 +549,28 @@
             document.getElementById("executiveReport").innerHTML = `
                 <div class="executive-card">
                     <div class="card-header"><h3>Transformadores (${trans.length})</h3></div>
-                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Operativo')"><span class="metric-label">Operativos</span><span class="metric-value"><span class="metric-badge badge-success">${operativos}</span> ${trans.length ? Math.round(operativos/trans.length*100) : 0}%</span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('Operativo')"><span class="metric-label">Operativos</span><span class="metric-value"><span class="metric-badge badge-success">${operativosTrans}</span> ${trans.length ? Math.round(operativosTrans/trans.length*100) : 0}%</span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('No Operativo')"><span class="metric-label">No Operativos</span><span class="metric-value"><span class="metric-badge badge-grave">${noOperativos}</span></span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('Daño Interno')"><span class="metric-label">Daño Interno</span><span class="metric-value"><span class="metric-badge badge-daño">${dañoInterno}</span></span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('Reserva')"><span class="metric-label">Reserva</span><span class="metric-value"><span class="metric-badge badge-warning">${reserva}</span></span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('Dado de baja')"><span class="metric-label">Dado de baja</span><span class="metric-value"><span class="metric-badge badge-baja">${dadoDeBaja}</span></span></div>
                 </div>
                 <div class="executive-card">
-                    <div class="card-header"><h3>Inspecciones (${terms.length})</h3></div>
+                    <div class="card-header"><h3>Inspecciones - Criticidad (${terms.length})</h3></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('CRITICO')"><span class="metric-label">Crítico</span><span class="metric-value"><span class="metric-badge badge-critical">${criticos}</span> ${terms.length ? Math.round(criticos/terms.length*100) : 0}%</span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('GRAVE')"><span class="metric-label">Grave</span><span class="metric-value"><span class="metric-badge badge-grave">${graves}</span> ${terms.length ? Math.round(graves/terms.length*100) : 0}%</span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('INTERMEDIO')"><span class="metric-label">Intermedio</span><span class="metric-value"><span class="metric-badge badge-warning">${intermedios}</span></span></div>
                     <div class="metric-row" onclick="filtrarYMostrarDashboard('AVISO')"><span class="metric-label">Aviso</span><span class="metric-value"><span class="metric-badge badge-info">${avisos}</span></span></div>
                 </div>
                 <div class="executive-card">
+                    <div class="card-header"><h3>Inspecciones - Estado Operativo</h3></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('OPERATIVO')"><span class="metric-label">Operativo</span><span class="metric-value"><span class="metric-badge badge-success">${operativo}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('NO OPERATIVO')"><span class="metric-label">No Operativo</span><span class="metric-value"><span class="metric-badge badge-grave">${noOpearativo}</span></span></div>
+                    <div class="metric-row" onclick="filtrarYMostrarDashboard('REQUIERE ATENCIÓN')"><span class="metric-label">Requiere Atención</span><span class="metric-value"><span class="metric-badge badge-warning">${requiereAtencion}</span></span></div>
+                </div>                
+                <div class="executive-card">
                     <div class="card-header"><h3>Top Subestaciones</h3></div>
-                    ${topSub.map(([s, c]) => `<div class="metric-row" onclick="buscarSubestacion('${s}')"><span class="metric-label">${s}</span><span class="metric-value">${c} equipos</span></div>`).join('')}
+                    ${topSub.map(([s, c]) => `<div class="metric-row" onclick="buscarSubestacion('${s.replace(/_/g, ' ')}')"><span class="metric-label">${s.replace(/_/g, ' ')}</span><span class="metric-value">${c} equipos</span></div>`).join('')}
                 </div>
             `;
         }
@@ -575,7 +582,7 @@
                 if (currentFilter === 'termicos') return e.tipo === 'termico';
                 if (currentFilter !== "all") {
                     if (e.tipo !== 'termico' && e.estado !== currentFilter) return false;
-                    if (e.tipo === 'termico' && e.nivel !== currentFilter) return false;
+                    if (e.tipo === 'termico' && e.nivel !== currentFilter && e.estado !== currentFilter) return false;
                 }
                 if (currentSearch) {
                     const s = currentSearch.toLowerCase();
@@ -594,9 +601,10 @@
             
             grid.innerHTML = Object.keys(grupos).sort().map(s => {
                 const g = grupos[s];
+                const nombreMostrar = s.replace(/_/g, ' ');
                 return `<div class="subestacion-card">
                     <div class="subestacion-header" onclick="toggleSubestacion('${s}')">
-                        <div class="subestacion-title">${s} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
+                        <div class="subestacion-title">${nombreMostrar} <span class="subestacion-badge">${g.trans.length + g.term.length} equipos</span></div>
                         <span>▼</span>
                     </div>
                     <div class="equipos-container" id="list-${s}">
@@ -616,43 +624,6 @@
                 </div>`;
             }).join('');
             actualizarKPIs();
-        }
-
-        function renderAlertas() {
-            const hoy = new Date(); hoy.setHours(0,0,0,0);
-            const futuro = new Date(hoy); futuro.setDate(hoy.getDate() + 30);
-            const activos = equiposActivos();
-            const proximas = activos.filter(e => {
-                const f = e.proxima_mantencion || e.proxima_inspeccion;
-                if (!f) return false;
-                const d = new Date(f); d.setHours(0,0,0,0);
-                return d >= hoy && d <= futuro;
-            }).sort((a,b) => new Date(a.proxima_mantencion||a.proxima_inspeccion) - new Date(b.proxima_mantencion||b.proxima_inspeccion));
-            
-            const vencidas = activos.filter(e => {
-                const f = e.proxima_mantencion || e.proxima_inspeccion;
-                if (!f) return false;
-                const d = new Date(f); d.setHours(0,0,0,0);
-                return d < hoy;
-            });
-            
-            document.getElementById("alertasList").innerHTML = `
-                ${vencidas.length > 0 ? `<div class="executive-card" style="margin-bottom:20px;">
-                    <div class="card-header"><h3>Mantenciones VENCIDAS (${vencidas.length})</h3></div>
-                    ${vencidas.map(e => `<div class="metric-row maintenance-overdue" style="background:#fee2e2;" onclick="${e.tipo==='termico'?`abrirModalTermico('${e.id}')`:`abrirModalTransformador('${e.id}')`}">
-                        <span class="metric-label">${e.subestacion} - ${e.nombre||e.equipo}</span>
-                        <span class="metric-value">Venció: ${e.proxima_mantencion||e.proxima_inspeccion}</span>
-                    </div>`).join('')}
-                </div>` : ''}
-                <div class="executive-card">
-                    <div class="card-header"><h3>Próximos 30 días (${proximas.length})</h3></div>
-                    ${proximas.length === 0 ? '<div class="empty-state">No hay mantenciones programadas</div>' : 
-                    proximas.map(e => `<div class="metric-row" onclick="${e.tipo==='termico'?`abrirModalTermico('${e.id}')`:`abrirModalTransformador('${e.id}')`}">
-                        <span class="metric-label">${e.subestacion} - ${e.nombre||e.equipo}</span>
-                        <span class="metric-value">${e.proxima_mantencion||e.proxima_inspeccion}</span>
-                    </div>`).join('')}
-                </div>
-            `;
         }
 
         function renderEliminados() {
@@ -679,7 +650,7 @@
                             </div>
                         </div>
                         <button class="restore-btn" onclick="restaurarEquipo('${e.id}', '${esTransformador ? 'trafo' : 'term'}')">
-                            ↺ Restaurar
+                             Restaurar
                         </button>
                     </div>
                 </div>`;
@@ -689,7 +660,6 @@
         function actualizarTodo() { 
             renderReporteEjecutivo(); 
             renderDashboard(); 
-            renderAlertas(); 
             renderEliminados(); 
             actualizarKPIs(); 
         }
@@ -703,25 +673,17 @@
             document.getElementById("editVoltajePrimario").value = e.voltaje_primario || "";
             document.getElementById("editVoltajeSecundario").value = e.voltaje_secundario || "";
             document.getElementById("editVoltajeTerciario").value = e.voltaje_terciario || "";
+            document.getElementById("editPesoTotal").value = e.peso_total || "";
+            document.getElementById("editPesoAceite").value = e.peso_aceite || "";
+            document.getElementById("editPesoNucleoDevanado").value = e.peso_nucleo_devanado || "";
+            document.getElementById("editPesoAccesorios").value = e.peso_accesorios || "";
             document.getElementById("editCapacidadTransformador").value = e.capacidad || "";
             document.getElementById("editRelacionTransformador").value = e.relacion || "";
             document.getElementById("editTipoConexion").value = e.tipo_conexion || "";
             document.getElementById("editAnoFabricacion").value = e.ano_fabricacion || "";
             document.getElementById("editEstadoTransformador").value = e.estado || "Operativo";
             document.getElementById("editUltimaInspeccion").value = e.ultima_inspeccion || "";
-            document.getElementById("editProximaMantencion").value = e.proxima_mantencion || "";
             
-            const statusDiv = document.getElementById("mantenimientoStatus");
-            if (e.proxima_mantencion) {
-                const hoy = new Date(); hoy.setHours(0,0,0,0);
-                const prox = new Date(e.proxima_mantencion); prox.setHours(0,0,0,0);
-                const diff = Math.ceil((prox - hoy) / (1000*60*60*24));
-                if (diff < 0) statusDiv.innerHTML = '<div class="maintenance-alert maintenance-overdue">Mantenimiento VENCIDO hace ' + Math.abs(diff) + ' días</div>';
-                else if (diff <= 30) statusDiv.innerHTML = '<div class="maintenance-alert">Mantenimiento programado en ' + diff + ' días</div>';
-                else statusDiv.innerHTML = '<div style="color:#166534;">Mantenimiento al día</div>';
-            } else {
-                statusDiv.innerHTML = '<div style="color:#6c7a8a;">No hay fecha programada</div>';
-            }
             
             const historial = await cargarHistorial('trafo', id);
             renderHistorial(historial, "historialTransformadorList");
@@ -749,6 +711,7 @@
             document.getElementById("editFechaInspeccionTermico").value = e.fecha_inspeccion || "";
             document.getElementById("editProximaInspeccionTermico").value = e.proxima_inspeccion || "";
             document.getElementById("editNivelMantenimientoTermico").value = e.nivel || "AVISO";
+            document.getElementById("editEstadoOperativo").value = e.estado || "OPERATIVO";
             
             const historial = await cargarHistorial('term', id);
             renderHistorial(historial, "historialTermicoList");
@@ -774,6 +737,11 @@
             e.voltaje_primario = document.getElementById("editVoltajePrimario").value;
             e.voltaje_secundario = document.getElementById("editVoltajeSecundario").value;
             e.voltaje_terciario = document.getElementById("editVoltajeTerciario").value;
+            // Pesos
+            e.peso_total = document.getElementById("editPesoTotal").value;
+            e.peso_aceite = document.getElementById("editPesoAceite").value;
+            e.peso_nucleo_devanado = document.getElementById("editPesoNucleoDevanado").value;
+            e.peso_accesorios = document.getElementById("editPesoAccesorios").value;
             e.capacidad = document.getElementById("editCapacidadTransformador").value;
             e.relacion = document.getElementById("editRelacionTransformador").value;
             e.tipo_conexion = document.getElementById("editTipoConexion").value;
@@ -795,6 +763,7 @@
             e.fecha_inspeccion = document.getElementById("editFechaInspeccionTermico").value;
             e.proxima_inspeccion = document.getElementById("editProximaInspeccionTermico").value;
             e.nivel = document.getElementById("editNivelMantenimientoTermico").value;
+            e.estado = document.getElementById("editEstadoOperativo").value;
             await guardarInspeccionEnFirestore(e);
             actualizarTodo();
             cerrarModal("modalTermico");
@@ -822,6 +791,10 @@
                 voltaje_primario: document.getElementById("newVoltajePrimario").value || "N/A",
                 voltaje_secundario: document.getElementById("newVoltajeSecundario").value || "N/A",
                 voltaje_terciario: document.getElementById("newVoltajeTerciario").value || "",
+                peso_total: document.getElementById("newPesoTotal").value || "",
+                peso_aceite: document.getElementById("newPesoAceite").value || "",
+                peso_nucleo_devanado: document.getElementById("newPesoNucleoDevanado").value || "",
+                peso_accesorios: document.getElementById("newPesoAccesorios").value || "",
                 capacidad: document.getElementById("newCapacidadTransformador").value || "N/A",
                 relacion: document.getElementById("newRelacionTransformador").value || "N/A",
                 tipo_conexion: document.getElementById("newTipoConexion").value || "N/A",
@@ -835,10 +808,7 @@
             };
             await guardarTransformadorEnFirestore(nuevo);
             transformadoresData.push(nuevo);
-            
-            // LIMPIAR FORMULARIO
             limpiarFormularioNuevoTransformador();
-            
             cerrarModal("modalAgregarTransformador");
             actualizarTodo();
         }
@@ -850,6 +820,10 @@
             document.getElementById("newVoltajePrimario").value = "";
             document.getElementById("newVoltajeSecundario").value = "";
             document.getElementById("newVoltajeTerciario").value = "";
+            document.getElementById("newPesoTotal").value = "";
+            document.getElementById("newPesoAceite").value = "";
+            document.getElementById("newPesoNucleoDevanado").value = "";
+            document.getElementById("newPesoAccesorios").value = "";
             document.getElementById("newCapacidadTransformador").value = "";
             document.getElementById("newRelacionTransformador").value = "";
             document.getElementById("newTipoConexion").value = "";
@@ -868,6 +842,7 @@
                 fecha_inspeccion: document.getElementById("newFechaInspeccionTermico").value || "",
                 proxima_inspeccion: document.getElementById("newProximaInspeccionTermico").value || "",
                 nivel: document.getElementById("newNivelMantenimientoTermico").value,
+                estado: document.getElementById("newEstadoOperativo").value,
                 observacion: "",
                 historial: [],
                 deleted: false,
@@ -875,10 +850,7 @@
             };
             await guardarInspeccionEnFirestore(nuevo);
             inspeccionesData.push(nuevo);
-            
-            // LIMPIAR FORMULARIO
             limpiarFormularioNuevaInspeccion();
-            
             cerrarModal("modalAgregarTermico");
             actualizarTodo();
         }
@@ -891,6 +863,7 @@
             document.getElementById("newFechaInspeccionTermico").value = "";
             document.getElementById("newProximaInspeccionTermico").value = "";
             document.getElementById("newNivelMantenimientoTermico").value = "AVISO";
+            document.getElementById("newEstadoOperativo").value = "OPERATIVO";
         }
 
         async function agregarEntradaHistorialTransformador() {
@@ -899,7 +872,6 @@
             const tipo = document.getElementById("newHistorialTipoT").value;
             const d = document.getElementById("newHistorialDescT").value;
             if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
-            
             await guardarEntradaHistorial('trafo', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
             const historial = await cargarHistorial('trafo', currentEditingId);
             renderHistorial(historial, "historialTransformadorList");
@@ -914,7 +886,6 @@
             const tipo = document.getElementById("newHistorialTipoTg").value;
             const d = document.getElementById("newHistorialDescTg").value;
             if (!f || !ot || !d) { alert("Complete todos los campos"); return; }
-            
             await guardarEntradaHistorial('term', currentEditingId, { fecha: f, ot, tipo, descripcion: d });
             const historial = await cargarHistorial('term', currentEditingId);
             renderHistorial(historial, "historialTermicoList");
@@ -938,24 +909,17 @@
             renderDashboard(); 
         }
         
-        function cambiarATabAlertas() { 
-            document.querySelector('.tab-btn[data-tab="alertas"]').click(); 
-            renderAlertas(); 
-        }
-        
         function toggleSubestacion(id) { 
             document.getElementById(`list-${id}`)?.classList.toggle('expanded'); 
         }
 
         function abrirModalAgregarTransformador() { 
-            // Asegurarse de que el formulario esté limpio al abrir
             limpiarFormularioNuevoTransformador();
             document.getElementById("modalAgregarTransformador").style.display = "flex"; 
             toggleFabMenu(); 
         }
         
         function abrirModalAgregarInspeccion() { 
-            // Asegurarse de que el formulario esté limpio al abrir
             limpiarFormularioNuevaInspeccion();
             document.getElementById("modalAgregarTermico").style.display = "flex"; 
             toggleFabMenu(); 
@@ -965,13 +929,11 @@
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const errorEl = document.getElementById('loginError');
-
             if (!email || !password) {
                 errorEl.textContent = 'Completa todos los campos';
                 errorEl.style.display = 'block';
                 return;  
             }
-
             errorEl.style.display = 'none';
             try {
                 const userCred = await auth.signInWithEmailAndPassword(email, password);
@@ -1000,12 +962,8 @@
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
                 updateUserUI();
-                
-                // Inicializar las listas de subestaciones
                 inicializarListasSubestaciones();
-                
                 await cargarDatos();
-
             } catch (error) {
                 console.error('Error de login:', error);
                 let mensaje = 'Error al iniciar sesión';
@@ -1024,18 +982,15 @@
             if (headerDiv) {
                 const existingUserDiv = document.getElementById('userInfoHeader');
                 if (existingUserDiv) existingUserDiv.remove();
-                
                 const userDiv = document.createElement('div');
                 userDiv.id = 'userInfoHeader';
                 userDiv.style.display = 'flex';
                 userDiv.style.alignItems = 'center';
                 userDiv.style.gap = '16px';
-                
                 let adminButton = '';
                 if (currentUser.role === 'admin') {
                     adminButton = `<button onclick="cargarListaUsuarios()" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;">👥 Usuarios</button>`;
                 }
-                
                 userDiv.innerHTML = `
                     ${adminButton}
                     <span style="color: white; font-size: 0.85rem;">
@@ -1050,7 +1005,6 @@
                 `;
                 headerDiv.appendChild(userDiv);
             }
-            
             const esAdmin = currentUser.role === 'admin';
             const esOperador = currentUser.role === 'operador' || currentUser.role === 'supervisor' || esAdmin;
             const fabOptions = document.getElementById('fabOptions');
@@ -1246,11 +1200,11 @@
             this.classList.add('active');
             document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
             if (this.dataset.tab === 'reporte') renderReporteEjecutivo();
-            if (this.dataset.tab === 'alertas') renderAlertas();
             if (this.dataset.tab === 'dashboard') renderDashboard();
             if (this.dataset.tab === 'eliminados') renderEliminados();
         }));
 
+        // Exponer funciones globalmente
         window.abrirModalTransformador = abrirModalTransformador;
         window.abrirModalTermico = abrirModalTermico;
         window.guardarEdicionTransformador = guardarEdicionTransformador;
@@ -1263,7 +1217,6 @@
         window.toggleSubestacion = toggleSubestacion;
         window.filtrarYMostrarDashboard = filtrarYMostrarDashboard;
         window.buscarSubestacion = buscarSubestacion;
-        window.cambiarATabAlertas = cambiarATabAlertas;
         window.toggleFabMenu = toggleFabMenu;
         window.agregarEntradaHistorialTransformador = agregarEntradaHistorialTransformador;
         window.agregarEntradaHistorialInspeccion = agregarEntradaHistorialInspeccion;
@@ -1279,6 +1232,7 @@
         window.recargarDatos = recargarDatos;
         window.doLogin = doLogin;
         window.doLogout = doLogout;
+
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 const userDoc = await db.collection('usuarios').doc(user.uid).get();
